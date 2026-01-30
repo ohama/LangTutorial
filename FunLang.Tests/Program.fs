@@ -36,6 +36,79 @@ let isFunction (input: string) : bool =
     | _ -> false
 
 // ============================================================
+// Phase 1: Comments (v2.0)
+// ============================================================
+
+/// Helper for tests - evaluates to Value (used in comment tests)
+let parseAndEval (input: string) : Value =
+    evaluateToValue input
+
+[<Tests>]
+let commentTests =
+    testList "Comments" [
+        testList "CMT-01: Single-line comments" [
+            test "lexer skips // comment" {
+                let result = parseAndEval "1 + 2 // ignored"
+                Expect.equal result (IntValue 3) ""
+            }
+
+            test "// comment only line" {
+                let result = parseAndEval "// comment\n42"
+                Expect.equal result (IntValue 42) ""
+            }
+        ]
+
+        testList "CMT-02: Block comments" [
+            test "lexer skips (* ... *)" {
+                let result = parseAndEval "(* comment *) 5"
+                Expect.equal result (IntValue 5) ""
+            }
+
+            test "block comment in middle" {
+                let result = parseAndEval "1 + (* mid *) 2"
+                Expect.equal result (IntValue 3) ""
+            }
+
+            test "multiline block comment" {
+                let result = parseAndEval "(* line1\nline2 *) 7"
+                Expect.equal result (IntValue 7) ""
+            }
+        ]
+
+        testList "CMT-03: Nested comments" [
+            test "one level nesting" {
+                let result = parseAndEval "(* outer (* inner *) *) 10"
+                Expect.equal result (IntValue 10) ""
+            }
+
+            test "multiple levels nesting" {
+                let result = parseAndEval "(* 1 (* 2 (* 3 *) 2 *) 1 *) 20"
+                Expect.equal result (IntValue 20) ""
+            }
+        ]
+
+        testList "CMT-04: Error handling" [
+            test "unterminated comment throws" {
+                Expect.throws
+                    (fun () -> parseAndEval "(* unclosed" |> ignore)
+                    "should throw on unterminated comment"
+            }
+        ]
+
+        testList "Non-interference" [
+            test "division still works" {
+                let result = parseAndEval "10 / 2"
+                Expect.equal result (IntValue 5) "slash should not be confused with comment"
+            }
+
+            test "parentheses still work" {
+                let result = parseAndEval "(1 + 2) * 3"
+                Expect.equal result (IntValue 9) "parens should not trigger block comment"
+            }
+        ]
+    ]
+
+// ============================================================
 // Phase 2: Arithmetic Expressions
 // ============================================================
 
@@ -662,6 +735,7 @@ let phase5Tests =
 [<EntryPoint>]
 let main argv =
     runTestsWithCLIArgs [] argv <| testList "FunLang Tests" [
+        commentTests
         phase2Tests
         phase3Tests
         phase4Tests
