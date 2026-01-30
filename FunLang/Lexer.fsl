@@ -42,6 +42,9 @@ rule tokenize = parse
     | "||"          { OR }
     // Phase 5: Arrow for lambda expressions
     | "->"          { ARROW }
+    // Comments (MUST come before operators to match first)
+    | "//" [^ '\n' '\r']*  { tokenize lexbuf }   // Skip single-line comment
+    | "(*"          { block_comment 1 lexbuf }   // Start block comment, depth=1
     // Single-char operators
     | '+'           { PLUS }
     | '-'           { MINUS }
@@ -53,3 +56,12 @@ rule tokenize = parse
     | ')'           { RPAREN }
     | '='           { EQUALS }
     | eof           { EOF }                       // End of input
+
+// Block comment handler with nesting support
+and block_comment depth = parse
+    | "(*"    { block_comment (depth + 1) lexbuf }     // Nested open: increase depth
+    | "*)"    { if depth = 1 then tokenize lexbuf     // Close: if depth=1, return to tokenize
+                else block_comment (depth - 1) lexbuf } // else decrease depth
+    | newline { block_comment depth lexbuf }           // Continue on newline
+    | eof     { failwith "Unterminated comment" }      // Error on EOF
+    | _       { block_comment depth lexbuf }           // Skip any other char
