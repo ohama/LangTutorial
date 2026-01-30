@@ -69,7 +69,7 @@ let main argv =
     | [| "--expr"; expr |] ->
         try
             let result = expr |> parse |> evalExpr
-            printfn "%d" result
+            printfn "%s" (formatValue result)
             0
         with ex ->
             eprintfn "Error: %s" ex.Message
@@ -103,7 +103,7 @@ let main argv =
         try
             let input = File.ReadAllText filename
             let result = input |> parse |> evalExpr
-            printfn "%d" result
+            printfn "%s" (formatValue result)
             0
         with ex ->
             eprintfn "Error: %s" ex.Message
