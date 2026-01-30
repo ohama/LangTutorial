@@ -10,6 +10,7 @@
 | 6 | [write-fslex-lexer](write-fslex-lexer.md) | fslex로 F# 렉서 작성하기 - 개념, 구조, 예제 | 2026-01-30 |
 | 7 | [setup-fslexyacc-build-order](setup-fslexyacc-build-order.md) | FsLexYacc에서 Parser before Lexer 빌드 순서 설정 | 2026-01-30 |
 | 8 | [testing-strategies](testing-strategies.md) | FunLang 테스트 전략 - fslit, Expecto, FsCheck 활용 가이드 | 2026-01-30 |
+| 9 | [write-fscheck-property-tests](write-fscheck-property-tests.md) | FsCheck로 속성 기반 테스트 작성 - 수학적 불변식 검증 | 2026-01-30 |
 
 ---
-총 8개 | 업데이트: 2026-01-30
+총 9개 | 업데이트: 2026-01-30
