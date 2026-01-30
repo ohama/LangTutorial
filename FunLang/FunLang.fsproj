@@ -1,5 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!--
+    FunLang - F# Language Implementation Tutorial
+
+    BUILD ORDER (CRITICAL):
+    =======================
+    1. Ast.fs       - AST type definitions (Discriminated Unions)
+    2. Parser.fsy   - fsyacc specification (generates Parser.fs, Parser.fsi)
+    3. Lexer.fsl    - fslex specification (generates Lexer.fs)
+    4. Parser.fsi   - Generated parser signature
+    5. Parser.fs    - Generated parser implementation
+    6. Lexer.fs     - Generated lexer implementation
+    7. Program.fs   - Main entry point
+
+    WHY THIS ORDER:
+    - Lexer.fsl opens Parser to access token types (NUMBER, EOF, etc.)
+    - Parser must be generated BEFORE Lexer can compile
+    - F# requires files to be ordered by dependency (no forward references)
+
+    COMMON PITFALL:
+    If you get "Parser module not found" or "NUMBER is not defined",
+    check that FsYacc comes BEFORE FsLex in the ItemGroup below.
+  -->
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
