@@ -17,6 +17,21 @@ let formatToken (token: Parser.token) : string =
     | Parser.LET -> "LET"
     | Parser.IN -> "IN"
     | Parser.EQUALS -> "EQUALS"
+    // Phase 4: Control flow tokens
+    | Parser.TRUE -> "TRUE"
+    | Parser.FALSE -> "FALSE"
+    | Parser.IF -> "IF"
+    | Parser.THEN -> "THEN"
+    | Parser.ELSE -> "ELSE"
+    // Phase 4: Comparison operator tokens
+    | Parser.LT -> "LT"
+    | Parser.GT -> "GT"
+    | Parser.LE -> "LE"
+    | Parser.GE -> "GE"
+    | Parser.NE -> "NE"
+    // Phase 4: Logical operator tokens
+    | Parser.AND -> "AND"
+    | Parser.OR -> "OR"
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string
