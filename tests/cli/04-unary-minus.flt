@@ -1,0 +1,4 @@
+// Test: Unary minus
+// --- Command: dotnet run --project FunLang -- --expr "-5 + 3"
+// --- Output:
+-2

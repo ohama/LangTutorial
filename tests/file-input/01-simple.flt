@@ -1,0 +1,6 @@
+// Test: Simple file execution
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+2 + 3
+// --- Output:
+5

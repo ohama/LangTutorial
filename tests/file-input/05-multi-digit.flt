@@ -1,0 +1,6 @@
+// Test: Multi-digit numbers from file
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+100 + 234
+// --- Output:
+334

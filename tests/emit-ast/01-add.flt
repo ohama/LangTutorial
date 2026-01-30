@@ -1,0 +1,4 @@
+// Test: Simple addition AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "2 + 3"
+// --- Output:
+Add (Number 2, Number 3)

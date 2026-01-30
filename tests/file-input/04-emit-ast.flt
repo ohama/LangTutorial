@@ -1,0 +1,6 @@
+// Test: File with emit-ast
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+2 + 3 * 4
+// --- Output:
+Add (Number 2, Multiply (Number 3, Number 4))

@@ -1,0 +1,4 @@
+// Test: Division and subtraction
+// --- Command: dotnet run --project FunLang -- --expr "10 / 2 - 3"
+// --- Output:
+2

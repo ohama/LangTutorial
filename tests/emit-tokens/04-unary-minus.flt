@@ -1,0 +1,4 @@
+// Test: Unary minus (appears as MINUS token)
+// --- Command: dotnet run --project FunLang -- --emit-tokens --expr "-5"
+// --- Output:
+MINUS NUMBER(5) EOF

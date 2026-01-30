@@ -1,0 +1,6 @@
+// Test: File with emit-tokens
+// --- Command: dotnet run --project FunLang -- --emit-tokens %input
+// --- Input:
+2 + 3
+// --- Output:
+NUMBER(2) PLUS NUMBER(3) EOF

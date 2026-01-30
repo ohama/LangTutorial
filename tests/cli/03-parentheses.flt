@@ -1,0 +1,4 @@
+// Test: Parentheses override precedence
+// --- Command: dotnet run --project FunLang -- --expr "(2 + 3) * 4"
+// --- Output:
+20

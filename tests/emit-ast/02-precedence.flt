@@ -1,0 +1,4 @@
+// Test: Precedence in AST (3 * 4 is nested under Add)
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "2 + 3 * 4"
+// --- Output:
+Add (Number 2, Multiply (Number 3, Number 4))

@@ -1,0 +1,4 @@
+// Test: Subtraction AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "10 - 3"
+// --- Output:
+Subtract (Number 10, Number 3)

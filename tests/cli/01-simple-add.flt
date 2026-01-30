@@ -1,0 +1,4 @@
+// Test: Simple addition
+// --- Command: dotnet run --project FunLang -- --expr "2 + 3"
+// --- Output:
+5

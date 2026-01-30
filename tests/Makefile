@@ -1,0 +1,34 @@
+# FunLang File-Based Tests
+# Run: make -C tests
+
+.PHONY: all test cli emit-tokens emit-ast file-input build check clean
+
+# Default: run all tests
+all: test
+
+# Run all tests (recursively finds all .flt files)
+test:
+	@cd .. && fslit tests/
+
+# Run tests by category
+cli:
+	@cd .. && fslit tests/cli/
+
+emit-tokens:
+	@cd .. && fslit tests/emit-tokens/
+
+emit-ast:
+	@cd .. && fslit tests/emit-ast/
+
+file-input:
+	@cd .. && fslit tests/file-input/
+
+# Build before testing
+build:
+	@cd .. && dotnet build FunLang/FunLang.fsproj
+
+# Build and test
+check: build test
+
+clean:
+	@echo "Nothing to clean"
