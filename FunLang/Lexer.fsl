@@ -12,16 +12,25 @@ let lexeme (lexbuf: LexBuffer<_>) =
 let digit = ['0'-'9']
 let whitespace = [' ' '\t']
 let newline = ('\n' | '\r' '\n')
+let letter = ['a'-'z' 'A'-'Z']
+let ident_start = letter | '_'
+let ident_char = letter | digit | '_'
 
 // Lexer rules
 rule tokenize = parse
     | whitespace+   { tokenize lexbuf }           // Skip whitespace
     | newline       { tokenize lexbuf }           // Skip newlines
     | digit+        { NUMBER (Int32.Parse(lexeme lexbuf)) }  // Integer literal
+    // Keywords MUST come before identifier pattern
+    | "let"         { LET }
+    | "in"          { IN }
+    // Identifier: starts with letter or underscore
+    | ident_start ident_char* { IDENT (lexeme lexbuf) }
     | '+'           { PLUS }
     | '-'           { MINUS }
     | '*'           { STAR }
     | '/'           { SLASH }
     | '('           { LPAREN }
     | ')'           { RPAREN }
+    | '='           { EQUALS }
     | eof           { EOF }                       // End of input
