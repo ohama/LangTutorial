@@ -7,12 +7,16 @@ open FSharp.Text.Lexing
 let formatToken (token: Parser.token) : string =
     match token with
     | Parser.NUMBER n -> sprintf "NUMBER(%d)" n
+    | Parser.IDENT s -> sprintf "IDENT(%s)" s
     | Parser.PLUS -> "PLUS"
     | Parser.MINUS -> "MINUS"
     | Parser.STAR -> "STAR"
     | Parser.SLASH -> "SLASH"
     | Parser.LPAREN -> "LPAREN"
     | Parser.RPAREN -> "RPAREN"
+    | Parser.LET -> "LET"
+    | Parser.IN -> "IN"
+    | Parser.EQUALS -> "EQUALS"
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string
