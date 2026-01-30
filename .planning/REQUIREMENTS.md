@@ -7,10 +7,10 @@
 
 ### Foundation
 
-- [ ] **FOUND-01**: .NET 10 + FsLexYacc 프로젝트 구성 설명
-- [ ] **FOUND-02**: fslex로 토큰 생성 (Lexer 기초)
-- [ ] **FOUND-03**: fsyacc로 AST 생성 (Parser 기초)
-- [ ] **FOUND-04**: Discriminated Union으로 AST 타입 정의
+- [x] **FOUND-01**: .NET 10 + FsLexYacc 프로젝트 구성 설명
+- [x] **FOUND-02**: fslex로 토큰 생성 (Lexer 기초)
+- [x] **FOUND-03**: fsyacc로 AST 생성 (Parser 기초)
+- [x] **FOUND-04**: Discriminated Union으로 AST 타입 정의
 
 ### Expressions
 
@@ -69,10 +69,10 @@
 
 | Requirement | Phase | Phase Name | Status |
 |-------------|-------|------------|--------|
-| FOUND-01 | Phase 1 | Foundation & Pipeline | Pending |
-| FOUND-02 | Phase 1 | Foundation & Pipeline | Pending |
-| FOUND-03 | Phase 1 | Foundation & Pipeline | Pending |
-| FOUND-04 | Phase 1 | Foundation & Pipeline | Pending |
+| FOUND-01 | Phase 1 | Foundation & Pipeline | Complete |
+| FOUND-02 | Phase 1 | Foundation & Pipeline | Complete |
+| FOUND-03 | Phase 1 | Foundation & Pipeline | Complete |
+| FOUND-04 | Phase 1 | Foundation & Pipeline | Complete |
 | EXPR-01 | Phase 2 | Arithmetic Expressions | Pending |
 | EXPR-02 | Phase 2 | Arithmetic Expressions | Pending |
 | EXPR-03 | Phase 2 | Arithmetic Expressions | Pending |
@@ -107,4 +107,4 @@
 
 ---
 *Requirements defined: 2025-01-30*
-*Last updated: 2025-01-30 after roadmap creation*
+*Last updated: 2026-01-30 (Phase 1 complete)*

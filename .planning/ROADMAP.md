@@ -40,12 +40,12 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 **Depends on:** None (foundation phase)
 
-**Plans:** 3 plans
+**Plans:** 3 plans ✓
 
 Plans:
-- [ ] 01-01-PLAN.md — Project setup + AST types
-- [ ] 01-02-PLAN.md — Parser.fsy + Lexer.fsl + build configuration
-- [ ] 01-03-PLAN.md — Program.fs wiring + pipeline verification
+- [x] 01-01-PLAN.md — Project setup + AST types
+- [x] 01-02-PLAN.md — Parser.fsy + Lexer.fsl + build configuration
+- [x] 01-03-PLAN.md — Program.fs wiring + pipeline verification
 
 **Notes:**
 - 이 단계에서는 아직 실행 가능한 인터프리터를 만들지 않음
@@ -183,14 +183,14 @@ Plans:
 
 | Phase | Status | Progress |
 |-------|--------|----------|
-| 1 - Foundation & Pipeline | ◐ Planned | 0/4 requirements |
+| 1 - Foundation & Pipeline | ● Complete | 4/4 requirements |
 | 2 - Arithmetic Expressions | ○ Pending | 0/4 requirements |
 | 3 - Variables & Binding | ○ Pending | 0/3 requirements |
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
 
-**Overall:** 0/6 phases complete (0%)
+**Overall:** 1/6 phases complete (17%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -247,11 +247,11 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** `/gsd:execute-phase 1` to execute Phase 1 plans
+**Immediate:** `/gsd:plan-phase 2` to plan Phase 2 (Arithmetic Expressions)
 
-**After Phase 1 completion:** Phase 2 to complete first runnable calculator
+**Phase 2 goal:** 사용자가 사칙연산 계산기를 실행하여 즉각적인 결과를 얻는다
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2025-01-30*
+*Last updated: 2026-01-30 (Phase 1 complete)*
