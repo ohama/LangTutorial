@@ -3,12 +3,12 @@
 ## Current Status
 
 **Phase:** Phase 1 - Foundation & Pipeline
-**Status:** ◐ In Progress (1 plan complete)
+**Status:** ◐ In Progress (2 plans complete)
 **Progress:** 0/6 phases complete (0%)
-**Last activity:** 2026-01-30 - Completed 01-01-PLAN.md
+**Last activity:** 2026-01-30 - Completed 01-02-PLAN.md
 
 ```
-Phase 1 [█○○○○○○○○○] 10%  ← You are here
+Phase 1 [██○○○○○○○○] 20%  ← You are here
 Phase 2 [○○○○○○○○○○] 0%
 Phase 3 [○○○○○○○○○○] 0%
 Phase 4 [○○○○○○○○○○] 0%
@@ -38,7 +38,7 @@ Phase 6 [○○○○○○○○○○] 0%
 
 | Phase | Name | Status | Plans | Requirements | Progress |
 |-------|------|--------|-------|--------------|----------|
-| 1 | Foundation & Pipeline | ◐ In Progress | 1/4 | 4 | 25% |
+| 1 | Foundation & Pipeline | ◐ In Progress | 2/4 | 4 | 50% |
 | 2 | Arithmetic Expressions | ○ Pending | 0/0 | 4 | 0% |
 | 3 | Variables & Binding | ○ Pending | 0/0 | 3 | 0% |
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
@@ -79,10 +79,13 @@ Phase 6 [○○○○○○○○○○] 0%
 | FsLexYacc 11.3.0 | 01-01 | Stable version compatible with .NET 10 | 2026-01-30 |
 | Minimal AST in Phase 1 | 01-01 | Number-only Expr type proves pipeline; arithmetic operators in Phase 2 | 2026-01-30 |
 | Compilation order Ast.fs first | 01-01 | F# requires dependencies compiled before usage | 2026-01-30 |
+| FsYacc before FsLex build order | 01-02 | Lexer.fsl opens Parser module, so Parser.fs must exist first | 2026-01-30 |
+| Generated files in source directory | 01-02 | FsLexYacc default behavior (not obj/) - reference directly in .fsproj | 2026-01-30 |
+| FSharp.Text.Lexing namespace | 01-02 | Required in Lexer.fsl for LexBuffer type access | 2026-01-30 |
 
 ### Active TODOs
 
-**Next action:** Execute plan 01-02 (Lexer implementation)
+**Next action:** Execute plan 01-03 (Main program & CLI)
 
 **Blocking issues:** None
 
@@ -98,10 +101,10 @@ None currently.
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 01-01 execution
-**What happened:** Completed plan 01-01 (Project Foundation). Created .NET 10 F# project with FsLexYacc 11.3.0, defined minimal AST (Expr with Number case). 2 tasks, 2 commits (e32b339, 82504ec).
-**What's next:** Execute plan 01-02 (Lexer implementation)
-**Stopped at:** Completed 01-01-PLAN.md
+**Last session:** 2026-01-30 - Plan 01-02 execution
+**What happened:** Completed plan 01-02 (Lexer & Parser Pipeline). Created Parser.fsy and Lexer.fsl specifications, configured correct build order (FsYacc before FsLex). Generated Parser.fs, Parser.fsi, and Lexer.fs. 3 tasks, 3 commits (7894e30, 4812af0, 5fdc2cc).
+**What's next:** Execute plan 01-03 (Main program & CLI)
+**Stopped at:** Completed 01-02-PLAN.md
 **Resume file:** None
 
 **If continuing from interruption:**
@@ -142,4 +145,4 @@ None currently.
 ---
 
 *Last updated: 2026-01-30*
-*Next update: After plan 01-02 execution*
+*Next update: After plan 01-03 execution*
