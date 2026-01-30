@@ -68,7 +68,7 @@ let main argv =
     // Pattern 7: --expr <expr>
     | [| "--expr"; expr |] ->
         try
-            let result = expr |> parse |> eval
+            let result = expr |> parse |> evalExpr
             printfn "%d" result
             0
         with ex ->
@@ -102,7 +102,7 @@ let main argv =
     | [| filename |] when File.Exists filename ->
         try
             let input = File.ReadAllText filename
-            let result = input |> parse |> eval
+            let result = input |> parse |> evalExpr
             printfn "%d" result
             0
         with ex ->
