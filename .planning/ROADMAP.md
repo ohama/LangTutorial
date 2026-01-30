@@ -40,6 +40,13 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 **Depends on:** None (foundation phase)
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project setup + AST types
+- [ ] 01-02-PLAN.md — Parser.fsy + Lexer.fsl + build configuration
+- [ ] 01-03-PLAN.md — Program.fs wiring + pipeline verification
+
 **Notes:**
 - 이 단계에서는 아직 실행 가능한 인터프리터를 만들지 않음
 - Lexer와 Parser의 구조만 설정하고, 다음 단계에서 평가 로직 추가
@@ -176,7 +183,7 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 | Phase | Status | Progress |
 |-------|--------|----------|
-| 1 - Foundation & Pipeline | ○ Pending | 0/4 requirements |
+| 1 - Foundation & Pipeline | ◐ Planned | 0/4 requirements |
 | 2 - Arithmetic Expressions | ○ Pending | 0/4 requirements |
 | 3 - Variables & Binding | ○ Pending | 0/3 requirements |
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
@@ -194,16 +201,16 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 ## Coverage Validation
 
-**All v1 requirements mapped:** ✓
+**All v1 requirements mapped:** Yes
 
 | Category | Requirements | Phase | Mapped |
 |----------|--------------|-------|--------|
-| Foundation | FOUND-01, FOUND-02, FOUND-03, FOUND-04 | Phase 1 | 4/4 ✓ |
-| Expressions | EXPR-01, EXPR-02, EXPR-03, EXPR-04 | Phase 2 | 4/4 ✓ |
-| Variables | VAR-01, VAR-02, VAR-03 | Phase 3 | 3/3 ✓ |
-| Control Flow | CTRL-01, CTRL-02, CTRL-03, CTRL-04 | Phase 4 | 4/4 ✓ |
-| Functions | FUNC-01, FUNC-02, FUNC-03, FUNC-04 | Phase 5 | 4/4 ✓ |
-| Quality | QUAL-01, QUAL-02, QUAL-03 | Phase 6 | 3/3 ✓ |
+| Foundation | FOUND-01, FOUND-02, FOUND-03, FOUND-04 | Phase 1 | 4/4 |
+| Expressions | EXPR-01, EXPR-02, EXPR-03, EXPR-04 | Phase 2 | 4/4 |
+| Variables | VAR-01, VAR-02, VAR-03 | Phase 3 | 3/3 |
+| Control Flow | CTRL-01, CTRL-02, CTRL-03, CTRL-04 | Phase 4 | 4/4 |
+| Functions | FUNC-01, FUNC-02, FUNC-03, FUNC-04 | Phase 5 | 4/4 |
+| Quality | QUAL-01, QUAL-02, QUAL-03 | Phase 6 | 3/3 |
 
 **Total mapped:** 22/22 requirements
 **Orphaned:** 0
@@ -215,34 +222,34 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 ```
 Phase 1 (Foundation)
-    ↓
-Phase 2 (Expressions) ← 첫 실행 가능한 코드
-    ↓
+    |
+Phase 2 (Expressions) <- First runnable code
+    |
 Phase 3 (Variables)
-    ↓
+    |
 Phase 4 (Control Flow)
-    ↓
-Phase 5 (Functions) ← Turing-complete 달성
-    ↓
+    |
+Phase 5 (Functions) <- Turing-complete
+    |
 Phase 6 (Quality)
 ```
 
-**Critical path:** 1 → 2 → 3 → 4 → 5 → 6 (모든 단계가 순차적)
+**Critical path:** 1 -> 2 -> 3 -> 4 -> 5 -> 6 (all sequential)
 
 **Rationale:**
-- Phase 2는 Phase 1의 파이프라인 필요
-- Phase 3는 Phase 2의 평가 인프라 필요
-- Phase 4는 Phase 3의 변수 지원 필요 (조건문에서 변수 사용)
-- Phase 5는 Phase 4의 조건문 필요 (재귀 함수의 종료 조건)
-- Phase 6은 Phase 5의 모든 기능 필요 (통합 테스트)
+- Phase 2 needs Phase 1's pipeline
+- Phase 3 needs Phase 2's evaluation infrastructure
+- Phase 4 needs Phase 3's variable support (conditions use variables)
+- Phase 5 needs Phase 4's conditionals (recursive function termination)
+- Phase 6 needs Phase 5's all features (integration testing)
 
 ---
 
 ## Next Steps
 
-**Immediate:** `/gsd:plan-phase 1`를 실행하여 Phase 1 계획 수립
+**Immediate:** `/gsd:execute-phase 1` to execute Phase 1 plans
 
-**After Phase 1 completion:** Phase 2로 진행하여 첫 실행 가능한 계산기 완성
+**After Phase 1 completion:** Phase 2 to complete first runnable calculator
 
 ---
 
