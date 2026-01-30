@@ -1,0 +1,6 @@
+// Both comment styles in same code
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(* block *) 1 + 2 // line comment
+// --- Output:
+3

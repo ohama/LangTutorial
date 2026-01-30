@@ -1,0 +1,6 @@
+// Deeply nested comment
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(* L1 (* L2 (* L3 *) L2 *) L1 *) 20
+// --- Output:
+20

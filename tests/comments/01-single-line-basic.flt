@@ -1,0 +1,6 @@
+// Single-line comment followed by expression
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+1 + 2 // this is a comment
+// --- Output:
+3

@@ -1,0 +1,7 @@
+// Comment before let expression
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+// define x
+let x = (* value *) 100 in x
+// --- Output:
+100

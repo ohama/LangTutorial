@@ -1,0 +1,7 @@
+// Unterminated block comment error
+// --- Command: dotnet run --project FunLang -- %input 2>&1
+// --- ExitCode: 1
+// --- Input:
+(* unclosed
+// --- Output:
+Error: Unterminated comment

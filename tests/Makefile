@@ -1,7 +1,7 @@
 # FunLang File-Based Tests
 # Run: make -C tests
 
-.PHONY: all test cli emit-tokens emit-ast file-input variables control functions build check clean
+.PHONY: all test cli emit-tokens emit-ast file-input variables control functions comments build check clean
 
 # Default: run all tests
 all: test
@@ -31,6 +31,9 @@ control:
 
 functions:
 	@cd .. && fslit tests/functions/
+
+comments:
+	@cd .. && fslit tests/comments/
 
 # Build before testing
 build:

@@ -1,0 +1,6 @@
+// Simple nested comment
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(* outer (* inner *) outer *) 10
+// --- Output:
+10

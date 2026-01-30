@@ -1,0 +1,6 @@
+// Division still works (slash not eaten by comment)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+10 / 2
+// --- Output:
+5

@@ -1,0 +1,6 @@
+// Simple block comment
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(* comment *) 5
+// --- Output:
+5

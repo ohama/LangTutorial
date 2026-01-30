@@ -1,0 +1,6 @@
+// Block comment in middle of expression
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+1 + (* middle *) 2
+// --- Output:
+3

@@ -1,0 +1,8 @@
+// Multi-line block comment
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(* this is
+   a multi-line
+   comment *) 7
+// --- Output:
+7
