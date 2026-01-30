@@ -12,9 +12,10 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 | 4 | Control Flow | 사용자가 조건 분기로 논리를 표현할 수 있다 | 4 |
 | 5 | Functions & Abstraction | 사용자가 함수를 정의하고 호출하여 코드를 재사용할 수 있다 | 4 |
 | 6 | Quality & Polish | 사용자가 친화적인 오류 메시지와 대화형 REPL을 경험한다 | 3 |
+| 7 | CLI Options & File-Based Tests | emit 옵션과 파일 기반 테스트 지원 | 5 |
 
-**Total phases:** 6
-**Total requirements:** 22
+**Total phases:** 7
+**Total requirements:** 27
 **Depth calibration:** Standard (6 phases fits 5-8 range)
 
 ---
@@ -186,6 +187,40 @@ Plans:
 
 ---
 
+### Phase 7: CLI Options & File-Based Tests
+
+**Goal:** 사용자가 다양한 입력 방식과 emit 옵션으로 언어의 각 단계를 검증한다
+
+**Requirements:**
+- **CLI-01**: 입력 방식 — `--expr <expr>` 또는 파일명 (positional argument)
+- **CLI-02**: `--emit-tokens` — 렉서 단계에서 토큰 목록 출력
+- **CLI-03**: `--emit-ast` — 파서 단계에서 AST 출력
+- **CLI-04**: `--emit-type` — (예약) 타입 체킹 단계 출력
+- **CLI-05**: emit 옵션을 활용한 파일 기반 테스트 (fslit)
+
+**Success Criteria:**
+1. `funlang --expr "2 + 3"` → `5` (현재 동작 유지)
+2. `funlang program.fun` → 파일 내용 실행
+3. `funlang --emit-tokens --expr "2 + 3"` → `NUMBER(2) PLUS NUMBER(3) EOF`
+4. `funlang --emit-ast --expr "2 + 3"` → `Add(Number 2, Number 3)`
+5. `funlang --emit-type --expr "..."` → 예약 (Phase 미구현 시 에러)
+6. fslit으로 `.fun` 파일들의 expected output 검증
+
+**Depends on:** Phase 2 (기본 인터프리터 필요, Phase 3-6과 병렬 가능)
+
+**Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Token formatter + CLI expansion
+- [ ] 07-02-PLAN.md — fslit test suite
+
+**Notes:**
+- emit 옵션은 디버깅과 테스트에 유용
+- `--emit-type`은 타입 시스템 추가 시 활성화
+- fslit (https://github.com/ohama/fslit) 사용
+
+---
+
 ## Progress Tracking
 
 | Phase | Status | Progress |
@@ -196,8 +231,9 @@ Plans:
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
+| 7 - CLI Options & File-Based Tests | ○ Pending | 0/5 requirements |
 
-**Overall:** 2/6 phases complete (33%)
+**Overall:** 2/7 phases complete (29%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -218,8 +254,9 @@ Plans:
 | Control Flow | CTRL-01, CTRL-02, CTRL-03, CTRL-04 | Phase 4 | 4/4 |
 | Functions | FUNC-01, FUNC-02, FUNC-03, FUNC-04 | Phase 5 | 4/4 |
 | Quality | QUAL-01, QUAL-02, QUAL-03 | Phase 6 | 3/3 |
+| CLI & Tests | CLI-01, CLI-02, CLI-03, CLI-04, CLI-05 | Phase 7 | 5/5 |
 
-**Total mapped:** 22/22 requirements
+**Total mapped:** 27/27 requirements
 **Orphaned:** 0
 **Duplicates:** 0
 
@@ -232,6 +269,8 @@ Phase 1 (Foundation)
     |
 Phase 2 (Expressions) <- First runnable code
     |
+    +---> Phase 7 (CLI & File Tests) <- Parallel track
+    |
 Phase 3 (Variables)
     |
 Phase 4 (Control Flow)
@@ -241,7 +280,8 @@ Phase 5 (Functions) <- Turing-complete
 Phase 6 (Quality)
 ```
 
-**Critical path:** 1 -> 2 -> 3 -> 4 -> 5 -> 6 (all sequential)
+**Critical path:** 1 -> 2 -> 3 -> 4 -> 5 -> 6 (main sequential)
+**Parallel track:** 2 -> 7 (independent of 3-6)
 
 **Rationale:**
 - Phase 2 needs Phase 1's pipeline
@@ -249,14 +289,15 @@ Phase 6 (Quality)
 - Phase 4 needs Phase 3's variable support (conditions use variables)
 - Phase 5 needs Phase 4's conditionals (recursive function termination)
 - Phase 6 needs Phase 5's all features (integration testing)
+- Phase 7 only needs Phase 2's basic interpreter (can run in parallel with 3-6)
 
 ---
 
 ## Next Steps
 
-**Immediate:** `/gsd:plan-phase 3` to plan Phase 3 (Variables & Binding)
+**Immediate:** `/gsd:execute-phase 7` to execute Phase 7 (CLI Options & File-Based Tests)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 2 complete)*
+*Last updated: 2026-01-30 (Phase 7 planned)*
