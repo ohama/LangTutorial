@@ -1,0 +1,20 @@
+{
+open System
+open Parser  // Import token types from generated Parser module
+
+// Helper to get lexeme as string
+let lexeme (lexbuf: Microsoft.FSharp.Text.Lexing.LexBuffer<_>) =
+    Microsoft.FSharp.Text.Lexing.LexBuffer<_>.LexemeString lexbuf
+}
+
+// Character class definitions
+let digit = ['0'-'9']
+let whitespace = [' ' '\t']
+let newline = ('\n' | '\r' '\n')
+
+// Lexer rules
+rule tokenize = parse
+  | whitespace+   { tokenize lexbuf }           // Skip whitespace
+  | newline       { tokenize lexbuf }           // Skip newlines
+  | digit+        { NUMBER (Int32.Parse(lexeme lexbuf)) }  // Integer literal
+  | eof           { EOF }                       // End of input
