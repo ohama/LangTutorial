@@ -1,0 +1,42 @@
+# Claude configuration (GSD framework)
+.claude/
+
+# Keep .planning/ tracked (project documentation)
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+__pycache__/
+
+# Build
+dist/
+build/
+bin/
+obj/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+logs/
+
+# Secrets
+*.pem
+*.key
+credentials.json
+secrets.json
