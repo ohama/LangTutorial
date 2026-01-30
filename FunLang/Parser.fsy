@@ -58,20 +58,28 @@ Expr:
     | Term                           { $1 }
 
 Term:
-    | Term STAR AppExpr  { Multiply($1, $3) }
-    | Term SLASH AppExpr { Divide($1, $3) }
-    | AppExpr            { $1 }
-
-// Phase 5: Function application (left-associative, high precedence)
-// f 1 2 parses as App(App(f, 1), 2) enabling currying
-AppExpr:
-    | AppExpr Factor     { App($1, $2) }
+    | Term STAR Factor   { Multiply($1, $3) }
+    | Term SLASH Factor  { Divide($1, $3) }
     | Factor             { $1 }
 
+// Factor: includes unary minus and function application
+// Unary minus binds tighter than multiplication but looser than application
 Factor:
+    | MINUS Factor       { Negate($2) }
+    | AppExpr            { $1 }
+
+// Phase 5: Function application (left-associative, highest precedence)
+// f 1 2 parses as App(App(f, 1), 2) enabling currying
+// Uses Atom to avoid ambiguity: "f -1" is subtraction, "f (-1)" is app with negative
+AppExpr:
+    | AppExpr Atom       { App($1, $2) }
+    | Atom               { $1 }
+
+// Atom: The most basic expressions, no operators
+// Used as function arguments in application
+Atom:
     | NUMBER             { Number($1) }
     | IDENT              { Var($1) }
     | TRUE               { Bool(true) }
     | FALSE              { Bool(false) }
     | LPAREN Expr RPAREN { $2 }
-    | MINUS Factor       { Negate($2) }

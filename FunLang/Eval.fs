@@ -11,9 +11,10 @@ let formatValue (v: Value) : string =
     match v with
     | IntValue n -> string n
     | BoolValue b -> if b then "true" else "false"
+    | FunctionValue _ -> "<function>"
 
 /// Evaluate an expression in an environment
-/// Returns Value (IntValue or BoolValue)
+/// Returns Value (IntValue, BoolValue, or FunctionValue)
 /// Raises exception for type errors and undefined variables
 let rec eval (env: Env) (expr: Expr) : Value =
     match expr with
@@ -26,11 +27,8 @@ let rec eval (env: Env) (expr: Expr) : Value =
         | None -> failwithf "Undefined variable: %s" name
 
     | Let (name, binding, body) ->
-        // Evaluate binding in current environment
         let value = eval env binding
-        // Extend environment with new binding
         let extendedEnv = Map.add name value env
-        // Evaluate body in extended environment
         eval extendedEnv body
 
     // Arithmetic operations - type check for IntValue
@@ -96,7 +94,7 @@ let rec eval (env: Env) (expr: Expr) : Value =
     // Logical operators - short-circuit evaluation
     | And (left, right) ->
         match eval env left with
-        | BoolValue false -> BoolValue false  // Short-circuit: don't evaluate right
+        | BoolValue false -> BoolValue false
         | BoolValue true ->
             match eval env right with
             | BoolValue b -> BoolValue b
@@ -105,7 +103,7 @@ let rec eval (env: Env) (expr: Expr) : Value =
 
     | Or (left, right) ->
         match eval env left with
-        | BoolValue true -> BoolValue true  // Short-circuit: don't evaluate right
+        | BoolValue true -> BoolValue true
         | BoolValue false ->
             match eval env right with
             | BoolValue b -> BoolValue b
@@ -118,6 +116,35 @@ let rec eval (env: Env) (expr: Expr) : Value =
         | BoolValue true -> eval env thenBranch
         | BoolValue false -> eval env elseBranch
         | _ -> failwith "Type error: if condition must be boolean"
+
+    // Phase 5: Functions
+
+    // Lambda creates a closure capturing current environment
+    | Lambda (param, body) ->
+        FunctionValue (param, body, env)
+
+    // Function application
+    | App (funcExpr, argExpr) ->
+        let funcVal = eval env funcExpr
+        match funcVal with
+        | FunctionValue (param, body, closureEnv) ->
+            let argValue = eval env argExpr
+            // For recursive functions: when calling by name, add self to closure
+            // This enables recursion by ensuring the function can find itself
+            let augmentedClosureEnv =
+                match funcExpr with
+                | Var name -> Map.add name funcVal closureEnv
+                | _ -> closureEnv
+            let callEnv = Map.add param argValue augmentedClosureEnv
+            eval callEnv body
+        | _ -> failwith "Type error: attempted to call non-function"
+
+    // Let rec - recursive function definition
+    // Creates a function whose closure will be augmented at call time (in App)
+    | LetRec (name, param, funcBody, inExpr) ->
+        let funcVal = FunctionValue (param, funcBody, env)
+        let recEnv = Map.add name funcVal env
+        eval recEnv inExpr
 
 /// Convenience function for top-level evaluation
 let evalExpr (expr: Expr) : Value =
