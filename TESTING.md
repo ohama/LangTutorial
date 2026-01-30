@@ -2,6 +2,58 @@
 
 이 문서는 Claude가 테스트를 확장할 때 참조하는 가이드입니다.
 
+---
+
+## Phase 완료 시 필수 테스트
+
+**각 Phase 구현이 완료되면 반드시 다음 테스트를 수행한다:**
+
+### 1. fslit 파일 기반 테스트 (CLI E2E)
+
+```bash
+# 새 Phase용 테스트 디렉토리 생성
+mkdir -p tests/<phase-name>/
+
+# 테스트 파일 작성 (최소 10-20개)
+# tests/<phase-name>/01-feature.flt, 02-feature.flt, ...
+
+# 실행
+make -C tests <phase-name>
+```
+
+### 2. Expecto 단위 테스트
+
+```bash
+# FunLang.Tests/Program.fs에 Phase별 테스트 추가
+# - 각 요구사항(REQ-XX)별 테스트 그룹
+# - 정상 케이스 + 에러 케이스
+# - AST 구성 테스트
+
+dotnet run --project FunLang.Tests
+```
+
+### 3. FsCheck 속성 테스트 (해당 시)
+
+```bash
+# 수학적 불변식이 있는 경우 추가
+# - 교환법칙, 결합법칙
+# - 항등원, 역원
+# - 타입 보존 속성
+
+dotnet run --project FunLang.Tests
+```
+
+### 체크리스트
+
+- [ ] `tests/<phase>/` 디렉토리 생성 및 fslit 테스트 작성
+- [ ] `tests/Makefile`에 새 타겟 추가
+- [ ] `FunLang.Tests/Program.fs`에 Phase 테스트 추가
+- [ ] 모든 fslit 테스트 통과: `make -C tests`
+- [ ] 모든 Expecto 테스트 통과: `dotnet run --project FunLang.Tests`
+- [ ] `TESTING.md` 테스트 현황 업데이트
+
+---
+
 ## Quick Reference
 
 ```bash
