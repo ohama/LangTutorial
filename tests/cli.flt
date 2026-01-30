@@ -1,0 +1,31 @@
+// Basic CLI tests for funlang --expr
+
+// Test: Simple addition
+// --- Command: dotnet run --project FunLang -- --expr "2 + 3"
+// --- Output:
+5
+
+// Test: Operator precedence (multiplication before addition)
+// --- Command: dotnet run --project FunLang -- --expr "2 + 3 * 4"
+// --- Output:
+14
+
+// Test: Parentheses override precedence
+// --- Command: dotnet run --project FunLang -- --expr "(2 + 3) * 4"
+// --- Output:
+20
+
+// Test: Unary minus
+// --- Command: dotnet run --project FunLang -- --expr "-5 + 3"
+// --- Output:
+-2
+
+// Test: Division and subtraction
+// --- Command: dotnet run --project FunLang -- --expr "10 / 2 - 3"
+// --- Output:
+2
+
+// Test: Complex expression
+// --- Command: dotnet run --project FunLang -- --expr "(10 - 2) * (3 + 1) / 4"
+// --- Output:
+8
