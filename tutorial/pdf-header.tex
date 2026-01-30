@@ -3,6 +3,15 @@
 \usepackage{xcolor}
 \usepackage{framed}
 
+% List styling - ensure proper bullet rendering
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*, labelsep=1em}
+\setlist[enumerate]{leftmargin=*, labelsep=1em}
+
+% Ensure proper spacing for tight lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 % Define colors
 \definecolor{codebg}{RGB}{245, 245, 245}
 \definecolor{codeborder}{RGB}{200, 200, 200}
