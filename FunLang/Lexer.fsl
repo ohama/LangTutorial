@@ -1,10 +1,11 @@
 {
 open System
+open FSharp.Text.Lexing
 open Parser  // Import token types from generated Parser module
 
 // Helper to get lexeme as string
-let lexeme (lexbuf: Microsoft.FSharp.Text.Lexing.LexBuffer<_>) =
-    Microsoft.FSharp.Text.Lexing.LexBuffer<_>.LexemeString lexbuf
+let lexeme (lexbuf: LexBuffer<_>) =
+    LexBuffer<_>.LexemeString lexbuf
 }
 
 // Character class definitions

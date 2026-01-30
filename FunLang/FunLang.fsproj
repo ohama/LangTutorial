@@ -6,7 +6,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- 1. AST definitions (manually written) -->
     <Compile Include="Ast.fs" />
+
+    <!-- 2. Parser generator - MUST come before Lexer -->
+    <FsYacc Include="Parser.fsy">
+      <OtherFlags>--module Parser</OtherFlags>
+    </FsYacc>
+
+    <!-- 3. Lexer generator - depends on Parser tokens -->
+    <FsLex Include="Lexer.fsl">
+      <OtherFlags>--module Lexer --unicode</OtherFlags>
+    </FsLex>
+
+    <!-- 4. Generated parser files (FsYacc generates in source directory) -->
+    <Compile Include="Parser.fsi" />
+    <Compile Include="Parser.fs" />
+
+    <!-- 5. Generated lexer file (FsLex generates in source directory) -->
+    <Compile Include="Lexer.fs" />
+
+    <!-- 6. Main program (to be implemented in Plan 03) -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
