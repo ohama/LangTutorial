@@ -1,0 +1,4 @@
+// Test: greater than comparison (CTRL-03)
+// --- Command: dotnet run --project FunLang -- --expr "if 5 > 3 then 10 else 20"
+// --- Output:
+10

@@ -1,0 +1,4 @@
+// Test: emit tokens for comparison and logical
+// --- Command: dotnet run --project FunLang -- --emit-tokens --expr "5 > 3 && 2 < 4"
+// --- Output:
+NUMBER(5) GT NUMBER(3) AND NUMBER(2) LT NUMBER(4) EOF

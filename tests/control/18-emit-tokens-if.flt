@@ -1,0 +1,4 @@
+// Test: emit tokens for if expression
+// --- Command: dotnet run --project FunLang -- --emit-tokens --expr "if true then 1 else 2"
+// --- Output:
+IF TRUE THEN NUMBER(1) ELSE NUMBER(2) EOF

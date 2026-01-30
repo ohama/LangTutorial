@@ -1,0 +1,4 @@
+// Test: true literal (CTRL-02)
+// --- Command: dotnet run --project FunLang -- --expr "true"
+// --- Output:
+true

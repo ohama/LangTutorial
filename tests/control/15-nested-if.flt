@@ -1,0 +1,4 @@
+// Test: nested if expressions (CTRL-01)
+// --- Command: dotnet run --project FunLang -- --expr "if 5 > 3 then if 2 < 4 then 100 else 50 else 0"
+// --- Output:
+100

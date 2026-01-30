@@ -11,9 +11,21 @@ let parse (input: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
     Parser.start Lexer.tokenize lexbuf
 
-/// Parse and evaluate a string expression
-let evaluate (input: string) : int =
+/// Parse and evaluate a string expression, returning Value
+let evaluateToValue (input: string) : Value =
     input |> parse |> evalExpr
+
+/// Parse and evaluate a string expression, extracting int (for backward compatibility)
+let evaluate (input: string) : int =
+    match evaluateToValue input with
+    | IntValue n -> n
+    | BoolValue _ -> failwith "Expected int but got bool"
+
+/// Parse and evaluate a string expression, extracting bool
+let evaluateToBool (input: string) : bool =
+    match evaluateToValue input with
+    | BoolValue b -> b
+    | IntValue _ -> failwith "Expected bool but got int"
 
 // ============================================================
 // Phase 2: Arithmetic Expressions
@@ -193,54 +205,60 @@ let phase3Tests =
 // Property-Based Tests (FsCheck)
 // ============================================================
 
+/// Helper to extract int from Value for property tests
+let asInt (v: Value) : int =
+    match v with
+    | IntValue n -> n
+    | BoolValue _ -> failwith "Expected int"
+
 [<Tests>]
 let propertyTests =
     testList "Property-Based Tests" [
         testList "Number Properties" [
             testProperty "number evaluates to itself" <| fun (n: int) ->
-                evalExpr (Number n) = n
+                asInt (evalExpr (Number n)) = n
 
             testProperty "double negation is identity" <| fun (n: int) ->
-                evalExpr (Negate(Negate(Number n))) = n
+                asInt (evalExpr (Negate(Negate(Number n)))) = n
         ]
 
         testList "Arithmetic Properties" [
             testProperty "addition is commutative" <| fun (a: int) (b: int) ->
-                let left = evalExpr (Add(Number a, Number b))
-                let right = evalExpr (Add(Number b, Number a))
+                let left = asInt (evalExpr (Add(Number a, Number b)))
+                let right = asInt (evalExpr (Add(Number b, Number a)))
                 left = right
 
             testProperty "multiplication is commutative" <| fun (a: int) (b: int) ->
-                let left = evalExpr (Multiply(Number a, Number b))
-                let right = evalExpr (Multiply(Number b, Number a))
+                let left = asInt (evalExpr (Multiply(Number a, Number b)))
+                let right = asInt (evalExpr (Multiply(Number b, Number a)))
                 left = right
 
             testProperty "zero is additive identity" <| fun (n: int) ->
-                evalExpr (Add(Number n, Number 0)) = n
+                asInt (evalExpr (Add(Number n, Number 0))) = n
 
             testProperty "one is multiplicative identity" <| fun (n: int) ->
-                evalExpr (Multiply(Number n, Number 1)) = n
+                asInt (evalExpr (Multiply(Number n, Number 1))) = n
 
             testProperty "subtraction of same number is zero" <| fun (n: int) ->
-                evalExpr (Subtract(Number n, Number n)) = 0
+                asInt (evalExpr (Subtract(Number n, Number n))) = 0
         ]
 
         testList "Variable Properties" [
             testProperty "let binding returns bound value" <| fun (n: int) ->
-                evalExpr (Let("x", Number n, Var "x")) = n
+                asInt (evalExpr (Let("x", Number n, Var "x"))) = n
 
             testProperty "let preserves expression value" <| fun (a: int) (b: int) ->
                 let direct = a + b
-                let viaLet = evalExpr (Let("x", Number a, Add(Var "x", Number b)))
+                let viaLet = asInt (evalExpr (Let("x", Number a, Add(Var "x", Number b))))
                 direct = viaLet
 
             testProperty "shadowing uses inner value" <| fun (outer: int) (inner: int) ->
                 let expr = Let("x", Number outer, Let("x", Number inner, Var "x"))
-                evalExpr expr = inner
+                asInt (evalExpr expr) = inner
 
             testProperty "nested let uses correct scope" <| fun (a: int) (b: int) ->
                 let expr = Let("x", Number a, Let("y", Number b, Add(Var "x", Var "y")))
-                evalExpr expr = a + b
+                asInt (evalExpr expr) = a + b
         ]
     ]
 
@@ -307,6 +325,149 @@ let lexerTests =
     ]
 
 // ============================================================
+// Phase 4: Control Flow
+// ============================================================
+
+[<Tests>]
+let phase4Tests =
+    testList "Phase 4: Control Flow" [
+        testList "CTRL-01: If-Then-Else" [
+            test "if true evaluates then branch" {
+                Expect.equal (evaluate "if true then 1 else 2") 1 "if true then 1 else 2 should be 1"
+            }
+            test "if false evaluates else branch" {
+                Expect.equal (evaluate "if false then 1 else 2") 2 "if false then 1 else 2 should be 2"
+            }
+            test "nested if expressions" {
+                Expect.equal (evaluate "if 5 > 3 then if 2 < 4 then 100 else 50 else 0") 100
+                    "nested if should work"
+            }
+            test "if with arithmetic in condition" {
+                Expect.equal (evaluate "if 2 + 3 > 4 then 10 else 20") 10
+                    "if with arithmetic condition"
+            }
+            test "if with let binding" {
+                Expect.equal (evaluate "let x = 10 in if x > 5 then x else 0") 10
+                    "if with let binding"
+            }
+        ]
+
+        testList "CTRL-02: Boolean Literals" [
+            test "true evaluates to true" {
+                Expect.isTrue (evaluateToBool "true") "true should be true"
+            }
+            test "false evaluates to false" {
+                Expect.isFalse (evaluateToBool "false") "false should be false"
+            }
+            test "boolean in let binding" {
+                Expect.isTrue (evaluateToBool "let b = true in b") "let b = true in b"
+            }
+        ]
+
+        testList "CTRL-03: Comparison Operators" [
+            test "less than true" {
+                Expect.equal (evaluate "if 3 < 5 then 1 else 0") 1 "3 < 5 should be true"
+            }
+            test "less than false" {
+                Expect.equal (evaluate "if 5 < 3 then 1 else 0") 0 "5 < 3 should be false"
+            }
+            test "greater than" {
+                Expect.equal (evaluate "if 5 > 3 then 10 else 20") 10 "5 > 3 should be true"
+            }
+            test "less or equal true" {
+                Expect.equal (evaluate "if 3 <= 3 then 1 else 0") 1 "3 <= 3 should be true"
+            }
+            test "less or equal false" {
+                Expect.equal (evaluate "if 4 <= 3 then 1 else 0") 0 "4 <= 3 should be false"
+            }
+            test "greater or equal true" {
+                Expect.equal (evaluate "if 5 >= 5 then 1 else 0") 1 "5 >= 5 should be true"
+            }
+            test "greater or equal false" {
+                Expect.equal (evaluate "if 3 >= 5 then 1 else 0") 0 "3 >= 5 should be false"
+            }
+            test "equal integers" {
+                Expect.equal (evaluate "if 5 = 5 then 1 else 0") 1 "5 = 5 should be true"
+            }
+            test "equal integers false" {
+                Expect.equal (evaluate "if 5 = 3 then 1 else 0") 0 "5 = 3 should be false"
+            }
+            test "not equal true" {
+                Expect.equal (evaluate "if 5 <> 3 then 1 else 0") 1 "5 <> 3 should be true"
+            }
+            test "not equal false" {
+                Expect.equal (evaluate "if 5 <> 5 then 1 else 0") 0 "5 <> 5 should be false"
+            }
+        ]
+
+        testList "CTRL-04: Logical Operators" [
+            test "and true true" {
+                Expect.equal (evaluate "if true && true then 1 else 0") 1 "true && true"
+            }
+            test "and true false" {
+                Expect.equal (evaluate "if true && false then 1 else 0") 0 "true && false"
+            }
+            test "and false true" {
+                Expect.equal (evaluate "if false && true then 1 else 0") 0 "false && true"
+            }
+            test "or true false" {
+                Expect.equal (evaluate "if true || false then 1 else 0") 1 "true || false"
+            }
+            test "or false true" {
+                Expect.equal (evaluate "if false || true then 1 else 0") 1 "false || true"
+            }
+            test "or false false" {
+                Expect.equal (evaluate "if false || false then 1 else 0") 0 "false || false"
+            }
+            test "complex condition with and" {
+                Expect.equal (evaluate "let x = 10 in let y = 20 in if x = 10 && y = 20 then 1 else 0") 1
+                    "x = 10 && y = 20"
+            }
+            test "complex condition with or" {
+                Expect.equal (evaluate "if 1 > 2 || 3 < 4 then 1 else 0") 1 "1 > 2 || 3 < 4"
+            }
+        ]
+
+        testList "Type Errors" [
+            test "if condition must be bool" {
+                Expect.throws (fun () -> evaluate "if 1 then 2 else 3" |> ignore)
+                    "if condition must be bool"
+            }
+            test "arithmetic requires int" {
+                Expect.throws (fun () -> evaluate "true + 1" |> ignore)
+                    "arithmetic requires int"
+            }
+            test "comparison requires int" {
+                Expect.throws (fun () -> evaluateToBool "true < false" |> ignore)
+                    "comparison requires int"
+            }
+            test "and requires bool" {
+                Expect.throws (fun () -> evaluateToBool "1 && 2" |> ignore)
+                    "and requires bool"
+            }
+        ]
+
+        testList "AST Construction" [
+            test "parse if-then-else" {
+                let ast = parse "if true then 1 else 2"
+                Expect.equal ast (If(Bool true, Number 1, Number 2)) "if AST"
+            }
+            test "parse comparison" {
+                let ast = parse "5 > 3"
+                Expect.equal ast (GreaterThan(Number 5, Number 3)) "comparison AST"
+            }
+            test "parse logical and" {
+                let ast = parse "true && false"
+                Expect.equal ast (And(Bool true, Bool false)) "and AST"
+            }
+            test "parse logical or" {
+                let ast = parse "true || false"
+                Expect.equal ast (Or(Bool true, Bool false)) "or AST"
+            }
+        ]
+    ]
+
+// ============================================================
 // Entry Point
 // ============================================================
 
@@ -315,6 +476,7 @@ let main argv =
     runTestsWithCLIArgs [] argv <| testList "FunLang Tests" [
         phase2Tests
         phase3Tests
+        phase4Tests
         propertyTests
         lexerTests
     ]

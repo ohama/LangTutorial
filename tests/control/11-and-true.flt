@@ -1,0 +1,4 @@
+// Test: logical and with both true (CTRL-04)
+// --- Command: dotnet run --project FunLang -- --expr "if true && true then 1 else 0"
+// --- Output:
+1

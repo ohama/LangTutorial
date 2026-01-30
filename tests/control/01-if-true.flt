@@ -1,0 +1,4 @@
+// Test: if true evaluates then branch (CTRL-01)
+// --- Command: dotnet run --project FunLang -- --expr "if true then 1 else 2"
+// --- Output:
+1

@@ -1,0 +1,4 @@
+// Test: false literal (CTRL-02)
+// --- Command: dotnet run --project FunLang -- --expr "false"
+// --- Output:
+false
