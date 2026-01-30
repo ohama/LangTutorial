@@ -11,6 +11,7 @@
 | 7 | [setup-fslexyacc-build-order](setup-fslexyacc-build-order.md) | FsLexYacc에서 Parser before Lexer 빌드 순서 설정 | 2026-01-30 |
 | 8 | [testing-strategies](testing-strategies.md) | FunLang 테스트 전략 - fslit, Expecto, FsCheck 활용 가이드 | 2026-01-30 |
 | 9 | [write-fscheck-property-tests](write-fscheck-property-tests.md) | FsCheck로 속성 기반 테스트 작성 - 수학적 불변식 검증 | 2026-01-30 |
+| 10 | [write-fslit-file-tests](write-fslit-file-tests.md) | fslit으로 CLI 파일 기반 테스트 작성 - LLVM lit 스타일 | 2026-01-30 |
 
 ---
-총 9개 | 업데이트: 2026-01-30
+총 10개 | 업데이트: 2026-01-30
