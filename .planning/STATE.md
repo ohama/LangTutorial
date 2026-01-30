@@ -2,18 +2,19 @@
 
 ## Current Status
 
-**Phase:** Phase 1 - Foundation & Pipeline
-**Status:** ● Complete (3/3 plans complete)
-**Progress:** 1/6 phases complete (17%)
-**Last activity:** 2026-01-30 - Completed 01-03-PLAN.md
+**Phase:** Phase 7 - CLI Options & File-Based Tests
+**Status:** ◐ In Progress (1/1 plans complete)
+**Progress:** 3/7 phases complete (43%)
+**Last activity:** 2026-01-30 - Completed plan 07-01
 
 ```
 Phase 1 [██████████] 100% ✓ Complete
-Phase 2 [○○○○○○○○○○] 0%   ← You are here
-Phase 3 [○○○○○○○○○○] 0%
+Phase 2 [██████████] 100% ✓ Complete
+Phase 3 [○○○○○○○○○○] 0%   ← Next (main track)
 Phase 4 [○○○○○○○○○○] 0%
 Phase 5 [○○○○○○○○○○] 0%
 Phase 6 [○○○○○○○○○○] 0%
+Phase 7 [██████████] 100% ✓ Complete (parallel track)
 ```
 
 ---
@@ -39,11 +40,12 @@ Phase 6 [○○○○○○○○○○] 0%
 | Phase | Name | Status | Plans | Requirements | Progress |
 |-------|------|--------|-------|--------------|----------|
 | 1 | Foundation & Pipeline | ● Complete | 3/3 | 4 | 100% |
-| 2 | Arithmetic Expressions | ○ Pending | 0/0 | 4 | 0% |
+| 2 | Arithmetic Expressions | ● Complete | 2/2 | 4 | 100% |
 | 3 | Variables & Binding | ○ Pending | 0/0 | 3 | 0% |
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
 | 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
 | 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
+| 7 | CLI Options & File-Based Tests | ● Complete | 1/1 | 5 | 100% |
 
 **Legend:**
 - ○ Pending: Not started
@@ -67,10 +69,15 @@ Phase 6 [○○○○○○○○○○] 0%
 
 ## Accumulated Context
 
+### Roadmap Evolution
+
+- Phase 7 added: CLI Options & File-Based Tests (parallel with Phase 3-6)
+
 ### Decisions Made
 
 | Decision | Phase | Rationale | Date |
 |----------|-------|-----------|------|
+| 7-phase structure | Roadmap | Added Phase 7 for CLI/file tests, can run parallel to main track | 2026-01-30 |
 | 6-phase structure | Roadmap | Natural boundaries by language feature, aligns with research | 2025-01-30 |
 | Foundation first | Phase 1 | Must establish pipeline before adding features | 2025-01-30 |
 | Sequential dependencies | Roadmap | Each phase builds on previous infrastructure | 2025-01-30 |
@@ -84,10 +91,13 @@ Phase 6 [○○○○○○○○○○] 0%
 | FSharp.Text.Lexing namespace | 01-02 | Required in Lexer.fsl for LexBuffer type access | 2026-01-30 |
 | Track generated files in git | 01-03 | Generated Parser/Lexer files tracked for reproducible builds | 2026-01-30 |
 | Build order documentation in .fsproj | 01-03 | Prevent future "Parser not found" errors with clear comments | 2026-01-30 |
+| Pattern matching order in CLI | 07-01 | Most specific patterns first to avoid F# unreachable pattern warnings | 2026-01-30 |
+| formatToken sprintf for NUMBER | 07-01 | Show value in token output for debugging (NUMBER(5) vs NUMBER) | 2026-01-30 |
+| --emit-type reservation | 07-01 | Reserve CLI interface for future type checking phase | 2026-01-30 |
 
 ### Active TODOs
 
-**Next action:** Plan Phase 2 (Arithmetic Expressions)
+**Next action:** Plan Phase 3 (Variables & Binding) - main track development
 
 **Blocking issues:** None
 
@@ -103,10 +113,10 @@ None currently.
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 01-03 execution (Phase 1 COMPLETE)
-**What happened:** Completed plan 01-03 (Main Program & Pipeline). Wired lexer and parser in Program.fs, verified end-to-end pipeline with "42" → "AST: Number 42", documented build order in .fsproj. 2 tasks, 2 commits (548fb45, 217b70b). Phase 1 complete - all 4 requirements (FOUND-01 through FOUND-04) verified.
-**What's next:** Plan Phase 2 (Arithmetic Expressions) using `/gsd:plan-phase 2`
-**Stopped at:** Phase 1 complete, ready for Phase 2
+**Last session:** 2026-01-30 - Plan 07-01 execution (Phase 7 COMPLETE)
+**What happened:** Completed plan 07-01 (CLI Options & File Input). Created Format.fs with token formatter and lex helper. Expanded Program.fs with --emit-tokens, --emit-ast, --emit-type options and file input support. 2 tasks, 2 commits (35c4e15, e833d17). Phase 7 complete - CLI foundation ready for testing infrastructure.
+**What's next:** Plan Phase 3 (Variables & Binding) for main track, or continue with Phase 4-6
+**Stopped at:** Phase 7 complete
 **Resume file:** None
 
 **If continuing from interruption:**
