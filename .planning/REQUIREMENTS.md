@@ -43,7 +43,7 @@
 
 - [ ] **QUAL-01**: 사용자 친화적 에러 메시지
 - [ ] **QUAL-02**: 대화형 REPL 셸
-- [ ] **QUAL-03**: Expecto로 각 chapter 테스트
+- [ ] **QUAL-03**: Expecto, FsCheck, fslit으로 테스트
 
 ## v2 Requirements
 

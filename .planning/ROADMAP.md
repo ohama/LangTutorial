@@ -154,13 +154,13 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 **Requirements:**
 - **QUAL-01**: 사용자 친화적 에러 메시지
 - **QUAL-02**: 대화형 REPL 셸
-- **QUAL-03**: Expecto로 각 chapter 테스트
+- **QUAL-03**: Expecto, FsCheck, fslit으로 테스트
 
 **Success Criteria:**
 1. 사용자가 잘못된 문법 "let x ="을 입력하면 위치와 예상 토큰을 포함한 명확한 에러 메시지를 표시한다
 2. 사용자가 정의되지 않은 변수 "y"를 참조하면 "Variable 'y' not found. Did you mean 'x'?"와 같은 제안을 받는다
 3. 사용자가 REPL을 실행하면 프롬프트가 표시되고 여러 줄의 명령을 순차적으로 입력할 수 있다
-4. 각 Chapter (1-4)에 대한 Expecto 테스트 스위트가 존재하고 모든 테스트가 통과한다
+4. Expecto 단위 테스트, FsCheck 속성 테스트, fslit 파일 기반 테스트가 모두 통과한다
 
 **Depends on:** Phase 5 (모든 기능이 구현되어야 종합 테스트 가능)
 
@@ -168,7 +168,7 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 - Error 타입 정의 (LexError, ParseError, RuntimeError)
 - Position tracking (line, column)
 - REPL은 세션 상태 유지 (환경이 누적됨)
-- Expecto 테스트로 회귀 방지
+- Expecto (단위), FsCheck (속성), fslit (파일 기반) 테스트로 회귀 방지
 
 ---
 

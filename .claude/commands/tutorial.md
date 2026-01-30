@@ -40,6 +40,22 @@ ls -la tutorial/*.md 2>/dev/null || echo "No chapters yet"
 - 실행 예제: 입력과 출력 예시
 - 소스 참조: 전체 코드는 `FunLang/` 디렉토리 참고하라고 안내
 
+## 테스트 도구
+
+- **Expecto**: 단위 테스트 프레임워크
+- **FsCheck**: 속성 기반 테스트 (property-based testing)
+- **fslit**: 파일 기반 테스트 (LLVM lit 스타일) - https://github.com/ohama/fslit
+
+### fslit 테스트 형식 (.flt)
+
+```
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+2 + 3 * 4
+// --- Output:
+14
+```
+
 ## 인자 처리
 
 `$ARGUMENTS`가 있으면:
