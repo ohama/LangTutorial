@@ -32,6 +32,10 @@ let formatToken (token: Parser.token) : string =
     // Phase 4: Logical operator tokens
     | Parser.AND -> "AND"
     | Parser.OR -> "OR"
+    // Phase 5: Function tokens
+    | Parser.FUN -> "FUN"
+    | Parser.REC -> "REC"
+    | Parser.ARROW -> "ARROW"
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string
