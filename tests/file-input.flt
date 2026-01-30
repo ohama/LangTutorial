@@ -1,0 +1,36 @@
+// File input tests using %input variable
+
+// Test: Simple file execution
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+2 + 3
+// --- Output:
+5
+
+// Test: Complex expression from file
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(2 + 3) * 4
+// --- Output:
+20
+
+// Test: File with emit-tokens
+// --- Command: dotnet run --project FunLang -- --emit-tokens %input
+// --- Input:
+2 + 3
+// --- Output:
+NUMBER(2) PLUS NUMBER(3) EOF
+
+// Test: File with emit-ast
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+2 + 3 * 4
+// --- Output:
+Add (Number 2, Multiply (Number 3, Number 4))
+
+// Test: Multi-digit numbers from file
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+100 + 234
+// --- Output:
+334
