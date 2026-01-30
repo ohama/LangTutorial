@@ -1,0 +1,4 @@
+// Test: Let with expression body
+// --- Command: dotnet run --project FunLang -- --expr "let x = 5 in x + 1"
+// --- Output:
+6

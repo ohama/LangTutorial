@@ -1,0 +1,4 @@
+// Test: Variable in complex expression
+// --- Command: dotnet run --project FunLang -- --expr "let x = 10 in x / 2 - 3"
+// --- Output:
+2

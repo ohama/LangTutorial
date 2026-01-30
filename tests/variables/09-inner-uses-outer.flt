@@ -1,0 +1,4 @@
+// Test: Inner let uses outer variable
+// --- Command: dotnet run --project FunLang -- --expr "let x = 5 in let y = x + 1 in y"
+// --- Output:
+6

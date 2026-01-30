@@ -1,0 +1,4 @@
+// Test: Multiple uses of same variable
+// --- Command: dotnet run --project FunLang -- --expr "let x = 2 in x + x"
+// --- Output:
+4

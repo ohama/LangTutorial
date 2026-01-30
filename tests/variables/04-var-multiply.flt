@@ -1,0 +1,4 @@
+// Test: Variable in multiplication
+// --- Command: dotnet run --project FunLang -- --expr "let x = 3 in x * 4"
+// --- Output:
+12
