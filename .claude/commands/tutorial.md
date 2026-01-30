@@ -40,6 +40,21 @@ ls -la tutorial/*.md 2>/dev/null || echo "No chapters yet"
 - 실행 예제: 입력과 출력 예시
 - 소스 참조: 전체 코드는 `FunLang/` 디렉토리 참고하라고 안내
 
+## FunLang CLI 인터페이스
+
+```
+funlang [options] [file]
+
+Options:
+  --expr <expr>      식을 직접 평가 (파일 대신)
+  --emit-tokens      토큰 출력 (디버깅/학습용)
+  --emit-ast         AST 출력 (디버깅/학습용)
+  --interactive, -i  REPL 모드
+```
+
+- `--expr` 없으면 파일에서 프로그램 읽음
+- 적절한 시점에 점진적으로 추가
+
 ## 테스트 도구
 
 - **Expecto**: 단위 테스트 프레임워크
@@ -54,6 +69,14 @@ ls -la tutorial/*.md 2>/dev/null || echo "No chapters yet"
 2 + 3 * 4
 // --- Output:
 14
+```
+
+```
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+2 + 3
+// --- Output:
+Add(Int 2, Int 3)
 ```
 
 ## 인자 처리
