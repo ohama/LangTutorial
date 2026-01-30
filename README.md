@@ -13,9 +13,9 @@ fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다.
 | 3 | Variables & Binding | ✓ 완료 |
 | 4 | Control Flow | ✓ 완료 |
 | 5 | Functions & Abstraction | ✓ 완료 |
-| 6 | Quality & Polish | ○ 예정 |
+| 6 | Quality & Polish | ⏸ 보류 |
 
-**현재:** Turing-complete 언어 달성 (Phase 5 완료)
+**현재:** Turing-complete 언어 달성 (Phase 5 완료, Phase 6 보류)
 
 ## 빠른 시작
 

@@ -2,177 +2,74 @@
 
 ## Current Status
 
-**Phase:** Phase 4 - Control Flow
-**Status:** ● Complete (1/1 plans complete)
-**Progress:** 5/7 phases complete (71%)
-**Last activity:** 2026-01-30 - Completed plan 04-01
+**Milestone:** v1.0 FunLang MVP
+**Status:** SHIPPED 2026-01-31
+**Progress:** 6/7 phases complete (Phase 6 on hold)
 
 ```
-Phase 1 [██████████] 100% ✓ Complete
-Phase 2 [██████████] 100% ✓ Complete
-Phase 3 [██████████] 100% ✓ Complete
-Phase 4 [██████████] 100% ✓ Complete (plan 01)
-Phase 5 [○○○○○○○○○○] 0%   ← Next (main track)
-Phase 6 [○○○○○○○○○○] 0%
-Phase 7 [██████████] 100% ✓ Complete (parallel track)
+v1.0 MVP - SHIPPED
+├── Phase 1 [██████████] ✓ Foundation & Pipeline
+├── Phase 2 [██████████] ✓ Arithmetic Expressions
+├── Phase 3 [██████████] ✓ Variables & Binding
+├── Phase 4 [██████████] ✓ Control Flow
+├── Phase 5 [██████████] ✓ Functions & Abstraction (Turing-complete!)
+├── Phase 6 [----------] ⏸ Quality & Polish (on hold)
+└── Phase 7 [██████████] ✓ CLI Options & File-Based Tests
 ```
 
 ---
 
 ## Project Reference
 
-**See:** .planning/PROJECT.md (updated 2025-01-30)
+**See:** .planning/PROJECT.md (updated 2026-01-31)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-**Current focus:** Phase 5 준비 - Functions & Abstraction (람다, 함수 정의)
+**Current focus:** Project complete (v1.0 shipped, Phase 6 on hold)
 
 **Tech stack:**
 - F# (.NET 10)
-- FsLexYacc (fslex + fsyacc)
-- Discriminated Unions for AST
-- Value type (IntValue | BoolValue) for evaluation results
-- Expecto for testing (Phase 6)
+- FsLexYacc 11.3.0 (fslex + fsyacc)
+- Value type (IntValue | BoolValue | FunctionValue)
+- Expecto + FsCheck + fslit for testing
 
 ---
 
-## Phase Status
+## Milestone History
 
-| Phase | Name | Status | Plans | Requirements | Progress |
-|-------|------|--------|-------|--------------|----------|
-| 1 | Foundation & Pipeline | ● Complete | 3/3 | 4 | 100% |
-| 2 | Arithmetic Expressions | ● Complete | 2/2 | 4 | 100% |
-| 3 | Variables & Binding | ● Complete | 2/2 | 3 | 100% |
-| 4 | Control Flow | ● Complete | 1/1 | 4 | 100% |
-| 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
-| 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
-| 7 | CLI Options & File-Based Tests | ● Complete | 2/2 | 5 | 100% |
+| Milestone | Shipped | Phases | Key Achievement |
+|-----------|---------|--------|-----------------|
+| v1.0 MVP | 2026-01-31 | 1-5, 7 | Turing-complete 언어 |
 
-**Legend:**
-- ○ Pending: Not started
-- ◐ In Progress: Active work
-- ● Complete: All requirements met
+**Archives:** `.planning/milestones/`
 
 ---
 
 ## Performance Metrics
 
-**Velocity:** 2 phases/session
-**Avg plans per phase:** 2.0 (10 plans in 5 phases)
-**Completion rate:** 71% (5/7 phases)
-
-**Milestones:**
-- [x] Phase 2 complete: 첫 실행 가능한 계산기
-- [x] Phase 3 complete: 변수 바인딩 및 스코프
-- [x] Phase 4 complete: 조건문 및 불리언 연산
-- [ ] Phase 5 complete: Turing-complete 언어 달성
-- [ ] Phase 6 complete: 전체 튜토리얼 완성
-- [x] Phase 7 complete: CLI 옵션 및 파일 기반 테스트
-
----
-
-## Accumulated Context
-
-### Roadmap Evolution
-
-- Phase 7 added: CLI Options & File-Based Tests (parallel with Phase 3-6)
-
-### Decisions Made
-
-| Decision | Phase | Rationale | Date |
-|----------|-------|-----------|------|
-| 7-phase structure | Roadmap | Added Phase 7 for CLI/file tests, can run parallel to main track | 2026-01-30 |
-| 6-phase structure | Roadmap | Natural boundaries by language feature, aligns with research | 2025-01-30 |
-| Foundation first | Phase 1 | Must establish pipeline before adding features | 2025-01-30 |
-| Sequential dependencies | Roadmap | Each phase builds on previous infrastructure | 2025-01-30 |
-| /tutorial command | Pre-project | Created as Claude command instead of phase | 2025-01-30 |
-| Target .NET 10 | 01-01 | Latest .NET version for modern F# language features and performance | 2026-01-30 |
-| FsLexYacc 11.3.0 | 01-01 | Stable version compatible with .NET 10 | 2026-01-30 |
-| Minimal AST in Phase 1 | 01-01 | Number-only Expr type proves pipeline; arithmetic operators in Phase 2 | 2026-01-30 |
-| Compilation order Ast.fs first | 01-01 | F# requires dependencies compiled before usage | 2026-01-30 |
-| FsYacc before FsLex build order | 01-02 | Lexer.fsl opens Parser module, so Parser.fs must exist first | 2026-01-30 |
-| Generated files in source directory | 01-02 | FsLexYacc default behavior (not obj/) - reference directly in .fsproj | 2026-01-30 |
-| FSharp.Text.Lexing namespace | 01-02 | Required in Lexer.fsl for LexBuffer type access | 2026-01-30 |
-| Track generated files in git | 01-03 | Generated Parser/Lexer files tracked for reproducible builds | 2026-01-30 |
-| Build order documentation in .fsproj | 01-03 | Prevent future "Parser not found" errors with clear comments | 2026-01-30 |
-| Pattern matching order in CLI | 07-01 | Most specific patterns first to avoid F# unreachable pattern warnings | 2026-01-30 |
-| formatToken sprintf for NUMBER | 07-01 | Show value in token output for debugging (NUMBER(5) vs NUMBER) | 2026-01-30 |
-| --emit-type reservation | 07-01 | Reserve CLI interface for future type checking phase | 2026-01-30 |
-| Verify tests against actual output | 07-02 | All test expectations verified by running CLI before committing | 2026-01-30 |
-| fslit %input variable for files | 07-02 | Self-contained tests without external file dependencies | 2026-01-30 |
-| Organize tests by CLI option | 07-02 | Separate files for cli, emit-tokens, emit-ast, file-input | 2026-01-30 |
-| Environment as Map<string, int> | 03-01 | O(log n) lookup, immutable, functional style for variable storage | 2026-01-30 |
-| evalExpr wrapper function | 03-01 | Hides environment plumbing from Program.fs for top-level calls | 2026-01-30 |
-| Lexer keyword ordering | 03-01 | Keywords (let, in) before identifier pattern to prevent IDENT match | 2026-01-30 |
-| failwithf for undefined vars | 03-01 | Simple error handling now, to be enhanced with proper types in Phase 6 | 2026-01-30 |
-| One test per file in fslit | 03-02 | Organize tests in category directories (tests/variables/, etc.) | 2026-01-30 |
-| Numbered test files | 03-02 | Clear ordering and readability (01-basic-let.flt, etc.) | 2026-01-30 |
-| Value type before Expr | 04-01 | F# requires types in dependency order | 2026-01-30 |
-| Precedence for new operators | 04-01 | %left/%nonassoc for new ops, keep Term/Factor for arithmetic | 2026-01-30 |
-| %nonassoc for comparisons | 04-01 | Prevents invalid chains like "1 < 2 < 3" | 2026-01-30 |
-| Short-circuit logical operators | 04-01 | And/Or only evaluate right if needed | 2026-01-30 |
-| Equal/NotEqual polymorphism | 04-01 | Work on both int and bool (same type required) | 2026-01-30 |
-| Clear type error messages | 04-01 | "Type error: [op] requires [type] operands" format | 2026-01-30 |
-
-### Active TODOs
-
-**Next action:** Plan Phase 5 (Functions & Abstraction) - main track development
-
-**Blocking issues:** None
-
-**Research gaps:**
-- Phase 5: Closure representation techniques (to be researched during planning)
-
-### Known Blockers
-
-None currently.
+**v1.0 Stats:**
+- 6 phases, 12 plans
+- 97 commits
+- 2,117 lines F#
+- 195 tests (66 fslit + 129 Expecto)
+- 2 days development
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 04-01 execution (Phase 4 COMPLETE)
-**What happened:** Completed plan 04-01 (Control Flow). Added Value type (IntValue | BoolValue), boolean literals, if-then-else, comparison operators (=, <>, <, >, <=, >=), and logical operators (&&, ||) with short-circuit evaluation. Type-checking evaluator with clear error messages. All 33 existing tests pass. 6 tasks, 6 commits.
-**What's next:** Plan Phase 5 (Functions & Abstraction) for main track
-**Stopped at:** Completed 04-01-PLAN.md
+**Last session:** 2026-01-31 - v1.0 milestone complete
+**What happened:** Completed Phase 5, put Phase 6 on hold, archived v1.0 milestone
+**What's next:** Project complete (Phase 6 available if needed)
+**Stopped at:** v1.0 shipped
 **Resume file:** None
 
-**If continuing from interruption:**
-1. Review ROADMAP.md for phase structure
-2. Check this STATE.md for current phase
-3. Review REQUIREMENTS.md for requirement details
-4. Proceed with `/gsd:plan-phase <number>` for next phase
-
-**Key files:**
-- `.planning/ROADMAP.md` - Phase structure and success criteria
-- `.planning/REQUIREMENTS.md` - Detailed requirements with traceability
-- `.planning/PROJECT.md` - Core value and constraints
-- `.planning/research/SUMMARY.md` - Research findings and architecture guidance
+**If resuming Phase 6:**
+1. Create new ROADMAP.md with Phase 6 details
+2. Create new REQUIREMENTS.md for Phase 6
+3. Run `/gsd:plan-phase 6`
 
 ---
 
-## Notes
-
-**Project characteristics:**
-- Tutorial project (educational focus, not product)
-- Solo developer workflow (user + Claude)
-- Sequential phases (each builds on previous)
-- Each phase produces working, testable code
-
-**Critical success factors:**
-1. Each chapter must run independently
-2. Progressive complexity (one feature per chapter)
-3. Complete working examples at each step
-4. Clear documentation for F# developers
-
-**Anti-patterns to avoid:**
-- Non-incremental structure (breaking code between chapters)
-- Horizontal layers (all models, then all APIs)
-- Build order dependency issues (Parser must generate before Lexer)
-- Insufficient error handling
-- Mega interpreter anti-pattern (monolithic code)
-
----
-
-*Last updated: 2026-01-30*
-*Next update: After Phase 5 planning*
+*Last updated: 2026-01-31*
+*Status: v1.0 SHIPPED*

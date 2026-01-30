@@ -11,17 +11,17 @@ F# 언어 구현 튜토리얼 프로젝트. fslex/fsyacc를 사용한 인터프�
 ## 테스트 실행
 
 ```bash
-make -C tests        # 전체 테스트 (21개)
-make -C tests check  # 빌드 후 테스트
+make -C tests                      # fslit 테스트 (66개)
+dotnet run --project FunLang.Tests # Expecto 테스트 (129개)
 ```
 
 ## 현재 상태
 
-- Phase 1, 2, 7 완료 (43%)
-- 다음: Phase 3 (Variables & Binding)
+- Phase 1-5, 7 완료 (86%)
+- Phase 6 보류
+- **Turing-complete 언어 달성**
 
 ## 작업 시 참고
 
-1. 새 Phase 시작: `/gsd:plan-phase N`
-2. 테스트 추가: `TESTING.md` 참조
-3. howto 문서: `docs/howto/README.md`
+1. 테스트 추가: `TESTING.md` 참조
+2. howto 문서: `docs/howto/README.md`
