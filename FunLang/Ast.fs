@@ -9,3 +9,6 @@ type Expr =
     | Multiply of Expr * Expr
     | Divide of Expr * Expr
     | Negate of Expr  // Unary minus
+    // Phase 3: Variables
+    | Var of string           // Variable reference
+    | Let of string * Expr * Expr  // let name = expr1 in expr2
