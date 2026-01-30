@@ -165,6 +165,12 @@ Plans:
 
 **Depends on:** Phase 4 (조건문이 재귀 함수에 필요)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — AST + Lexer + Parser + Format (function syntax)
+- [ ] 05-02-PLAN.md — Evaluator + fslit tests (function semantics)
+
 **Notes:**
 - Function 값 타입 도입 (파라미터, 본문, 캡처된 환경)
 - 클로저는 환경을 캡처하여 first-class function 지원
@@ -306,9 +312,9 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** Plan Phase 5 (Functions & Abstraction)
+**Immediate:** Execute Phase 5 (Functions & Abstraction)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 4 complete)*
+*Last updated: 2026-01-30 (Phase 5 planned)*
