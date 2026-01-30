@@ -75,8 +75,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — AST expansion + Evaluator
-- [ ] 02-02-PLAN.md — Parser grammar + Lexer tokens + Pipeline wiring
+- [x] 02-01-PLAN.md — AST expansion + Evaluator
+- [x] 02-02-PLAN.md — Parser grammar + Lexer tokens + Pipeline wiring
 
 **Notes:**
 - 첫 번째 실행 가능한 인터프리터 (즉각적인 만족감 제공)
@@ -191,13 +191,13 @@ Plans:
 | Phase | Status | Progress |
 |-------|--------|----------|
 | 1 - Foundation & Pipeline | ● Complete | 4/4 requirements |
-| 2 - Arithmetic Expressions | ○ Pending | 0/4 requirements |
+| 2 - Arithmetic Expressions | ● Complete | 4/4 requirements |
 | 3 - Variables & Binding | ○ Pending | 0/3 requirements |
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
 
-**Overall:** 1/6 phases complete (17%)
+**Overall:** 2/6 phases complete (33%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -254,13 +254,9 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** `/gsd:execute-phase 2` to execute Phase 2 (Arithmetic Expressions)
-
-**Phase 2 plans ready:**
-- 02-01-PLAN.md (Wave 1): AST expansion + Evaluator
-- 02-02-PLAN.md (Wave 2): Parser + Lexer + Wiring
+**Immediate:** `/gsd:plan-phase 3` to plan Phase 3 (Variables & Binding)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 2 planned)*
+*Last updated: 2026-01-30 (Phase 2 complete)*

@@ -11,7 +11,8 @@
     4. Parser.fsi   - Generated parser signature
     5. Parser.fs    - Generated parser implementation
     6. Lexer.fs     - Generated lexer implementation
-    7. Program.fs   - Main entry point
+    7. Eval.fs      - Evaluator (pattern matching on AST)
+    8. Program.fs   - Main entry point
 
     WHY THIS ORDER:
     - Lexer.fsl opens Parser to access token types (NUMBER, EOF, etc.)
@@ -49,7 +50,10 @@
     <!-- 5. Generated lexer file (FsLex generates in source directory) -->
     <Compile Include="Lexer.fs" />
 
-    <!-- 6. Main program (to be implemented in Plan 03) -->
+    <!-- 6. Evaluator (uses Ast, used by Program) -->
+    <Compile Include="Eval.fs" />
+
+    <!-- 7. Main program -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 

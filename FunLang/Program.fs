@@ -1,6 +1,7 @@
 open System
 open FSharp.Text.Lexing
 open Ast
+open Eval
 
 /// Parse a string input and return the AST
 let parse (input: string) : Expr =
@@ -9,21 +10,27 @@ let parse (input: string) : Expr =
 
 [<EntryPoint>]
 let main argv =
-    // Test input - just a number for Phase 1
-    let testInput = "42"
-
-    printfn "FunLang Interpreter - Phase 1: Foundation"
-    printfn "========================================="
-    printfn ""
-    printfn "Input: %s" testInput
-
-    try
-        let ast = parse testInput
-        printfn "AST: %A" ast
+    match argv with
+    | [| "--expr"; expr |] ->
+        try
+            let result = expr |> parse |> eval
+            printfn "%d" result
+            0
+        with ex ->
+            eprintfn "Error: %s" ex.Message
+            1
+    | [| "--help" |] | [| "-h" |] ->
+        printfn "FunLang Interpreter"
         printfn ""
-        printfn "Pipeline successful!"
-        0  // Success exit code
-    with
-    | ex ->
-        printfn "Error: %s" ex.Message
-        1  // Error exit code
+        printfn "Usage:"
+        printfn "  funlang --expr <expression>  Evaluate an expression"
+        printfn "  funlang --help               Show this help"
+        printfn ""
+        printfn "Examples:"
+        printfn "  funlang --expr \"2 + 3 * 4\""
+        printfn "  funlang --expr \"(2 + 3) * 4\""
+        0
+    | _ ->
+        eprintfn "Usage: funlang --expr <expression>"
+        eprintfn "       funlang --help"
+        1

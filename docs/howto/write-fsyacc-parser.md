@@ -83,6 +83,12 @@ open Ast  // AST 타입 사용
 - `%right`: 우결합
 - `%nonassoc`: 결합 없음
 
+> ⚠️ **FsYacc 버그 경고**: `%left`, `%right`, `%nonassoc`, `%prec`는 FsYacc에서 알려진 버그가 있다.
+> - [Issue #39](https://github.com/fsprojects/FsLexYacc/issues/39): `%nonassoc`가 right-associative처럼 동작
+> - [Issue #40](https://github.com/fsprojects/FsLexYacc/issues/40): precedence 선언이 reduce/reduce 충돌에 무시됨
+>
+> **권장**: Grammar Stratification (Expr/Term/Factor) 패턴 사용 → [fsyacc-precedence-without-declarations](fsyacc-precedence-without-declarations.md)
+
 ### Section 3: Rules
 
 `%%` 다음에 문법 규칙을 정의한다.
@@ -244,6 +250,10 @@ val start: (FSharp.Text.Lexing.LexBuffer<'a> -> token) -> FSharp.Text.Lexing.Lex
 
 ## 관련 문서
 
+- [fsyacc-precedence-without-declarations](fsyacc-precedence-without-declarations.md) - 버그 없는 우선순위 처리 (권장)
+- [fsyacc-operator-precedence-methods](fsyacc-operator-precedence-methods.md) - 우선순위 처리 방법 비교
 - [setup-fslexyacc-build-order](setup-fslexyacc-build-order.md) - 빌드 순서 설정
 - [write-fslex-lexer](write-fslex-lexer.md) - fslex 렉서 작성법
 - [FsLexYacc 공식 문서](https://fsprojects.github.io/FsLexYacc/)
+- [FsLexYacc Issue #39](https://github.com/fsprojects/FsLexYacc/issues/39) - %nonassoc 버그
+- [FsLexYacc Issue #40](https://github.com/fsprojects/FsLexYacc/issues/40) - precedence 버그

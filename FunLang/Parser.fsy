@@ -4,6 +4,8 @@ open Ast
 
 // Token declarations
 %token <int> NUMBER
+%token PLUS MINUS STAR SLASH
+%token LPAREN RPAREN
 %token EOF
 
 // Start symbol and its type
@@ -12,6 +14,24 @@ open Ast
 
 %%
 
-// Grammar rules
+// Grammar rules using Expr/Term/Factor pattern for precedence
+// Lower precedence (+ -) at higher grammar level
+// Higher precedence (* /) at lower grammar level
+
 start:
-  | NUMBER EOF { Number $1 }
+    | Expr EOF           { $1 }
+
+Expr:
+    | Expr PLUS Term     { Add($1, $3) }
+    | Expr MINUS Term    { Subtract($1, $3) }
+    | Term               { $1 }
+
+Term:
+    | Term STAR Factor   { Multiply($1, $3) }
+    | Term SLASH Factor  { Divide($1, $3) }
+    | Factor             { $1 }
+
+Factor:
+    | NUMBER             { Number($1) }
+    | LPAREN Expr RPAREN { $2 }
+    | MINUS Factor       { Negate($2) }

@@ -2,15 +2,30 @@
 module Parser
 type token = 
   | EOF
+  | LPAREN
+  | RPAREN
+  | PLUS
+  | MINUS
+  | STAR
+  | SLASH
   | NUMBER of (int)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_LPAREN
+    | TOKEN_RPAREN
+    | TOKEN_PLUS
+    | TOKEN_MINUS
+    | TOKEN_STAR
+    | TOKEN_SLASH
     | TOKEN_NUMBER
     | TOKEN_end_of_input
     | TOKEN_error
 type nonTerminalId = 
     | NONTERM__startstart
     | NONTERM_start
+    | NONTERM_Expr
+    | NONTERM_Term
+    | NONTERM_Factor
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 

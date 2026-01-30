@@ -15,7 +15,13 @@ let newline = ('\n' | '\r' '\n')
 
 // Lexer rules
 rule tokenize = parse
-  | whitespace+   { tokenize lexbuf }           // Skip whitespace
-  | newline       { tokenize lexbuf }           // Skip newlines
-  | digit+        { NUMBER (Int32.Parse(lexeme lexbuf)) }  // Integer literal
-  | eof           { EOF }                       // End of input
+    | whitespace+   { tokenize lexbuf }           // Skip whitespace
+    | newline       { tokenize lexbuf }           // Skip newlines
+    | digit+        { NUMBER (Int32.Parse(lexeme lexbuf)) }  // Integer literal
+    | '+'           { PLUS }
+    | '-'           { MINUS }
+    | '*'           { STAR }
+    | '/'           { SLASH }
+    | '('           { LPAREN }
+    | ')'           { RPAREN }
+    | eof           { EOF }                       // End of input
