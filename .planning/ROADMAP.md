@@ -138,7 +138,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 04-01-PLAN.md — Value type + AST + Lexer + Parser + Evaluator + Format + Program
+- [x] 04-01-PLAN.md — Value type + AST + Lexer + Parser + Evaluator + Format + Program
 
 **Notes:**
 - Value 타입에 Boolean 추가
@@ -239,12 +239,12 @@ Plans:
 | 1 - Foundation & Pipeline | ● Complete | 4/4 requirements |
 | 2 - Arithmetic Expressions | ● Complete | 4/4 requirements |
 | 3 - Variables & Binding | ● Complete | 3/3 requirements |
-| 4 - Control Flow | ◐ In Progress | 0/4 requirements |
+| 4 - Control Flow | ● Complete | 4/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
 | 7 - CLI Options & File-Based Tests | ● Complete | 5/5 requirements |
 
-**Overall:** 4/7 phases complete (57%)
+**Overall:** 5/7 phases complete (71%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -284,7 +284,7 @@ Phase 2 (Expressions) <- First runnable code
     |
 Phase 3 (Variables)
     |
-Phase 4 (Control Flow) <- In Progress
+Phase 4 (Control Flow) <- Complete
     |
 Phase 5 (Functions) <- Turing-complete
     |
@@ -306,9 +306,9 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** Execute Phase 4 Plan 01 (Control Flow implementation)
+**Immediate:** Plan Phase 5 (Functions & Abstraction)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 4 planned)*
+*Last updated: 2026-01-30 (Phase 4 complete)*
