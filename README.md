@@ -10,8 +10,8 @@ fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다.
 |------|------|------|
 | 1 | Foundation & Pipeline | ✓ 완료 |
 | 2 | Arithmetic Expressions | ✓ 완료 |
-| 3 | Variables & Binding | ○ 예정 |
-| 4 | Control Flow | ○ 예정 |
+| 3 | Variables & Binding | ✓ 완료 |
+| 4 | Control Flow | ✓ 완료 |
 | 5 | Functions & Abstraction | ○ 예정 |
 | 6 | Quality & Polish | ○ 예정 |
 
@@ -21,18 +21,25 @@ fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다.
 # 빌드
 dotnet build FunLang/FunLang.fsproj
 
-# 실행
+# 산술 연산
 dotnet run --project FunLang -- --expr "2 + 3 * 4"
 14
 
-dotnet run --project FunLang -- --expr "(2 + 3) * 4"
-20
+# 변수 바인딩
+dotnet run --project FunLang -- --expr "let x = 5 in x * 2"
+10
 
-dotnet run --project FunLang -- --expr "-5 + 3"
--2
+# 조건문
+dotnet run --project FunLang -- --expr "if 5 > 3 then 10 else 20"
+10
+
+# 논리 연산
+dotnet run --project FunLang -- --expr "if true && 2 < 4 then 1 else 0"
+1
 
 # 테스트
-dotnet run --project FunLang.Tests
+make -C tests              # fslit CLI 테스트 (53개)
+dotnet run --project FunLang.Tests  # Expecto 테스트 (93개)
 ```
 
 ## 튜토리얼 구성
@@ -41,8 +48,8 @@ dotnet run --project FunLang.Tests
 |------|------|-----------|
 | 1 | Foundation & Pipeline | 프로젝트 설정, fslex/fsyacc 기초 |
 | 2 | Arithmetic Expressions | 사칙연산, 연산자 우선순위, 괄호, 단항 마이너스 |
-| 3 | Variables & Binding | let 바인딩, 변수 참조, 스코프 |
-| 4 | Control Flow | if-then-else, Boolean, 비교/논리 연산자 |
+| 3 | Variables & Binding | let 바인딩, 변수 참조, 스코프, 섀도잉 |
+| 4 | Control Flow | if-then-else, Boolean, 비교/논리 연산자, 타입 검사 |
 | 5 | Functions & Abstraction | 함수 정의/호출, 재귀, 클로저 |
 | 6 | Quality & Polish | 에러 메시지, REPL, 테스트 |
 
@@ -51,21 +58,24 @@ dotnet run --project FunLang.Tests
 ```
 LangTutorial/
 ├── FunLang/              # 언어 구현 (F# 프로젝트)
-│   ├── Ast.fs            # AST 타입 정의
+│   ├── Ast.fs            # AST 타입 정의 (Value, Expr)
 │   ├── Parser.fsy        # fsyacc 문법
 │   ├── Lexer.fsl         # fslex 렉서
-│   ├── Eval.fs           # 평가기
+│   ├── Eval.fs           # 평가기 (타입 검사, 환경 기반)
 │   └── Program.fs        # CLI
-├── FunLang.Tests/        # Expecto 테스트
+├── FunLang.Tests/        # Expecto 단위 테스트 (93개)
+├── tests/                # fslit CLI 테스트 (53개)
+│   ├── cli/              # 기본 CLI 테스트
+│   ├── variables/        # 변수 바인딩 테스트
+│   ├── control/          # 제어 흐름 테스트
+│   └── ...
 ├── tutorial/             # 튜토리얼 문서
 │   ├── chapter-01-foundation.md
 │   ├── chapter-02-arithmetic.md
-│   └── pdf/              # PDF 버전
-└── docs/howto/           # 개발 지식 문서
-    ├── write-fsyacc-parser.md
-    ├── write-fslex-lexer.md
-    ├── fsyacc-precedence-without-declarations.md
-    └── ...
+│   ├── chapter-03-variables.md
+│   ├── chapter-04-conditionals.md
+│   └── appendix-01-testing.md
+└── docs/howto/           # 개발 지식 문서 (12개)
 ```
 
 ## 기술 스택
@@ -73,7 +83,8 @@ LangTutorial/
 - **F#** (.NET 10)
 - **FsLexYacc 11.3.0** — 렉서/파서 생성기
 - **Expecto** — 단위 테스트
-- **FsCheck** — 속성 기반 테스트 (예정)
+- **FsCheck** — 속성 기반 테스트
+- **fslit** — 파일 기반 CLI 테스트
 
 ## Git 태그
 
@@ -82,17 +93,19 @@ LangTutorial/
 ```bash
 git checkout tutorial-v1.0  # Chapter 1: Foundation
 git checkout tutorial-v2.0  # Chapter 2: Arithmetic
+git checkout tutorial-v3.0  # Chapter 3: Variables
+git checkout tutorial-v4.0  # Chapter 4: Control Flow
 ```
 
 ## 문서
 
-- **tutorial/** — 단계별 튜토리얼 (Markdown/PDF)
-- **docs/howto/** — 개발 지식 문서 (7개)
-  - fsyacc 파서 작성
-  - fslex 렉서 작성
-  - 연산자 우선순위 처리
+- **tutorial/** — 단계별 튜토리얼 (4 chapters + 1 appendix)
+- **docs/howto/** — 개발 지식 문서 (12개)
+  - fsyacc 파서 작성, 연산자 우선순위
+  - fslex 렉서 작성, 키워드 우선순위
   - 단항 마이너스 구현
-  - Expecto 테스트 설정
+  - Expecto/FsCheck 테스트 설정
+  - Value 타입 진화 시 테스트 적응
   - 등
 
 ## 라이선스
