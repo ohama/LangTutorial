@@ -5,38 +5,65 @@
 ## Quick Reference
 
 ```bash
-# 전체 테스트 실행
+# 1. fslit 파일 기반 테스트 (CLI 검증)
 make -C tests
 
-# 카테고리별 실행
-make -C tests cli
-make -C tests emit-tokens
-make -C tests emit-ast
-make -C tests file-input
+# 2. Expecto 단위 테스트 (내부 로직)
+dotnet run --project FunLang.Tests
 
-# 빌드 후 테스트
-make -C tests check
+# 3. 전체 테스트
+make -C tests && dotnet run --project FunLang.Tests
 ```
+
+---
+
+## 테스트 피라미드
+
+```
+        ┌─────────┐
+        │  fslit  │  CLI E2E (느림, 넓음)
+        └────┬────┘
+        ┌────┴────┐
+        │ Expecto │  단위 테스트 (빠름)
+        └────┬────┘
+   ┌─────────┴─────────┐
+   │  FsCheck (선택)   │  속성 테스트 (자동 생성)
+   └───────────────────┘
+```
+
+| 도구 | 목적 | 언제 사용 |
+|------|------|-----------|
+| **fslit** | CLI 통합 테스트 | 회귀 방지, E2E 검증 |
+| **Expecto** | 단위 테스트 | 모듈별 로직 검증 |
+| **FsCheck** | 속성 기반 테스트 | 수학적 불변식 검증 (선택) |
 
 ---
 
 ## 테스트 구조
 
 ```
-tests/
-├── Makefile              # 테스트 실행 스크립트
-├── cli/                  # --expr 기본 평가
-├── emit-tokens/          # --emit-tokens 출력
-├── emit-ast/             # --emit-ast 출력
-├── file-input/           # 파일 입력 (%input)
-├── variables/            # Phase 3: let, let-in (TODO)
-├── control/              # Phase 4: if, bool, comparison (TODO)
-└── functions/            # Phase 5: fn, rec, closure (TODO)
+LangTutorial/
+├── tests/                    # fslit 파일 기반 테스트
+│   ├── Makefile
+│   ├── cli/                  # --expr 기본 평가
+│   ├── emit-tokens/          # --emit-tokens 출력
+│   ├── emit-ast/             # --emit-ast 출력
+│   ├── file-input/           # 파일 입력 (%input)
+│   ├── variables/            # Phase 3: let, let-in
+│   ├── control/              # Phase 4: if, bool (TODO)
+│   └── functions/            # Phase 5: fn, rec (TODO)
+│
+└── FunLang.Tests/            # Expecto 단위 테스트 프로젝트
+    ├── FunLang.Tests.fsproj
+    ├── LexerTests.fs
+    ├── ParserTests.fs
+    ├── EvalTests.fs
+    └── Program.fs
 ```
 
 ---
 
-## fslit 테스트 작성법
+## Part 1: fslit 파일 기반 테스트
 
 ### 기본 형식
 
@@ -65,219 +92,389 @@ tests/
 3. **Output은 정확히 일치** (공백, 줄바꿈 포함)
 4. **새 디렉토리 생성 시 Makefile 업데이트**
 
+### 실행
+
+```bash
+# 전체 테스트
+make -C tests
+
+# 카테고리별
+make -C tests cli
+make -C tests variables
+make -C tests emit-tokens
+
+# 빌드 후 테스트
+make -C tests check
+```
+
 ---
 
-## Phase별 테스트 템플릿
+## Part 2: Expecto 단위 테스트
 
-### Phase 3: Variables & Binding
-
-디렉토리: `tests/variables/`
+### 프로젝트 설정
 
 ```bash
-mkdir -p tests/variables
+# 테스트 프로젝트 생성
+dotnet new console -lang F# -n FunLang.Tests -f net10.0
+cd FunLang.Tests
+
+# 패키지 추가
+dotnet add package Expecto
+dotnet add package Expecto.FsCheck  # FsCheck 통합 (선택)
+dotnet add reference ../FunLang/FunLang.fsproj
 ```
 
-**tests/variables/01-let-simple.flt:**
-```flt
-// Test: Simple let binding
-// --- Command: dotnet run --project FunLang -- --expr "let x = 5 in x"
-// --- Output:
-5
+### 테스트 구조
+
+**FunLang.Tests/LexerTests.fs:**
+
+```fsharp
+module LexerTests
+
+open Expecto
+open FSharp.Text.Lexing
+
+[<Tests>]
+let lexerTests =
+    testList "Lexer" [
+        test "tokenizes number" {
+            let lexbuf = LexBuffer<char>.FromString "42"
+            let token = Lexer.tokenize lexbuf
+            Expect.equal token (Parser.NUMBER 42) "should be NUMBER(42)"
+        }
+
+        test "tokenizes let keyword" {
+            let lexbuf = LexBuffer<char>.FromString "let"
+            let token = Lexer.tokenize lexbuf
+            Expect.equal token Parser.LET "should be LET"
+        }
+
+        test "tokenizes identifier" {
+            let lexbuf = LexBuffer<char>.FromString "foo"
+            let token = Lexer.tokenize lexbuf
+            Expect.equal token (Parser.IDENT "foo") "should be IDENT(foo)"
+        }
+
+        test "distinguishes keywords from identifiers" {
+            let lexbuf = LexBuffer<char>.FromString "letter"
+            let token = Lexer.tokenize lexbuf
+            Expect.equal token (Parser.IDENT "letter") "letter is IDENT, not LET"
+        }
+    ]
 ```
 
-**tests/variables/02-let-expr.flt:**
-```flt
-// Test: Let with expression
-// --- Command: dotnet run --project FunLang -- --expr "let x = 2 + 3 in x * 2"
-// --- Output:
-10
+**FunLang.Tests/ParserTests.fs:**
+
+```fsharp
+module ParserTests
+
+open Expecto
+open FSharp.Text.Lexing
+open Ast
+
+let parse input =
+    let lexbuf = LexBuffer<char>.FromString input
+    Parser.start Lexer.tokenize lexbuf
+
+[<Tests>]
+let parserTests =
+    testList "Parser" [
+        test "parses number" {
+            let ast = parse "42"
+            Expect.equal ast (Number 42) ""
+        }
+
+        test "parses addition" {
+            let ast = parse "2 + 3"
+            Expect.equal ast (Add(Number 2, Number 3)) ""
+        }
+
+        test "parses let-in" {
+            let ast = parse "let x = 5 in x"
+            Expect.equal ast (Let("x", Number 5, Var "x")) ""
+        }
+
+        test "respects operator precedence" {
+            let ast = parse "2 + 3 * 4"
+            Expect.equal ast (Add(Number 2, Multiply(Number 3, Number 4))) ""
+        }
+
+        test "parses nested let" {
+            let ast = parse "let x = 1 in let y = 2 in x + y"
+            let expected = Let("x", Number 1, Let("y", Number 2, Add(Var "x", Var "y")))
+            Expect.equal ast expected ""
+        }
+    ]
 ```
 
-**tests/variables/03-let-nested.flt:**
-```flt
-// Test: Nested let
-// --- Command: dotnet run --project FunLang -- --expr "let x = 5 in let y = x + 1 in y"
-// --- Output:
-6
+**FunLang.Tests/EvalTests.fs:**
+
+```fsharp
+module EvalTests
+
+open Expecto
+open Ast
+open Eval
+
+[<Tests>]
+let evalTests =
+    testList "Eval" [
+        test "evaluates number" {
+            Expect.equal (evalExpr (Number 42)) 42 ""
+        }
+
+        test "evaluates addition" {
+            Expect.equal (evalExpr (Add(Number 2, Number 3))) 5 ""
+        }
+
+        test "evaluates let binding" {
+            let expr = Let("x", Number 5, Var "x")
+            Expect.equal (evalExpr expr) 5 ""
+        }
+
+        test "evaluates let with expression body" {
+            let expr = Let("x", Number 5, Add(Var "x", Number 1))
+            Expect.equal (evalExpr expr) 6 ""
+        }
+
+        test "evaluates nested let" {
+            let expr = Let("x", Number 1, Let("y", Number 2, Add(Var "x", Var "y")))
+            Expect.equal (evalExpr expr) 3 ""
+        }
+
+        test "evaluates shadowing correctly" {
+            let expr = Let("x", Number 1, Let("x", Number 2, Var "x"))
+            Expect.equal (evalExpr expr) 2 ""
+        }
+
+        test "throws on undefined variable" {
+            Expect.throws (fun () -> evalExpr (Var "x") |> ignore) "should throw"
+        }
+    ]
 ```
 
-**tests/variables/04-let-shadow.flt:**
-```flt
-// Test: Variable shadowing
-// --- Command: dotnet run --project FunLang -- --expr "let x = 5 in let x = 10 in x"
-// --- Output:
-10
+**FunLang.Tests/Program.fs:**
+
+```fsharp
+open Expecto
+
+[<EntryPoint>]
+let main argv =
+    runTestsWithCLIArgs [] argv <| testList "All" [
+        LexerTests.lexerTests
+        ParserTests.parserTests
+        EvalTests.evalTests
+    ]
 ```
 
-### Phase 4: Control Flow
-
-디렉토리: `tests/control/`
+### 실행
 
 ```bash
-mkdir -p tests/control
+# 전체 테스트
+dotnet run --project FunLang.Tests
+
+# 필터링
+dotnet run --project FunLang.Tests -- --filter "Lexer"
+dotnet run --project FunLang.Tests -- --filter "Eval"
+
+# 상세 출력
+dotnet run --project FunLang.Tests -- --debug
 ```
 
-**tests/control/01-if-true.flt:**
+### 주요 Expect 함수
+
+| 함수 | 용도 |
+|------|------|
+| `Expect.equal actual expected msg` | 동등성 |
+| `Expect.isTrue condition msg` | 불린 |
+| `Expect.throws<ExnType> (fun () -> ...) msg` | 예외 |
+| `Expect.isSome option msg` | Option 값 |
+
+---
+
+## Part 3: FsCheck 속성 테스트 (선택)
+
+수학적 성질을 검증할 때 사용. 복잡하면 Expecto 단위 테스트로 대체 가능.
+
+### 설정
+
+```bash
+dotnet add package FsCheck
+dotnet add package Expecto.FsCheck
+```
+
+### 속성 테스트 예시
+
+**FunLang.Tests/PropertyTests.fs:**
+
+```fsharp
+module PropertyTests
+
+open Expecto
+open FsCheck
+open Ast
+open Eval
+
+[<Tests>]
+let propertyTests =
+    testList "Properties" [
+        // 숫자는 그대로 평가됨
+        testProperty "number evaluates to itself" <| fun (n: int) ->
+            evalExpr (Number n) = n
+
+        // 덧셈은 교환법칙
+        testProperty "addition is commutative" <| fun (a: int) (b: int) ->
+            let left = evalExpr (Add(Number a, Number b))
+            let right = evalExpr (Add(Number b, Number a))
+            left = right
+
+        // 0을 더해도 변하지 않음
+        testProperty "zero is additive identity" <| fun (n: int) ->
+            evalExpr (Add(Number n, Number 0)) = n
+
+        // 1을 곱해도 변하지 않음
+        testProperty "one is multiplicative identity" <| fun (n: int) ->
+            evalExpr (Multiply(Number n, Number 1)) = n
+
+        // 이중 부정 = 원래 값
+        testProperty "double negation is identity" <| fun (n: int) ->
+            evalExpr (Negate(Negate(Number n))) = n
+    ]
+```
+
+**Program.fs에 추가:**
+
+```fsharp
+[<EntryPoint>]
+let main argv =
+    runTestsWithCLIArgs [] argv <| testList "All" [
+        LexerTests.lexerTests
+        ParserTests.parserTests
+        EvalTests.evalTests
+        PropertyTests.propertyTests  // 추가
+    ]
+```
+
+### 조건부 속성
+
+```fsharp
+testProperty "division by non-zero" <| fun (a: int) (b: int) ->
+    b <> 0 ==> lazy (
+        evalExpr (Divide(Number a, Number b)) = a / b
+    )
+```
+
+---
+
+## Phase별 테스트 작성
+
+### Phase 3: Variables (완료)
+
+**fslit 테스트:** `tests/variables/` (12개)
+- 01-12: let binding, variable reference, nested scope, shadowing, emit tests
+
+**Expecto 테스트 추가:**
+
+```fsharp
+// EvalTests.fs에 추가
+test "inner scope doesn't affect outer" {
+    // let x = 1 in (let y = x + 1 in y) + x = 2 + 1 = 3
+    let expr = Let("x", Number 1,
+                   Add(Let("y", Add(Var "x", Number 1), Var "y"),
+                       Var "x"))
+    Expect.equal (evalExpr expr) 3 ""
+}
+```
+
+### Phase 4: Control Flow (TODO)
+
+**fslit 테스트:** `tests/control/` 생성
+
 ```flt
+// tests/control/01-if-true.flt
 // Test: If true branch
 // --- Command: dotnet run --project FunLang -- --expr "if true then 1 else 2"
 // --- Output:
 1
 ```
 
-**tests/control/02-if-false.flt:**
-```flt
-// Test: If false branch
-// --- Command: dotnet run --project FunLang -- --expr "if false then 1 else 2"
-// --- Output:
-2
+**Expecto 테스트:**
+
+```fsharp
+[<Tests>]
+let controlTests =
+    testList "Control Flow" [
+        test "if true evaluates then branch" {
+            let expr = If(Bool true, Number 1, Number 2)
+            Expect.equal (evalExpr expr) 1 ""
+        }
+
+        test "if false evaluates else branch" {
+            let expr = If(Bool false, Number 1, Number 2)
+            Expect.equal (evalExpr expr) 2 ""
+        }
+
+        test "comparison greater than" {
+            let expr = If(GreaterThan(Number 5, Number 3), Number 10, Number 20)
+            Expect.equal (evalExpr expr) 10 ""
+        }
+    ]
 ```
 
-**tests/control/03-comparison-gt.flt:**
-```flt
-// Test: Greater than comparison
-// --- Command: dotnet run --project FunLang -- --expr "if 5 > 3 then 10 else 20"
-// --- Output:
-10
-```
+### Phase 5: Functions (TODO)
 
-**tests/control/04-comparison-eq.flt:**
-```flt
-// Test: Equality comparison
-// --- Command: dotnet run --project FunLang -- --expr "if 5 = 5 then 1 else 0"
-// --- Output:
-1
-```
+**fslit 테스트:** `tests/functions/` 생성
 
-**tests/control/05-logical-and.flt:**
-```flt
-// Test: Logical AND
-// --- Command: dotnet run --project FunLang -- --expr "if true && true then 1 else 0"
-// --- Output:
-1
-```
+**Expecto 테스트:**
 
-**tests/control/06-logical-or.flt:**
-```flt
-// Test: Logical OR
-// --- Command: dotnet run --project FunLang -- --expr "if false || true then 1 else 0"
-// --- Output:
-1
-```
+```fsharp
+[<Tests>]
+let functionTests =
+    testList "Functions" [
+        test "simple function application" {
+            // let f x = x + 1 in f 5 = 6
+            let expr = Let("f", Lambda("x", Add(Var "x", Number 1)),
+                          App(Var "f", Number 5))
+            Expect.equal (evalExpr expr) 6 ""
+        }
 
-### Phase 5: Functions
-
-디렉토리: `tests/functions/`
-
-```bash
-mkdir -p tests/functions
-```
-
-**tests/functions/01-simple.flt:**
-```flt
-// Test: Simple function
-// --- Command: dotnet run --project FunLang -- --expr "let f x = x + 1 in f 5"
-// --- Output:
-6
-```
-
-**tests/functions/02-two-args.flt:**
-```flt
-// Test: Two argument function
-// --- Command: dotnet run --project FunLang -- --expr "let add x y = x + y in add 3 4"
-// --- Output:
-7
-```
-
-**tests/functions/03-recursive.flt:**
-```flt
-// Test: Recursive factorial
-// --- Command: dotnet run --project FunLang -- --expr "let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact 5"
-// --- Output:
-120
-```
-
-**tests/functions/04-fibonacci.flt:**
-```flt
-// Test: Recursive fibonacci
-// --- Command: dotnet run --project FunLang -- --expr "let rec fib n = if n <= 1 then n else fib (n - 1) + fib (n - 2) in fib 10"
-// --- Output:
-55
-```
-
-**tests/functions/05-closure.flt:**
-```flt
-// Test: Closure captures variable
-// --- Command: dotnet run --project FunLang -- --expr "let x = 10 in let f y = x + y in f 5"
-// --- Output:
-15
-```
-
----
-
-## Makefile 업데이트
-
-새 디렉토리 추가 시:
-
-```makefile
-# tests/Makefile에 추가
-
-.PHONY: variables control functions
-
-variables:
-	@cd .. && fslit tests/variables/
-
-control:
-	@cd .. && fslit tests/control/
-
-functions:
-	@cd .. && fslit tests/functions/
+        test "closure captures environment" {
+            // let x = 10 in let f y = x + y in f 5 = 15
+            let expr = Let("x", Number 10,
+                          Let("f", Lambda("y", Add(Var "x", Var "y")),
+                              App(Var "f", Number 5)))
+            Expect.equal (evalExpr expr) 15 ""
+        }
+    ]
 ```
 
 ---
 
 ## 테스트 추가 워크플로우
 
-### 1. 기능 구현 전
+### 새 기능 구현 시
 
 ```bash
-# 1. 테스트 디렉토리 생성
+# 1. fslit 테스트 먼저 (실패 확인)
 mkdir -p tests/<category>
+# tests/<category>/01-feature.flt 작성
+make -C tests <category>  # FAIL 확인
 
-# 2. 실패하는 테스트 작성
-# tests/<category>/01-feature.flt
+# 2. 기능 구현
 
-# 3. 테스트 실행 (실패 확인)
-make -C tests <category>
-```
+# 3. fslit 테스트 통과 확인
+make -C tests <category>  # PASS
 
-### 2. 기능 구현 후
+# 4. Expecto 단위 테스트 추가
+# FunLang.Tests/<Module>Tests.fs 수정
+dotnet run --project FunLang.Tests  # PASS
 
-```bash
-# 1. 테스트 실행 (통과 확인)
-make -C tests <category>
+# 5. 전체 회귀 테스트
+make -C tests && dotnet run --project FunLang.Tests
 
-# 2. 전체 회귀 테스트
-make -C tests
-
-# 3. 커밋
-git add tests/<category>/
-git commit -m "test: add <category> tests for Phase N"
-```
-
-### 3. 실제 출력 확인
-
-테스트 작성 전 실제 출력 형식 확인:
-
-```bash
-# AST 출력 형식 확인
-dotnet run --project FunLang -- --emit-ast --expr "let x = 5 in x"
-
-# 토큰 출력 형식 확인
-dotnet run --project FunLang -- --emit-tokens --expr "let x = 5 in x"
-
-# 평가 결과 확인
-dotnet run --project FunLang -- --expr "let x = 5 in x"
+# 6. 커밋
+git add tests/<category>/ FunLang.Tests/
+git commit -m "test: add <feature> tests"
 ```
 
 ---
@@ -290,41 +487,70 @@ dotnet run --project FunLang -- --expr "let x = 5 in x"
 | emit-tokens | 4 | 7 | ✓ 완료 |
 | emit-ast | 6 | 7 | ✓ 완료 |
 | file-input | 5 | 7 | ✓ 완료 |
-| variables | 0 | 3 | 대기 |
+| variables | 12 | 3 | ✓ 완료 |
 | control | 0 | 4 | 대기 |
 | functions | 0 | 5 | 대기 |
 
-**총 테스트: 21개** (Phase 2, 7 완료)
+**fslit 총 테스트: 33개** (Phase 2, 3, 7 완료)
+
+| 프로젝트 | 테스트 수 | 상태 |
+|----------|-----------|------|
+| FunLang.Tests | 58 | ✓ 완료 |
+
+**Expecto 테스트 구성:**
+- Phase 2 (산술): 18개
+- Phase 3 (변수): 15개
+- Property Tests: 11개 (FsCheck)
+- Lexer Tests: 9개
+- 기타: 5개
 
 ---
 
-## emit 옵션별 테스트
+## Makefile 템플릿
 
-각 Phase에서 emit 옵션 테스트도 추가:
+```makefile
+# tests/Makefile
+.PHONY: all test cli emit-tokens emit-ast file-input variables control functions build check clean
 
-```bash
-# Phase 3 토큰 테스트
-tests/emit-tokens/10-let.flt
-tests/emit-tokens/11-in.flt
+all: test
 
-# Phase 3 AST 테스트
-tests/emit-ast/10-let.flt
-tests/emit-ast/11-let-in.flt
+test:
+	@cd .. && fslit tests/
 
-# Phase 4 토큰 테스트
-tests/emit-tokens/20-if.flt
-tests/emit-tokens/21-bool.flt
-tests/emit-tokens/22-comparison.flt
+cli:
+	@cd .. && fslit tests/cli/
 
-# Phase 4 AST 테스트
-tests/emit-ast/20-if.flt
-tests/emit-ast/21-comparison.flt
+emit-tokens:
+	@cd .. && fslit tests/emit-tokens/
+
+emit-ast:
+	@cd .. && fslit tests/emit-ast/
+
+file-input:
+	@cd .. && fslit tests/file-input/
+
+variables:
+	@cd .. && fslit tests/variables/
+
+control:
+	@cd .. && fslit tests/control/
+
+functions:
+	@cd .. && fslit tests/functions/
+
+check: build test
+
+build:
+	@cd .. && dotnet build
 ```
 
 ---
 
 ## 참고 문서
 
-- `docs/howto/testing-strategies.md` - 테스트 전략 상세 (Expecto, FsCheck 포함)
+- `docs/howto/testing-strategies.md` - 테스트 전략 상세
 - `docs/howto/setup-expecto-test-project.md` - Expecto 프로젝트 설정
-- `.planning/ROADMAP.md` - Phase별 요구사항 및 성공 기준
+- `docs/howto/write-fscheck-property-tests.md` - FsCheck 속성 테스트
+- `docs/howto/write-fslit-file-tests.md` - fslit 파일 테스트
+- `tutorial/appendix-01-testing.md` - 테스트 튜토리얼
+- `.planning/ROADMAP.md` - Phase별 요구사항
