@@ -1,4 +1,8 @@
 // Test: Basic closure
-// --- Command: dotnet run --project FunLang -- --expr "let x = 10 in let f = fun y -> x + y in f 5"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let x = 10 in
+let f = fun y -> x + y in
+f 5
 // --- Output:
 15

@@ -1,4 +1,6 @@
 // Test: Unary minus AST
-// --- Command: dotnet run --project FunLang -- --emit-ast --expr "-5"
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+-5
 // --- Output:
 Negate (Number 5)

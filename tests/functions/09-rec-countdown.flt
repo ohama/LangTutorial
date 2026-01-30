@@ -1,4 +1,9 @@
 // Test: Simple recursion countdown
-// --- Command: dotnet run --project FunLang -- --expr "let rec count n = if n = 0 then 0 else count (n - 1) in count 10"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let rec count n =
+  if n = 0 then 0
+  else count (n - 1)
+in count 10
 // --- Output:
 0

@@ -1,4 +1,6 @@
 // Test: if false evaluates else branch (CTRL-01)
-// --- Command: dotnet run --project FunLang -- --expr "if false then 1 else 2"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+if false then 1 else 2
 // --- Output:
 2

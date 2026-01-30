@@ -1,4 +1,6 @@
 // Test: Curried multi-parameter function
-// --- Command: dotnet run --project FunLang -- --expr "let add = fun x -> fun y -> x + y in add 3 4"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let add = fun x -> fun y -> x + y in add 3 4
 // --- Output:
 7

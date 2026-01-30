@@ -1,4 +1,6 @@
 // Test: Operator precedence (multiplication before addition)
-// --- Command: dotnet run --project FunLang -- --expr "2 + 3 * 4"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+2 + 3 * 4
 // --- Output:
 14

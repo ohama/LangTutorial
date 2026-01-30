@@ -1,4 +1,6 @@
 // Test: Parenthesized let in expression
-// --- Command: dotnet run --project FunLang -- --expr "let x = 1 in (let y = x + 1 in y) * 2"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let x = 1 in (let y = x + 1 in y) * 2
 // --- Output:
 4

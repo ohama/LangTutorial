@@ -1,4 +1,6 @@
 // Test: Function bound to variable and called
-// --- Command: dotnet run --project FunLang -- --expr "let f = fun x -> x + 1 in f 5"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let f = fun x -> x + 1 in f 5
 // --- Output:
 6

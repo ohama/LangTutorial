@@ -1,4 +1,6 @@
 // Test: Let expression tokens
-// --- Command: dotnet run --project FunLang -- --emit-tokens --expr "let x = 5 in x"
+// --- Command: dotnet run --project FunLang -- --emit-tokens %input
+// --- Input:
+let x = 5 in x
 // --- Output:
 LET IDENT(x) EQUALS NUMBER(5) IN IDENT(x) EOF

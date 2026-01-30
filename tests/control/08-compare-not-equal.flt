@@ -1,4 +1,6 @@
 // Test: not equal comparison (CTRL-03)
-// --- Command: dotnet run --project FunLang -- --expr "if 5 <> 3 then 1 else 0"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+if 5 <> 3 then 1 else 0
 // --- Output:
 1

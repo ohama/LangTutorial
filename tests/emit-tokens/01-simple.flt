@@ -1,4 +1,6 @@
 // Test: Simple expression tokens
-// --- Command: dotnet run --project FunLang -- --emit-tokens --expr "2 + 3"
+// --- Command: dotnet run --project FunLang -- --emit-tokens %input
+// --- Input:
+2 + 3
 // --- Output:
 NUMBER(2) PLUS NUMBER(3) EOF

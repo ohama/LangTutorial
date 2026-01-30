@@ -1,4 +1,6 @@
 // Test: Division AST
-// --- Command: dotnet run --project FunLang -- --emit-ast --expr "10 / 2"
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+10 / 2
 // --- Output:
 Divide (Number 10, Number 2)

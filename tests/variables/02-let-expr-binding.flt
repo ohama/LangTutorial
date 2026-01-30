@@ -1,4 +1,6 @@
 // Test: Let with expression binding
-// --- Command: dotnet run --project FunLang -- --expr "let x = 2 + 3 in x"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let x = 2 + 3 in x
 // --- Output:
 5

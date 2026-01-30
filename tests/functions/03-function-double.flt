@@ -1,4 +1,6 @@
 // Test: Function with arithmetic body
-// --- Command: dotnet run --project FunLang -- --expr "let double = fun x -> x * 2 in double 7"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let double = fun x -> x * 2 in double 7
 // --- Output:
 14

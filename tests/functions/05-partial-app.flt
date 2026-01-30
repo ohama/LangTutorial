@@ -1,4 +1,8 @@
 // Test: Partial application
-// --- Command: dotnet run --project FunLang -- --expr "let add = fun x -> fun y -> x + y in let add5 = add 5 in add5 10"
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let add = fun x -> fun y -> x + y in
+let add5 = add 5 in
+add5 10
 // --- Output:
 15

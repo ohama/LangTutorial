@@ -1,4 +1,6 @@
 // Test: Let expression AST
-// --- Command: dotnet run --project FunLang -- --emit-ast --expr "let x = 5 in x"
+// --- Command: dotnet run --project FunLang -- --emit-ast %input
+// --- Input:
+let x = 5 in x
 // --- Output:
 Let ("x", Number 5, Var "x")
