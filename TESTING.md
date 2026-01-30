@@ -50,7 +50,7 @@ LangTutorial/
 │   ├── emit-ast/             # --emit-ast 출력
 │   ├── file-input/           # 파일 입력 (%input)
 │   ├── variables/            # Phase 3: let, let-in
-│   ├── control/              # Phase 4: if, bool (TODO)
+│   ├── control/              # Phase 4: if, bool, comparison, logical
 │   └── functions/            # Phase 5: fn, rec (TODO)
 │
 └── FunLang.Tests/            # Expecto 단위 테스트 프로젝트
@@ -386,40 +386,19 @@ test "inner scope doesn't affect outer" {
 }
 ```
 
-### Phase 4: Control Flow (TODO)
+### Phase 4: Control Flow (완료)
 
-**fslit 테스트:** `tests/control/` 생성
+**fslit 테스트:** `tests/control/` (20개)
+- 01-17: if-then-else, boolean literals, comparison ops, logical ops
+- 18-20: emit-tokens/emit-ast verification
 
-```flt
-// tests/control/01-if-true.flt
-// Test: If true branch
-// --- Command: dotnet run --project FunLang -- --expr "if true then 1 else 2"
-// --- Output:
-1
-```
-
-**Expecto 테스트:**
-
-```fsharp
-[<Tests>]
-let controlTests =
-    testList "Control Flow" [
-        test "if true evaluates then branch" {
-            let expr = If(Bool true, Number 1, Number 2)
-            Expect.equal (evalExpr expr) 1 ""
-        }
-
-        test "if false evaluates else branch" {
-            let expr = If(Bool false, Number 1, Number 2)
-            Expect.equal (evalExpr expr) 2 ""
-        }
-
-        test "comparison greater than" {
-            let expr = If(GreaterThan(Number 5, Number 3), Number 10, Number 20)
-            Expect.equal (evalExpr expr) 10 ""
-        }
-    ]
-```
+**Expecto 테스트:** `FunLang.Tests/Program.fs` Phase 4 section (~30개)
+- CTRL-01: if-then-else (true/false branch, nested, with let)
+- CTRL-02: boolean literals (true, false)
+- CTRL-03: comparison operators (=, <>, <, >, <=, >=)
+- CTRL-04: logical operators (&&, ||, short-circuit)
+- Type errors (if condition must be bool, comparison operands must be int)
+- AST construction tests
 
 ### Phase 5: Functions (TODO)
 
@@ -488,21 +467,22 @@ git commit -m "test: add <feature> tests"
 | emit-ast | 6 | 7 | ✓ 완료 |
 | file-input | 5 | 7 | ✓ 완료 |
 | variables | 12 | 3 | ✓ 완료 |
-| control | 0 | 4 | 대기 |
+| control | 20 | 4 | ✓ 완료 |
 | functions | 0 | 5 | 대기 |
 
-**fslit 총 테스트: 33개** (Phase 2, 3, 7 완료)
+**fslit 총 테스트: 53개** (Phase 2, 3, 4, 7 완료)
 
 | 프로젝트 | 테스트 수 | 상태 |
 |----------|-----------|------|
-| FunLang.Tests | 58 | ✓ 완료 |
+| FunLang.Tests | 93 | ✓ 완료 |
 
 **Expecto 테스트 구성:**
 - Phase 2 (산술): 18개
 - Phase 3 (변수): 15개
+- Phase 4 (제어흐름): 30개
 - Property Tests: 11개 (FsCheck)
 - Lexer Tests: 9개
-- 기타: 5개
+- 기타: 10개
 
 ---
 
