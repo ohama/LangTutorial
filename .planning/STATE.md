@@ -3,9 +3,9 @@
 ## Current Status
 
 **Phase:** Phase 3 - Variables & Binding
-**Status:** ◐ In Progress (1/1 plans complete)
+**Status:** ● Complete (2/2 plans complete)
 **Progress:** 5/7 phases complete (71%)
-**Last activity:** 2026-01-30 - Completed plan 03-01
+**Last activity:** 2026-01-30 - Completed plan 03-02
 
 ```
 Phase 1 [██████████] 100% ✓ Complete
@@ -41,7 +41,7 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 |-------|------|--------|-------|--------------|----------|
 | 1 | Foundation & Pipeline | ● Complete | 3/3 | 4 | 100% |
 | 2 | Arithmetic Expressions | ● Complete | 2/2 | 4 | 100% |
-| 3 | Variables & Binding | ● Complete | 1/1 | 3 | 100% |
+| 3 | Variables & Binding | ● Complete | 2/2 | 3 | 100% |
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
 | 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
 | 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
@@ -57,8 +57,8 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 ## Performance Metrics
 
 **Velocity:** 2 phases/session
-**Avg plans per phase:** 2.0 (8 plans in 4 phases)
-**Completion rate:** 57% (4/7 phases)
+**Avg plans per phase:** 2.0 (10 plans in 5 phases)
+**Completion rate:** 71% (5/7 phases)
 
 **Milestones:**
 - [x] Phase 2 complete: 첫 실행 가능한 계산기
@@ -102,6 +102,8 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 | evalExpr wrapper function | 03-01 | Hides environment plumbing from Program.fs for top-level calls | 2026-01-30 |
 | Lexer keyword ordering | 03-01 | Keywords (let, in) before identifier pattern to prevent IDENT match | 2026-01-30 |
 | failwithf for undefined vars | 03-01 | Simple error handling now, to be enhanced with proper types in Phase 6 | 2026-01-30 |
+| One test per file in fslit | 03-02 | Organize tests in category directories (tests/variables/, etc.) | 2026-01-30 |
+| Numbered test files | 03-02 | Clear ordering and readability (01-basic-let.flt, etc.) | 2026-01-30 |
 
 ### Active TODOs
 
@@ -120,10 +122,10 @@ None currently.
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 03-01 execution (Phase 3 COMPLETE)
-**What happened:** Completed plan 03-01 (Variables & Binding). Implemented let-in syntax, variable references, environment-passing evaluator with Map<string, int>, lexical scoping, and undefined variable errors. Extended AST with Var and Let nodes. Added LET, IN, EQUALS, IDENT tokens to lexer/parser. 6 tasks, 6 commits (fd4d10b, 85573f1, 701c1ed, d705fd8, aa3c4a0, 1068569). Phase 3 complete - variables and binding working.
+**Last session:** 2026-01-30 - Plan 03-02 execution (Phase 3 COMPLETE)
+**What happened:** Completed plan 03-02 (Variable Binding Tests). Created 12 fslit tests for all variable binding requirements (VAR-01, VAR-02, VAR-03). Tests cover let binding, variable references, local scope, shadowing, and token/AST output. Added variables target to Makefile. All 33 tests pass (12 variables + 21 existing). 2 tasks, 2 commits (4d3d512, cd3f434). Phase 3 fully complete with comprehensive test coverage.
 **What's next:** Plan Phase 4 (Control Flow) for main track
-**Stopped at:** Completed 03-01-PLAN.md
+**Stopped at:** Completed 03-02-PLAN.md
 **Resume file:** None
 
 **If continuing from interruption:**
