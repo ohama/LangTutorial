@@ -40,7 +40,7 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 **Depends on:** None (foundation phase)
 
-**Plans:** 3 plans ✓
+**Plans:** 3 plans
 
 Plans:
 - [x] 01-01-PLAN.md — Project setup + AST types
@@ -72,9 +72,16 @@ Plans:
 
 **Depends on:** Phase 1 (Lexer와 Parser가 존재해야 평가 가능)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — AST expansion + Evaluator
+- [ ] 02-02-PLAN.md — Parser grammar + Lexer tokens + Pipeline wiring
+
 **Notes:**
 - 첫 번째 실행 가능한 인터프리터 (즉각적인 만족감 제공)
 - 이 단계에서 Evaluator 컴포넌트 도입
+- Expr/Term/Factor grammar pattern for precedence (avoid FsYacc %left/%right bugs)
 - Chapter 1 튜토리얼 문서 작성 (tutorial/chapter-01-arithmetic.md)
 
 ---
@@ -247,11 +254,13 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** `/gsd:plan-phase 2` to plan Phase 2 (Arithmetic Expressions)
+**Immediate:** `/gsd:execute-phase 2` to execute Phase 2 (Arithmetic Expressions)
 
-**Phase 2 goal:** 사용자가 사칙연산 계산기를 실행하여 즉각적인 결과를 얻는다
+**Phase 2 plans ready:**
+- 02-01-PLAN.md (Wave 1): AST expansion + Evaluator
+- 02-02-PLAN.md (Wave 2): Parser + Lexer + Wiring
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 1 complete)*
+*Last updated: 2026-01-30 (Phase 2 planned)*
