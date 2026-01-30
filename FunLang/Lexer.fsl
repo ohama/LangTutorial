@@ -29,6 +29,9 @@ rule tokenize = parse
     | "else"        { ELSE }
     | "let"         { LET }
     | "in"          { IN }
+    // Phase 5: Function keywords
+    | "fun"         { FUN }
+    | "rec"         { REC }
     // Identifier: starts with letter or underscore
     | ident_start ident_char* { IDENT (lexeme lexbuf) }
     // Multi-char operators MUST come before single-char
@@ -37,6 +40,8 @@ rule tokenize = parse
     | "<>"          { NE }
     | "&&"          { AND }
     | "||"          { OR }
+    // Phase 5: Arrow for lambda expressions
+    | "->"          { ARROW }
     // Single-char operators
     | '+'           { PLUS }
     | '-'           { MINUS }
