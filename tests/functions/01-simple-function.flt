@@ -1,0 +1,4 @@
+// Test: Lambda expression returns function
+// --- Command: dotnet run --project FunLang -- --expr "fun x -> x"
+// --- Output:
+<function>

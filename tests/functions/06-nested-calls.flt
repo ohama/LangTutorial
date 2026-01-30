@@ -1,0 +1,4 @@
+// Test: Nested function calls
+// --- Command: dotnet run --project FunLang -- --expr "let f = fun x -> x + 1 in f (f (f 0))"
+// --- Output:
+3

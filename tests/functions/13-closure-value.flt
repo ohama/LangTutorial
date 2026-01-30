@@ -1,0 +1,4 @@
+// Test: Closure captures value not reference
+// --- Command: dotnet run --project FunLang -- --expr "let x = 1 in let f = fun y -> x + y in let x = 100 in f 5"
+// --- Output:
+6

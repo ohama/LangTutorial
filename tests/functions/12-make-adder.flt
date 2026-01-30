@@ -1,0 +1,4 @@
+// Test: makeAdder pattern (classic closure test)
+// --- Command: dotnet run --project FunLang -- --expr "let makeAdder = fun x -> fun y -> x + y in let add5 = makeAdder 5 in add5 3"
+// --- Output:
+8

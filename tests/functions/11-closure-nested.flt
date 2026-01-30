@@ -1,0 +1,4 @@
+// Test: Closure in nested let
+// --- Command: dotnet run --project FunLang -- --expr "let a = 1 in let b = 2 in let f = fun x -> a + b + x in f 3"
+// --- Output:
+6
