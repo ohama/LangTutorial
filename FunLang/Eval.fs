@@ -2,11 +2,8 @@ module Eval
 
 open Ast
 
-/// Environment mapping variable names to values
-/// Phase 4: Now stores Value (not int) for heterogeneous types
-type Env = Map<string, Value>
-
 /// Empty environment for top-level evaluation
+/// Phase 5: Env type now defined in Ast.fs for mutual recursion with Value
 let emptyEnv : Env = Map.empty
 
 /// Format a value for user-friendly output

@@ -1,15 +1,10 @@
 module Ast
 
-/// Value type for evaluation results
-/// Phase 4: Heterogeneous types (int and bool)
-type Value =
-    | IntValue of int
-    | BoolValue of bool
-
 /// Expression AST for arithmetic operations
 /// Phase 2: Arithmetic expressions with precedence
 /// Phase 3: Variables and let binding
 /// Phase 4: Control flow, comparisons, and logical operators
+/// Phase 5: Functions (Lambda, App, LetRec)
 type Expr =
     | Number of int
     | Add of Expr * Expr
@@ -33,3 +28,20 @@ type Expr =
     // Phase 4: Logical operators (short-circuit evaluation)
     | And of Expr * Expr  // &&
     | Or of Expr * Expr   // ||
+    // Phase 5: Functions
+    | Lambda of param: string * body: Expr      // fun param -> body
+    | App of func: Expr * arg: Expr             // func arg (function application)
+    | LetRec of name: string * param: string * body: Expr * inExpr: Expr
+    // let rec name param = body in inExpr
+
+/// Value type for evaluation results
+/// Phase 4: Heterogeneous types (int and bool)
+/// Phase 5: FunctionValue for first-class functions (mutual recursion with Expr, Env)
+and Value =
+    | IntValue of int
+    | BoolValue of bool
+    | FunctionValue of param: string * body: Expr * closure: Env
+
+/// Environment mapping variable names to values
+/// Phase 5: Defined here for mutual recursion with Value
+and Env = Map<string, Value>
