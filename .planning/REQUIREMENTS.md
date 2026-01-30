@@ -14,16 +14,16 @@
 
 ### Expressions
 
-- [ ] **EXPR-01**: 사칙연산 (+, -, *, /) 구현
-- [ ] **EXPR-02**: 연산자 우선순위 처리 (*, /가 +, -보다 먼저)
-- [ ] **EXPR-03**: 괄호로 우선순위 변경
-- [ ] **EXPR-04**: 단항 마이너스 (음수) 지원
+- [x] **EXPR-01**: 사칙연산 (+, -, *, /) 구현
+- [x] **EXPR-02**: 연산자 우선순위 처리 (*, /가 +, -보다 먼저)
+- [x] **EXPR-03**: 괄호로 우선순위 변경
+- [x] **EXPR-04**: 단항 마이너스 (음수) 지원
 
 ### Variables
 
-- [ ] **VAR-01**: let 바인딩 (let x = 5)
-- [ ] **VAR-02**: 식에서 변수 참조
-- [ ] **VAR-03**: let-in 식으로 지역 스코프
+- [x] **VAR-01**: let 바인딩 (let x = 5)
+- [x] **VAR-02**: 식에서 변수 참조
+- [x] **VAR-03**: let-in 식으로 지역 스코프
 
 ### Control Flow
 
@@ -73,13 +73,13 @@
 | FOUND-02 | Phase 1 | Foundation & Pipeline | Complete |
 | FOUND-03 | Phase 1 | Foundation & Pipeline | Complete |
 | FOUND-04 | Phase 1 | Foundation & Pipeline | Complete |
-| EXPR-01 | Phase 2 | Arithmetic Expressions | Pending |
-| EXPR-02 | Phase 2 | Arithmetic Expressions | Pending |
-| EXPR-03 | Phase 2 | Arithmetic Expressions | Pending |
-| EXPR-04 | Phase 2 | Arithmetic Expressions | Pending |
-| VAR-01 | Phase 3 | Variables & Binding | Pending |
-| VAR-02 | Phase 3 | Variables & Binding | Pending |
-| VAR-03 | Phase 3 | Variables & Binding | Pending |
+| EXPR-01 | Phase 2 | Arithmetic Expressions | Complete |
+| EXPR-02 | Phase 2 | Arithmetic Expressions | Complete |
+| EXPR-03 | Phase 2 | Arithmetic Expressions | Complete |
+| EXPR-04 | Phase 2 | Arithmetic Expressions | Complete |
+| VAR-01 | Phase 3 | Variables & Binding | Complete |
+| VAR-02 | Phase 3 | Variables & Binding | Complete |
+| VAR-03 | Phase 3 | Variables & Binding | Complete |
 | CTRL-01 | Phase 4 | Control Flow | Pending |
 | CTRL-02 | Phase 4 | Control Flow | Pending |
 | CTRL-03 | Phase 4 | Control Flow | Pending |
@@ -107,4 +107,4 @@
 
 ---
 *Requirements defined: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 1 complete)*
+*Last updated: 2026-01-30 (Phase 3 complete)*

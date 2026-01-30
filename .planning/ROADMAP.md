@@ -97,16 +97,22 @@ Plans:
 - **VAR-03**: let-in 식으로 지역 스코프
 
 **Success Criteria:**
-1. 사용자가 "let x = 10"을 입력하면 변수 x에 10이 저장된다
-2. 사용자가 "x + 5"를 입력하면 15를 출력한다 (변수 참조)
-3. 사용자가 "let y = x * 2"를 입력하면 기존 변수 x를 사용하여 y에 20이 저장된다
-4. 사용자가 "let x = 3 in x + 5"를 입력하면 8을 출력하고 외부 x는 여전히 10이다 (지역 스코프)
+1. 사용자가 "let x = 5 in x" 입력하면 5를 출력한다
+2. 사용자가 "let x = 5 in x + 1"을 입력하면 6을 출력한다 (변수 참조)
+3. 사용자가 "let x = 1 in let y = 2 in x + y"를 입력하면 3을 출력한다 (중첩 스코프)
+4. 정의되지 않은 변수 참조 시 "Undefined variable: x" 에러 메시지를 표시한다
 
 **Depends on:** Phase 2 (표현식 평가 인프라 필요)
 
+**Plans:** 2 plans
+
+Plans:
+- [x] 03-01-PLAN.md — AST + Lexer + Parser + Evaluator + Format + Program
+- [x] 03-02-PLAN.md — fslit tests for variables
+
 **Notes:**
 - Environment 컴포넌트 도입 (immutable Map 기반)
-- 스코프 관리 (global vs local)
+- 스코프 관리 (let-in으로 지역 스코프만 지원)
 - Chapter 2 튜토리얼 문서 작성 (tutorial/chapter-02-variables.md)
 
 ---
@@ -227,13 +233,13 @@ Plans:
 |-------|--------|----------|
 | 1 - Foundation & Pipeline | ● Complete | 4/4 requirements |
 | 2 - Arithmetic Expressions | ● Complete | 4/4 requirements |
-| 3 - Variables & Binding | ○ Pending | 0/3 requirements |
+| 3 - Variables & Binding | ● Complete | 3/3 requirements |
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
 | 7 - CLI Options & File-Based Tests | ● Complete | 5/5 requirements |
 
-**Overall:** 3/7 phases complete (43%)
+**Overall:** 4/7 phases complete (57%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -295,9 +301,9 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** `/gsd:plan-phase 3` to plan Phase 3 (Variables & Binding)
+**Immediate:** Plan Phase 4 (Control Flow)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 7 complete)*
+*Last updated: 2026-01-30 (Phase 3 complete)*
