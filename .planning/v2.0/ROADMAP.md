@@ -54,7 +54,10 @@ $ funlang --expr "(* block *) 5"
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Implement comment lexer rules and tests
+- [x] 01-01-PLAN.md — Implement comment lexer rules and tests
+
+### Status
+**Completed:** 2026-01-31
 
 ---
 
@@ -161,13 +164,13 @@ Phase 1 → Phase 2 → Phase 3
 
 ## Definition of Done
 
-### Phase 1: Comments
-- [ ] `//` 단일행 주석 동작
-- [ ] `(* *)` 다중행 주석 동작
-- [ ] 중첩 주석 지원
-- [ ] 미종료 주석 오류 메시지
-- [ ] 기존 테스트 통과
-- [ ] 새 테스트 10개 추가
+### Phase 1: Comments ✓
+- [x] `//` 단일행 주석 동작
+- [x] `(* *)` 다중행 주석 동작
+- [x] 중첩 주석 지원
+- [x] 미종료 주석 오류 메시지
+- [x] 기존 테스트 통과
+- [x] 새 테스트 22개 추가 (12 fslit + 10 Expecto)
 
 ### Phase 2: Strings
 - [ ] 문자열 리터럴 파싱
