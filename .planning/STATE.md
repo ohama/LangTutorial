@@ -3,9 +3,9 @@
 ## Current Status
 
 **Phase:** Phase 7 - CLI Options & File-Based Tests
-**Status:** ◐ In Progress (1/1 plans complete)
-**Progress:** 3/7 phases complete (43%)
-**Last activity:** 2026-01-30 - Completed plan 07-01
+**Status:** ● Complete (2/2 plans complete)
+**Progress:** 4/7 phases complete (57%)
+**Last activity:** 2026-01-30 - Completed plan 07-02
 
 ```
 Phase 1 [██████████] 100% ✓ Complete
@@ -45,7 +45,7 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
 | 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
 | 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
-| 7 | CLI Options & File-Based Tests | ● Complete | 1/1 | 5 | 100% |
+| 7 | CLI Options & File-Based Tests | ● Complete | 2/2 | 5 | 100% |
 
 **Legend:**
 - ○ Pending: Not started
@@ -94,6 +94,9 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 | Pattern matching order in CLI | 07-01 | Most specific patterns first to avoid F# unreachable pattern warnings | 2026-01-30 |
 | formatToken sprintf for NUMBER | 07-01 | Show value in token output for debugging (NUMBER(5) vs NUMBER) | 2026-01-30 |
 | --emit-type reservation | 07-01 | Reserve CLI interface for future type checking phase | 2026-01-30 |
+| Verify tests against actual output | 07-02 | All test expectations verified by running CLI before committing | 2026-01-30 |
+| fslit %input variable for files | 07-02 | Self-contained tests without external file dependencies | 2026-01-30 |
+| Organize tests by CLI option | 07-02 | Separate files for cli, emit-tokens, emit-ast, file-input | 2026-01-30 |
 
 ### Active TODOs
 
@@ -113,10 +116,10 @@ None currently.
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 07-01 execution (Phase 7 COMPLETE)
-**What happened:** Completed plan 07-01 (CLI Options & File Input). Created Format.fs with token formatter and lex helper. Expanded Program.fs with --emit-tokens, --emit-ast, --emit-type options and file input support. 2 tasks, 2 commits (35c4e15, e833d17). Phase 7 complete - CLI foundation ready for testing infrastructure.
+**Last session:** 2026-01-30 - Plan 07-02 execution (Phase 7 COMPLETE)
+**What happened:** Completed plan 07-02 (CLI File-Based Tests). Created tests/ directory with 4 fslit test files covering all CLI options: cli.flt (6 cases), emit-tokens.flt (4 cases), emit-ast.flt (6 cases), file-input.flt (5 cases). 3 tasks, 3 commits (b10b577, a93d8f8, 9442d04). Phase 7 complete - regression test suite in place.
 **What's next:** Plan Phase 3 (Variables & Binding) for main track, or continue with Phase 4-6
-**Stopped at:** Phase 7 complete
+**Stopped at:** Completed 07-02-PLAN.md
 **Resume file:** None
 
 **If continuing from interruption:**
@@ -157,4 +160,4 @@ None currently.
 ---
 
 *Last updated: 2026-01-30*
-*Next update: After Phase 2 planning*
+*Next update: After Phase 3 planning*
