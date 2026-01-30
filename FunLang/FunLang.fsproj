@@ -50,10 +50,13 @@
     <!-- 5. Generated lexer file (FsLex generates in source directory) -->
     <Compile Include="Lexer.fs" />
 
-    <!-- 6. Evaluator (uses Ast, used by Program) -->
+    <!-- 6. Format utilities (uses Parser tokens and Lexer) -->
+    <Compile Include="Format.fs" />
+
+    <!-- 7. Evaluator (uses Ast, used by Program) -->
     <Compile Include="Eval.fs" />
 
-    <!-- 7. Main program -->
+    <!-- 8. Main program -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
