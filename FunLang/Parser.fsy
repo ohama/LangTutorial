@@ -1,0 +1,17 @@
+%{
+open Ast
+%}
+
+// Token declarations
+%token <int> NUMBER
+%token EOF
+
+// Start symbol and its type
+%start start
+%type <Ast.Expr> start
+
+%%
+
+// Grammar rules
+start:
+  | NUMBER EOF { Number $1 }
