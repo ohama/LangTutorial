@@ -4,7 +4,7 @@
 
 **Phase:** Phase 1 - Foundation & Pipeline
 **Status:** ○ Pending (not started)
-**Progress:** 0/7 phases complete (0%)
+**Progress:** 0/6 phases complete (0%)
 
 ```
 Phase 1 [○○○○○○○○○○] 0%  ← You are here
@@ -13,7 +13,6 @@ Phase 3 [○○○○○○○○○○] 0%
 Phase 4 [○○○○○○○○○○] 0%
 Phase 5 [○○○○○○○○○○] 0%
 Phase 6 [○○○○○○○○○○] 0%
-Phase 7 [○○○○○○○○○○] 0%
 ```
 
 ---
@@ -44,7 +43,6 @@ Phase 7 [○○○○○○○○○○] 0%
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
 | 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
 | 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
-| 7 | Tutorial Skill | ○ Pending | 0/0 | 4 | 0% |
 
 **Legend:**
 - ○ Pending: Not started
@@ -57,12 +55,12 @@ Phase 7 [○○○○○○○○○○] 0%
 
 **Velocity:** N/A (no completed phases yet)
 **Avg plans per phase:** N/A
-**Completion rate:** 0% (0/7 phases)
+**Completion rate:** 0% (0/6 phases)
 
 **Milestones:**
 - [ ] Phase 2 complete: 첫 실행 가능한 계산기
 - [ ] Phase 5 complete: Turing-complete 언어 달성
-- [ ] Phase 7 complete: 전체 튜토리얼 완성
+- [ ] Phase 6 complete: 전체 튜토리얼 완성
 
 ---
 
@@ -72,9 +70,10 @@ Phase 7 [○○○○○○○○○○] 0%
 
 | Decision | Phase | Rationale | Date |
 |----------|-------|-----------|------|
-| 7-phase structure | Roadmap | Natural boundaries by language feature, aligns with research | 2025-01-30 |
+| 6-phase structure | Roadmap | Natural boundaries by language feature, aligns with research | 2025-01-30 |
 | Foundation first | Phase 1 | Must establish pipeline before adding features | 2025-01-30 |
 | Sequential dependencies | Roadmap | Each phase builds on previous infrastructure | 2025-01-30 |
+| /tutorial command | Pre-project | Created as Claude command instead of phase | 2025-01-30 |
 
 ### Active TODOs
 
@@ -95,7 +94,7 @@ None currently.
 ## Session Continuity
 
 **Last session:** 2025-01-30 - Roadmap creation
-**What happened:** Created 7-phase roadmap with goal-backward success criteria, validated 100% requirement coverage (26/26 requirements mapped)
+**What happened:** Created 6-phase roadmap with goal-backward success criteria, validated 100% requirement coverage (22/22 requirements mapped). Created /tutorial command separately.
 **What's next:** Plan Phase 1 (Foundation & Pipeline) with `/gsd:plan-phase 1`
 
 **If continuing from interruption:**

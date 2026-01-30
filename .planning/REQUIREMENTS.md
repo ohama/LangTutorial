@@ -45,13 +45,6 @@
 - [ ] **QUAL-02**: 대화형 REPL 셸
 - [ ] **QUAL-03**: Expecto로 각 chapter 테스트
 
-### Skill
-
-- [ ] **SKIL-01**: /tutorial 스킬 - 현재 chapter 목록 표시
-- [ ] **SKIL-02**: /tutorial 스킬 - 각 chapter 완성 상태 표시
-- [ ] **SKIL-03**: /tutorial 스킬 - 다음 chapter 제안
-- [ ] **SKIL-04**: /tutorial 스킬 - 특정 chapter 작성 명령
-
 ## v2 Requirements
 
 ### Advanced Features
@@ -98,16 +91,11 @@
 | QUAL-01 | Phase 6 | Quality & Polish | Pending |
 | QUAL-02 | Phase 6 | Quality & Polish | Pending |
 | QUAL-03 | Phase 6 | Quality & Polish | Pending |
-| SKIL-01 | Phase 7 | Tutorial Skill | Pending |
-| SKIL-02 | Phase 7 | Tutorial Skill | Pending |
-| SKIL-03 | Phase 7 | Tutorial Skill | Pending |
-| SKIL-04 | Phase 7 | Tutorial Skill | Pending |
 
 **Coverage:**
-- v1 requirements: 26 total (23 functional + 3 traceability metadata)
-- Mapped to phases: 26/26 ✓
+- v1 requirements: 22 total
+- Mapped to phases: 22/22 ✓
 - Unmapped: 0 ✓
-- Orphaned: 0 ✓
 
 **Phase Distribution:**
 - Phase 1 (Foundation & Pipeline): 4 requirements
@@ -116,7 +104,6 @@
 - Phase 4 (Control Flow): 4 requirements
 - Phase 5 (Functions & Abstraction): 4 requirements
 - Phase 6 (Quality & Polish): 3 requirements
-- Phase 7 (Tutorial Skill): 4 requirements
 
 ---
 *Requirements defined: 2025-01-30*

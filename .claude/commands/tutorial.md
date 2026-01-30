@@ -1,0 +1,51 @@
+# Tutorial Command
+
+튜토리얼 chapter 목록을 표시하고 작성을 관리한다.
+
+## 실행 시 동작
+
+1. **Chapter 목록 표시**: `tutorial/` 디렉토리의 모든 chapter 파일을 나열한다.
+
+2. **상태 표시**: 각 chapter의 완성 상태를 표시한다.
+   - ✓ 완성: 파일이 존재하고 내용이 있음
+   - ○ 미작성: 파일이 없음
+
+3. **다음 chapter 제안**: 아직 작성되지 않은 다음 chapter를 추천한다.
+
+4. **작성 명령**: 인자로 chapter 이름을 받으면 해당 chapter 작성을 시작한다.
+
+## 실행 방법
+
+```bash
+# 목록/상태 표시
+ls -la tutorial/*.md 2>/dev/null || echo "No chapters yet"
+```
+
+## Chapter 구조
+
+| Chapter | 파일명 | 내용 |
+|---------|--------|------|
+| 1 | chapter-01-foundation.md | .NET 10 + FsLexYacc 프로젝트 설정 |
+| 2 | chapter-02-arithmetic.md | 사칙연산 인터프리터 |
+| 3 | chapter-03-variables.md | 변수 바인딩과 스코프 |
+| 4 | chapter-04-conditionals.md | 조건문과 Boolean |
+| 5 | chapter-05-functions.md | 함수 정의와 호출 |
+| 6 | chapter-06-quality.md | 에러 처리와 REPL |
+
+## Chapter 작성 가이드
+
+각 chapter는 다음을 포함해야 한다:
+- 개요: 이 chapter에서 추가하는 기능
+- 코드 변경: Lexer, Parser, AST, Evaluator 수정 사항
+- 전체 코드: 해당 시점의 완전한 코드
+- 실행 예제: 입력과 출력 예시
+- 테스트: Expecto 테스트 코드
+
+## 인자 처리
+
+`$ARGUMENTS`가 있으면:
+- chapter 번호나 이름으로 해당 chapter 작성 시작
+- 예: `/tutorial 2` → chapter-02-arithmetic.md 작성
+
+`$ARGUMENTS`가 없으면:
+- 현재 상태 표시 및 다음 chapter 제안

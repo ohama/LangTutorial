@@ -12,11 +12,10 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 | 4 | Control Flow | 사용자가 조건 분기로 논리를 표현할 수 있다 | 4 |
 | 5 | Functions & Abstraction | 사용자가 함수를 정의하고 호출하여 코드를 재사용할 수 있다 | 4 |
 | 6 | Quality & Polish | 사용자가 친화적인 오류 메시지와 대화형 REPL을 경험한다 | 3 |
-| 7 | Tutorial Skill | 개발자가 /tutorial 스킬로 진행 상황을 확인하고 다음 단계를 진행한다 | 4 |
 
-**Total phases:** 7
-**Total requirements:** 26 (23 v1 + traceability updates)
-**Depth calibration:** Standard (7 phases fits 5-8 range)
+**Total phases:** 6
+**Total requirements:** 22
+**Depth calibration:** Standard (6 phases fits 5-8 range)
 
 ---
 
@@ -173,31 +172,6 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 
 ---
 
-### Phase 7: Tutorial Skill
-
-**Goal:** 개발자가 /tutorial 스킬로 진행 상황을 확인하고 다음 단계를 진행한다
-
-**Requirements:**
-- **SKIL-01**: /tutorial 스킬 - 현재 chapter 목록 표시
-- **SKIL-02**: /tutorial 스킬 - 각 chapter 완성 상태 표시
-- **SKIL-03**: /tutorial 스킬 - 다음 chapter 제안
-- **SKIL-04**: /tutorial 스킬 - 특정 chapter 작성 명령
-
-**Success Criteria:**
-1. 개발자가 `/tutorial`을 실행하면 Chapter 1-4 목록과 각 chapter의 완성 상태가 표시된다
-2. 개발자가 `/tutorial`을 실행하면 "Next: Chapter 2 - Variables" 같은 제안을 받는다
-3. 개발자가 `/tutorial chapter-03-conditionals`를 실행하면 Chapter 3 작성 지시사항이 표시된다
-4. /tutorial 스킬이 .claude/skills/tutorial.md 파일로 등록되고 Claude가 인식한다
-
-**Depends on:** Phase 6 (모든 chapter가 완성되어야 스킬이 의미 있음)
-
-**Notes:**
-- .claude/skills/tutorial.md 파일 생성
-- Chapter 완성 상태는 tutorial/ 디렉토리의 파일 존재 여부로 판단
-- 이 단계는 프로젝트 메타 작업 (인프라보다는 문서화 도구)
-
----
-
 ## Progress Tracking
 
 | Phase | Status | Progress |
@@ -208,9 +182,8 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
-| 7 - Tutorial Skill | ○ Pending | 0/4 requirements |
 
-**Overall:** 0/7 phases complete (0%)
+**Overall:** 0/6 phases complete (0%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -231,9 +204,8 @@ F# 언어 구현 튜토리얼 로드맵. fslex/fsyacc를 사용하여 점진적�
 | Control Flow | CTRL-01, CTRL-02, CTRL-03, CTRL-04 | Phase 4 | 4/4 ✓ |
 | Functions | FUNC-01, FUNC-02, FUNC-03, FUNC-04 | Phase 5 | 4/4 ✓ |
 | Quality | QUAL-01, QUAL-02, QUAL-03 | Phase 6 | 3/3 ✓ |
-| Skill | SKIL-01, SKIL-02, SKIL-03, SKIL-04 | Phase 7 | 4/4 ✓ |
 
-**Total mapped:** 26/26 requirements
+**Total mapped:** 22/22 requirements
 **Orphaned:** 0
 **Duplicates:** 0
 
@@ -253,11 +225,9 @@ Phase 4 (Control Flow)
 Phase 5 (Functions) ← Turing-complete 달성
     ↓
 Phase 6 (Quality)
-    ↓
-Phase 7 (Tutorial Skill)
 ```
 
-**Critical path:** 1 → 2 → 3 → 4 → 5 → 6 → 7 (모든 단계가 순차적)
+**Critical path:** 1 → 2 → 3 → 4 → 5 → 6 (모든 단계가 순차적)
 
 **Rationale:**
 - Phase 2는 Phase 1의 파이프라인 필요
@@ -265,7 +235,6 @@ Phase 7 (Tutorial Skill)
 - Phase 4는 Phase 3의 변수 지원 필요 (조건문에서 변수 사용)
 - Phase 5는 Phase 4의 조건문 필요 (재귀 함수의 종료 조건)
 - Phase 6은 Phase 5의 모든 기능 필요 (통합 테스트)
-- Phase 7은 Phase 6의 완성된 chapter 필요 (튜토리얼 문서 대상)
 
 ---
 
