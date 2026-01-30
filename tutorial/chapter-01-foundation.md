@@ -5,6 +5,7 @@
 ## 개요
 
 이 chapter에서 다루는 내용:
+
 - .NET 10 F# 프로젝트 생성
 - FsLexYacc 패키지 설치
 - AST 타입 정의 (Discriminated Union)
