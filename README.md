@@ -12,8 +12,10 @@ fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다.
 | 2 | Arithmetic Expressions | ✓ 완료 |
 | 3 | Variables & Binding | ✓ 완료 |
 | 4 | Control Flow | ✓ 완료 |
-| 5 | Functions & Abstraction | ○ 예정 |
+| 5 | Functions & Abstraction | ✓ 완료 |
 | 6 | Quality & Polish | ○ 예정 |
+
+**현재:** Turing-complete 언어 달성 (Phase 5 완료)
 
 ## 빠른 시작
 
@@ -33,13 +35,21 @@ dotnet run --project FunLang -- --expr "let x = 5 in x * 2"
 dotnet run --project FunLang -- --expr "if 5 > 3 then 10 else 20"
 10
 
-# 논리 연산
-dotnet run --project FunLang -- --expr "if true && 2 < 4 then 1 else 0"
-1
+# 함수 정의와 호출
+dotnet run --project FunLang -- --expr "let f = fun x -> x + 1 in f 5"
+6
+
+# 재귀 함수 (팩토리얼)
+dotnet run --project FunLang -- --expr "let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact 5"
+120
+
+# 클로저
+dotnet run --project FunLang -- --expr "let x = 10 in let f = fun y -> x + y in f 5"
+15
 
 # 테스트
-make -C tests              # fslit CLI 테스트 (53개)
-dotnet run --project FunLang.Tests  # Expecto 테스트 (93개)
+make -C tests              # fslit CLI 테스트 (66개)
+dotnet run --project FunLang.Tests  # Expecto 테스트 (129개)
 ```
 
 ## 튜토리얼 구성
@@ -58,24 +68,26 @@ dotnet run --project FunLang.Tests  # Expecto 테스트 (93개)
 ```
 LangTutorial/
 ├── FunLang/              # 언어 구현 (F# 프로젝트)
-│   ├── Ast.fs            # AST 타입 정의 (Value, Expr)
+│   ├── Ast.fs            # AST 타입 정의 (Expr, Value, Env)
 │   ├── Parser.fsy        # fsyacc 문법
 │   ├── Lexer.fsl         # fslex 렉서
-│   ├── Eval.fs           # 평가기 (타입 검사, 환경 기반)
+│   ├── Eval.fs           # 평가기 (타입 검사, 클로저, 재귀)
 │   └── Program.fs        # CLI
-├── FunLang.Tests/        # Expecto 단위 테스트 (93개)
-├── tests/                # fslit CLI 테스트 (53개)
+├── FunLang.Tests/        # Expecto 단위 테스트 (129개)
+├── tests/                # fslit CLI 테스트 (66개)
 │   ├── cli/              # 기본 CLI 테스트
 │   ├── variables/        # 변수 바인딩 테스트
 │   ├── control/          # 제어 흐름 테스트
+│   ├── functions/        # 함수 테스트
 │   └── ...
 ├── tutorial/             # 튜토리얼 문서
 │   ├── chapter-01-foundation.md
 │   ├── chapter-02-arithmetic.md
 │   ├── chapter-03-variables.md
 │   ├── chapter-04-conditionals.md
+│   ├── chapter-05-functions.md
 │   └── appendix-01-testing.md
-└── docs/howto/           # 개발 지식 문서 (12개)
+└── docs/howto/           # 개발 지식 문서 (13개)
 ```
 
 ## 기술 스택
@@ -93,17 +105,19 @@ LangTutorial/
 ```bash
 git checkout tutorial-v1.0  # Chapter 1: Foundation
 git checkout tutorial-v2.0  # Chapter 2: Arithmetic
-git checkout tutorial-v3.0  # Chapter 3: Variables
+git checkout tutorial-v3    # Chapter 3: Variables
 git checkout tutorial-v4.0  # Chapter 4: Control Flow
+git checkout tutorial-v5.0  # Chapter 5: Functions (예정)
 ```
 
 ## 문서
 
-- **tutorial/** — 단계별 튜토리얼 (4 chapters + 1 appendix)
-- **docs/howto/** — 개발 지식 문서 (12개)
+- **tutorial/** — 단계별 튜토리얼 (5 chapters + 1 appendix)
+- **docs/howto/** — 개발 지식 문서 (13개)
   - fsyacc 파서 작성, 연산자 우선순위
   - fslex 렉서 작성, 키워드 우선순위
   - 단항 마이너스 구현
+  - 함수 적용 vs 뺄셈 파서 해결
   - Expecto/FsCheck 테스트 설정
   - Value 타입 진화 시 테스트 적응
   - 등

@@ -103,7 +103,7 @@ LangTutorial/
 │   ├── file-input/           # 파일 입력 (%input)
 │   ├── variables/            # Phase 3: let, let-in
 │   ├── control/              # Phase 4: if, bool, comparison, logical
-│   └── functions/            # Phase 5: fn, rec (TODO)
+│   └── functions/            # Phase 5: fn, rec, closures
 │
 └── FunLang.Tests/            # Expecto 단위 테스트 프로젝트
     ├── FunLang.Tests.fsproj
@@ -143,6 +143,36 @@ LangTutorial/
 2. **파일명**: `NN-description.flt` (번호-설명)
 3. **Output은 정확히 일치** (공백, 줄바꿈 포함)
 4. **새 디렉토리 생성 시 Makefile 업데이트**
+5. **`--- Input:` 섹션 사용 권장** — `--expr` 대신 `%input`과 `--- Input:` 섹션 사용
+
+### --expr vs --- Input:
+
+**권장: `--- Input:` 섹션 사용**
+
+```flt
+// ✅ 권장: Input 섹션 사용
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let rec fact n =
+  if n <= 1 then 1
+  else n * fact (n - 1)
+in fact 5
+// --- Output:
+120
+```
+
+```flt
+// ❌ 피할 것: --expr 인라인
+// --- Command: dotnet run --project FunLang -- --expr "let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact 5"
+// --- Output:
+120
+```
+
+**이유:**
+- 멀티라인 표현식을 읽기 쉽게 포맷 가능
+- 테스트 파일이 실제 `.fun` 소스 파일처럼 보임
+- 따옴표 이스케이프 문제 없음
+- `--emit-tokens`, `--emit-ast`와 함께 사용: `dotnet run --project FunLang -- --emit-tokens %input`
 
 ### 실행
 
@@ -452,32 +482,19 @@ test "inner scope doesn't affect outer" {
 - Type errors (if condition must be bool, comparison operands must be int)
 - AST construction tests
 
-### Phase 5: Functions (TODO)
+### Phase 5: Functions (완료)
 
-**fslit 테스트:** `tests/functions/` 생성
+**fslit 테스트:** `tests/functions/` (13개)
+- 01-13: simple function, curried, partial application, recursion (factorial, fibonacci, countdown), closures (basic, nested, make-adder)
 
-**Expecto 테스트:**
-
-```fsharp
-[<Tests>]
-let functionTests =
-    testList "Functions" [
-        test "simple function application" {
-            // let f x = x + 1 in f 5 = 6
-            let expr = Let("f", Lambda("x", Add(Var "x", Number 1)),
-                          App(Var "f", Number 5))
-            Expect.equal (evalExpr expr) 6 ""
-        }
-
-        test "closure captures environment" {
-            // let x = 10 in let f y = x + y in f 5 = 15
-            let expr = Let("x", Number 10,
-                          Let("f", Lambda("y", Add(Var "x", Var "y")),
-                              App(Var "f", Number 5)))
-            Expect.equal (evalExpr expr) 15 ""
-        }
-    ]
-```
+**Expecto 테스트:** `FunLang.Tests/Program.fs` Phase 5 section (36개)
+- FUNC-01: Function definition (lambda, bound function, higher-order)
+- FUNC-02: Function application (simple, curried, partial, nested, left-associative)
+- FUNC-03: Recursive functions (let rec, factorial, fibonacci, countdown, sum)
+- FUNC-04: Closures (capture outer, definition-time capture, nested, factory)
+- Lexer tests (fun, rec, arrow tokens)
+- AST construction tests
+- Edge cases (subtraction vs application, negative arguments)
 
 ---
 
@@ -520,18 +537,19 @@ git commit -m "test: add <feature> tests"
 | file-input | 5 | 7 | ✓ 완료 |
 | variables | 12 | 3 | ✓ 완료 |
 | control | 20 | 4 | ✓ 완료 |
-| functions | 0 | 5 | 대기 |
+| functions | 13 | 5 | ✓ 완료 |
 
-**fslit 총 테스트: 53개** (Phase 2, 3, 4, 7 완료)
+**fslit 총 테스트: 66개** (Phase 2, 3, 4, 5, 7 완료)
 
 | 프로젝트 | 테스트 수 | 상태 |
 |----------|-----------|------|
-| FunLang.Tests | 93 | ✓ 완료 |
+| FunLang.Tests | 129 | ✓ 완료 |
 
 **Expecto 테스트 구성:**
 - Phase 2 (산술): 18개
 - Phase 3 (변수): 15개
 - Phase 4 (제어흐름): 30개
+- Phase 5 (함수): 36개
 - Property Tests: 11개 (FsCheck)
 - Lexer Tests: 9개
 - 기타: 10개
