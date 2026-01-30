@@ -2,6 +2,18 @@
 module Parser
 type token = 
   | EOF
+  | AND
+  | OR
+  | LT
+  | GT
+  | LE
+  | GE
+  | NE
+  | TRUE
+  | FALSE
+  | IF
+  | THEN
+  | ELSE
   | LET
   | IN
   | EQUALS
@@ -15,6 +27,18 @@ type token =
   | NUMBER of (int)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_AND
+    | TOKEN_OR
+    | TOKEN_LT
+    | TOKEN_GT
+    | TOKEN_LE
+    | TOKEN_GE
+    | TOKEN_NE
+    | TOKEN_TRUE
+    | TOKEN_FALSE
+    | TOKEN_IF
+    | TOKEN_THEN
+    | TOKEN_ELSE
     | TOKEN_LET
     | TOKEN_IN
     | TOKEN_EQUALS
