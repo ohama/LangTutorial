@@ -20,12 +20,20 @@ let evaluate (input: string) : int =
     match evaluateToValue input with
     | IntValue n -> n
     | BoolValue _ -> failwith "Expected int but got bool"
+    | FunctionValue _ -> failwith "Expected int but got function"
 
 /// Parse and evaluate a string expression, extracting bool
 let evaluateToBool (input: string) : bool =
     match evaluateToValue input with
     | BoolValue b -> b
     | IntValue _ -> failwith "Expected bool but got int"
+    | FunctionValue _ -> failwith "Expected bool but got function"
+
+/// Check if value is a function
+let isFunction (input: string) : bool =
+    match evaluateToValue input with
+    | FunctionValue _ -> true
+    | _ -> false
 
 // ============================================================
 // Phase 2: Arithmetic Expressions
@@ -210,6 +218,7 @@ let asInt (v: Value) : int =
     match v with
     | IntValue n -> n
     | BoolValue _ -> failwith "Expected int"
+    | FunctionValue _ -> failwith "Expected int"
 
 [<Tests>]
 let propertyTests =
@@ -468,6 +477,185 @@ let phase4Tests =
     ]
 
 // ============================================================
+// Phase 5: Functions & Abstraction
+// ============================================================
+
+[<Tests>]
+let phase5Tests =
+    testList "Phase 5: Functions & Abstraction" [
+        testList "FUNC-01: Function Definition" [
+            test "simple lambda" {
+                Expect.isTrue (isFunction "fun x -> x") "fun x -> x should be a function"
+            }
+            test "lambda with body expression" {
+                Expect.isTrue (isFunction "fun x -> x + 1") "fun x -> x + 1 should be a function"
+            }
+            test "function bound to variable" {
+                Expect.equal (evaluate "let f = fun x -> x + 1 in f 5") 6
+                    "let f = fun x -> x + 1 in f 5 should be 6"
+            }
+            test "function returning function" {
+                Expect.isTrue (isFunction "fun x -> fun y -> x + y")
+                    "fun x -> fun y -> x + y should be a function"
+            }
+        ]
+
+        testList "FUNC-02: Function Application" [
+            test "simple application" {
+                Expect.equal (evaluate "let f = fun x -> x + 1 in f 5") 6
+                    "function application should work"
+            }
+            test "application with expression argument" {
+                Expect.equal (evaluate "let f = fun x -> x * 2 in f (3 + 4)") 14
+                    "f (3 + 4) should be 14"
+            }
+            test "curried function" {
+                Expect.equal (evaluate "let add = fun x -> fun y -> x + y in add 3 4") 7
+                    "curried function add 3 4 should be 7"
+            }
+            test "partial application" {
+                Expect.equal (evaluate "let add = fun x -> fun y -> x + y in let add5 = add 5 in add5 10") 15
+                    "partial application should work"
+            }
+            test "nested function calls" {
+                Expect.equal (evaluate "let double = fun x -> x * 2 in double (double 3)") 12
+                    "double (double 3) should be 12"
+            }
+            test "application is left associative" {
+                // f x y = (f x) y
+                Expect.equal (evaluate "let add = fun x -> fun y -> x + y in add 2 3") 5
+                    "add 2 3 = (add 2) 3 should be 5"
+            }
+        ]
+
+        testList "FUNC-03: Recursive Functions" [
+            test "simple recursion with let rec" {
+                Expect.equal (evaluate "let rec f x = x in f 42") 42
+                    "simple rec function"
+            }
+            test "factorial" {
+                Expect.equal (evaluate "let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact 5") 120
+                    "fact 5 should be 120"
+            }
+            test "factorial of 0" {
+                Expect.equal (evaluate "let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact 0") 1
+                    "fact 0 should be 1"
+            }
+            test "fibonacci" {
+                Expect.equal (evaluate "let rec fib n = if n <= 1 then n else fib (n - 1) + fib (n - 2) in fib 6") 8
+                    "fib 6 should be 8"
+            }
+            test "countdown" {
+                Expect.equal (evaluate "let rec countdown n = if n <= 0 then 0 else countdown (n - 1) in countdown 10") 0
+                    "countdown 10 should be 0"
+            }
+            test "sum to n" {
+                Expect.equal (evaluate "let rec sum n = if n <= 0 then 0 else n + sum (n - 1) in sum 5") 15
+                    "sum 5 should be 15"
+            }
+        ]
+
+        testList "FUNC-04: Closures" [
+            test "closure captures outer variable" {
+                Expect.equal (evaluate "let x = 10 in let f = fun y -> x + y in f 5") 15
+                    "closure should capture x = 10"
+            }
+            test "closure captures at definition time" {
+                // x is captured when f is defined (x = 10), not when called
+                Expect.equal (evaluate "let x = 10 in let f = fun y -> x + y in let x = 99 in f 5") 15
+                    "closure captures at definition time, not call time"
+            }
+            test "nested closure" {
+                Expect.equal (evaluate "let a = 1 in let b = 2 in let f = fun c -> a + b + c in f 3") 6
+                    "nested closure captures multiple variables"
+            }
+            test "make adder (closure factory)" {
+                Expect.equal (evaluate "let makeAdder = fun x -> fun y -> x + y in let add5 = makeAdder 5 in add5 3") 8
+                    "closure factory pattern"
+            }
+            test "closure value is captured" {
+                Expect.equal (evaluate "let x = 100 in let f = fun y -> x + y in let g = fun z -> f z + 1 in g 5") 106
+                    "closure within closure"
+            }
+        ]
+
+        testList "Lexer - Function Tokens" [
+            test "tokenizes fun keyword" {
+                let lexbuf = LexBuffer<char>.FromString "fun"
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token Parser.FUN "should be FUN"
+            }
+            test "tokenizes rec keyword" {
+                let lexbuf = LexBuffer<char>.FromString "rec"
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token Parser.REC "should be REC"
+            }
+            test "tokenizes arrow" {
+                let lexbuf = LexBuffer<char>.FromString "->"
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token Parser.ARROW "should be ARROW"
+            }
+            test "distinguishes fun from identifier" {
+                let lexbuf = LexBuffer<char>.FromString "funny"
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token (Parser.IDENT "funny") "funny is IDENT, not FUN"
+            }
+            test "distinguishes rec from identifier" {
+                let lexbuf = LexBuffer<char>.FromString "record"
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token (Parser.IDENT "record") "record is IDENT, not REC"
+            }
+        ]
+
+        testList "AST Construction" [
+            test "parse lambda" {
+                let ast = parse "fun x -> x"
+                Expect.equal ast (Lambda("x", Var "x")) "lambda AST"
+            }
+            test "parse lambda with expression body" {
+                let ast = parse "fun x -> x + 1"
+                Expect.equal ast (Lambda("x", Add(Var "x", Number 1))) "lambda with expression body"
+            }
+            test "parse nested lambda" {
+                let ast = parse "fun x -> fun y -> x + y"
+                Expect.equal ast (Lambda("x", Lambda("y", Add(Var "x", Var "y")))) "nested lambda"
+            }
+            test "parse application" {
+                let ast = parse "f 5"
+                Expect.equal ast (App(Var "f", Number 5)) "application AST"
+            }
+            test "parse chained application" {
+                let ast = parse "f 1 2"
+                Expect.equal ast (App(App(Var "f", Number 1), Number 2)) "chained application is left-associative"
+            }
+            test "parse let rec" {
+                let ast = parse "let rec f x = x in f 1"
+                Expect.equal ast (LetRec("f", "x", Var "x", App(Var "f", Number 1))) "let rec AST"
+            }
+        ]
+
+        testList "Edge Cases" [
+            test "function subtraction vs application" {
+                // f - 1 is subtraction, not application
+                Expect.equal (evaluate "let f = 10 in f - 1") 9
+                    "f - 1 should be subtraction when f is int"
+            }
+            test "function with negative argument needs parens" {
+                Expect.equal (evaluate "let f = fun x -> x in f (-5)") -5
+                    "f (-5) applies -5 to f"
+            }
+            test "identity function" {
+                Expect.equal (evaluate "let id = fun x -> x in id 42") 42
+                    "identity function"
+            }
+            test "constant function" {
+                Expect.equal (evaluate "let const = fun x -> fun y -> x in const 5 10") 5
+                    "constant function returns first argument"
+            }
+        ]
+    ]
+
+// ============================================================
 // Entry Point
 // ============================================================
 
@@ -477,6 +665,7 @@ let main argv =
         phase2Tests
         phase3Tests
         phase4Tests
+        phase5Tests
         propertyTests
         lexerTests
     ]
