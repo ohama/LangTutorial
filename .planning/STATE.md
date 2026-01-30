@@ -2,16 +2,16 @@
 
 ## Current Status
 
-**Phase:** Phase 7 - CLI Options & File-Based Tests
-**Status:** ● Complete (2/2 plans complete)
-**Progress:** 4/7 phases complete (57%)
-**Last activity:** 2026-01-30 - Completed plan 07-02
+**Phase:** Phase 3 - Variables & Binding
+**Status:** ◐ In Progress (1/1 plans complete)
+**Progress:** 5/7 phases complete (71%)
+**Last activity:** 2026-01-30 - Completed plan 03-01
 
 ```
 Phase 1 [██████████] 100% ✓ Complete
 Phase 2 [██████████] 100% ✓ Complete
-Phase 3 [○○○○○○○○○○] 0%   ← Next (main track)
-Phase 4 [○○○○○○○○○○] 0%
+Phase 3 [██████████] 100% ✓ Complete
+Phase 4 [○○○○○○○○○○] 0%   ← Next (main track)
 Phase 5 [○○○○○○○○○○] 0%
 Phase 6 [○○○○○○○○○○] 0%
 Phase 7 [██████████] 100% ✓ Complete (parallel track)
@@ -25,7 +25,7 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-**Current focus:** Phase 3 준비 - Variables & Binding (let 바인딩, 변수 참조, let-in 스코프)
+**Current focus:** Phase 4 준비 - Control Flow (if-then-else, 조건 평가)
 
 **Tech stack:**
 - F# (.NET 10)
@@ -41,7 +41,7 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 |-------|------|--------|-------|--------------|----------|
 | 1 | Foundation & Pipeline | ● Complete | 3/3 | 4 | 100% |
 | 2 | Arithmetic Expressions | ● Complete | 2/2 | 4 | 100% |
-| 3 | Variables & Binding | ○ Pending | 0/0 | 3 | 0% |
+| 3 | Variables & Binding | ● Complete | 1/1 | 3 | 100% |
 | 4 | Control Flow | ○ Pending | 0/0 | 4 | 0% |
 | 5 | Functions & Abstraction | ○ Pending | 0/0 | 4 | 0% |
 | 6 | Quality & Polish | ○ Pending | 0/0 | 3 | 0% |
@@ -57,8 +57,8 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 ## Performance Metrics
 
 **Velocity:** 2 phases/session
-**Avg plans per phase:** 2.3 (7 plans in 3 phases)
-**Completion rate:** 43% (3/7 phases)
+**Avg plans per phase:** 2.0 (8 plans in 4 phases)
+**Completion rate:** 57% (4/7 phases)
 
 **Milestones:**
 - [x] Phase 2 complete: 첫 실행 가능한 계산기
@@ -98,15 +98,18 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 | Verify tests against actual output | 07-02 | All test expectations verified by running CLI before committing | 2026-01-30 |
 | fslit %input variable for files | 07-02 | Self-contained tests without external file dependencies | 2026-01-30 |
 | Organize tests by CLI option | 07-02 | Separate files for cli, emit-tokens, emit-ast, file-input | 2026-01-30 |
+| Environment as Map<string, int> | 03-01 | O(log n) lookup, immutable, functional style for variable storage | 2026-01-30 |
+| evalExpr wrapper function | 03-01 | Hides environment plumbing from Program.fs for top-level calls | 2026-01-30 |
+| Lexer keyword ordering | 03-01 | Keywords (let, in) before identifier pattern to prevent IDENT match | 2026-01-30 |
+| failwithf for undefined vars | 03-01 | Simple error handling now, to be enhanced with proper types in Phase 6 | 2026-01-30 |
 
 ### Active TODOs
 
-**Next action:** Plan Phase 3 (Variables & Binding) - main track development
+**Next action:** Plan Phase 4 (Control Flow) - main track development
 
 **Blocking issues:** None
 
 **Research gaps:**
-- Phase 3: Scope management strategies (simple vs nested)
 - Phase 5: Closure representation techniques (to be researched during planning)
 
 ### Known Blockers
@@ -117,10 +120,10 @@ None currently.
 
 ## Session Continuity
 
-**Last session:** 2026-01-30 - Plan 07-02 execution (Phase 7 COMPLETE)
-**What happened:** Completed plan 07-02 (CLI File-Based Tests). Created tests/ directory with 4 fslit test files covering all CLI options: cli.flt (6 cases), emit-tokens.flt (4 cases), emit-ast.flt (6 cases), file-input.flt (5 cases). 3 tasks, 3 commits (b10b577, a93d8f8, 9442d04). Phase 7 complete - regression test suite in place.
-**What's next:** Plan Phase 3 (Variables & Binding) for main track, or continue with Phase 4-6
-**Stopped at:** Completed 07-02-PLAN.md
+**Last session:** 2026-01-30 - Plan 03-01 execution (Phase 3 COMPLETE)
+**What happened:** Completed plan 03-01 (Variables & Binding). Implemented let-in syntax, variable references, environment-passing evaluator with Map<string, int>, lexical scoping, and undefined variable errors. Extended AST with Var and Let nodes. Added LET, IN, EQUALS, IDENT tokens to lexer/parser. 6 tasks, 6 commits (fd4d10b, 85573f1, 701c1ed, d705fd8, aa3c4a0, 1068569). Phase 3 complete - variables and binding working.
+**What's next:** Plan Phase 4 (Control Flow) for main track
+**Stopped at:** Completed 03-01-PLAN.md
 **Resume file:** None
 
 **If continuing from interruption:**
@@ -161,4 +164,4 @@ None currently.
 ---
 
 *Last updated: 2026-01-30*
-*Next update: After Phase 3 planning*
+*Next update: After Phase 4 planning*
