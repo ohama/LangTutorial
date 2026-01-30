@@ -1,618 +1,376 @@
-# Pitfalls Research
-
-Research findings on common mistakes in language implementation tutorials, with focus on F#, fslex/fsyacc, and incremental tutorial design.
+# Pitfalls Research: REPL, Strings, Comments
 
-## Common Mistakes
+Research findings on common mistakes when adding REPL, string literals, and comments to an existing fslex/fsyacc-based interpreter (FunLang).
 
-### 1. Complex Grammar Design
-**Pitfall**: Using grammars that are difficult to parse, requiring complex parser generators or causing ambiguities.
+**Domain:** Adding features to existing F# interpreter
+**Researched:** 2026-01-31
+**Existing System:** FunLang v1.0 with fslex/fsyacc, 195 tests, closure-based functions
 
-**Warning Signs**:
-- Parser generator reports shift-reduce or reduce-reduce conflicts
-- Grammar requires lookahead beyond LL(1) or LALR(1)
-- Multiple valid parse trees for the same input
-- Difficulty explaining grammar rules to beginners
+---
 
-**Prevention Strategy**:
-- Start with simple, unambiguous LL(1) or LALR(1) grammars
-- Avoid left recursion in early chapters
-- Use precedence declarations explicitly
-- Test grammar with minimal examples before expanding
+## REPL Pitfalls
 
-**Address In**: Phase 1 (grammar design) - validate grammar simplicity before implementing
-
-**Sources**:
-- [5 Mistakes in Programming Language Design](https://beza1e1.tuxen.de/articles/proglang_mistakes.html)
-- [Shift-Reduce Conflicts Documentation](https://web.cs.wpi.edu/~cs544/PLT5.2.3.html)
+| Pitfall | Warning Signs | Prevention | Phase |
+|---------|--------------|------------|-------|
+| **Environment not persisted between inputs** | `let x = 5` works, but `x` undefined on next line | Store and pass environment between REPL iterations; do not recreate `emptyEnv` each loop | REPL Core |
+| **No incomplete input detection** | Multi-line `let ... in` crashes instead of prompting for continuation | Check for "Unexpected end of input" SyntaxError; return continuation prompt | REPL Core |
+| **Creating new LexBuffer per line loses position** | Line numbers always show 1; error positions wrong | Accumulate input text or track global line offset; consider fresh buffer with offset tracking | REPL Core |
+| **Ctrl+C crashes instead of canceling** | REPL exits on interrupt | Install `Console.CancelKeyPress` handler; reset input state | REPL Polish |
+| **No way to exit cleanly** | Users type `:quit` but get "undefined variable" | Detect REPL commands before parsing; common: `:quit`, `:env`, `:help` | REPL Core |
+| **Blocking on Console.ReadLine loses history** | No up-arrow for previous commands | Use readline library (e.g., ReadLine.NET) or implement basic history | REPL Polish |
+| **evalExpr always starts with emptyEnv** | REPL cannot define persistent bindings | Create REPL-specific eval that accepts and returns Env | REPL Core |
+| **Exceptions crash REPL loop** | One syntax error exits the entire REPL | Wrap parse/eval in try-catch; print error and continue | REPL Core |
 
-### 2. Mega Interpreter Anti-Pattern
-**Pitfall**: Building one giant interpreter that handles everything instead of modular, focused components.
+### Critical REPL Pitfall: Environment Persistence
 
-**Warning Signs**:
-- Single file exceeding 500 lines
-- Interpreter handling unrelated language features in same function
-- Difficulty testing individual features
-- Cannot demonstrate partial functionality
+**What goes wrong:** Current `evalExpr` uses `emptyEnv`, so each REPL input starts fresh. Users expect:
+```
+> let x = 5
+5
+> x + 1
+6
+```
+But get: "Undefined variable: x"
 
-**Prevention Strategy**:
-- Separate lexer, parser, and evaluator into distinct modules
-- Use visitor pattern or similar for extensibility
-- Each chapter adds one focused feature
-- Every chapter produces runnable code
-
-**Address In**: Phase 0 (architecture design) - establish modular structure from start
-
-**Sources**:
-- [9 Anti-Patterns Every Programmer Should Be Aware Of](https://sahandsaba.com/nine-anti-patterns-every-programmer-should-be-aware-of-with-examples.html)
+**Root cause:** `evalExpr` is designed for single-expression evaluation, not session persistence.
 
-### 3. Premature Optimization
-**Pitfall**: Optimizing for performance before establishing correct semantics and readable code.
-
-**Warning Signs**:
-- Complex optimizations in early chapters
-- Sacrificing code clarity for minor performance gains
-- No baseline performance measurements
-- Students confused by "clever" code
+**Prevention:**
+1. Create REPL-specific function: `evalInEnv : Env -> Expr -> Value * Env`
+2. Let expressions should extend the persistent environment
+3. Other expressions should evaluate in persistent environment but not modify it
 
-**Prevention Strategy**:
-- Start with naive, correct implementations
-- Defer optimization to advanced chapters
-- Always measure before optimizing
-- Document why optimizations matter
+**Detection:** Test multi-input sessions in REPL development.
 
-**Address In**: Late phases (7-9) - only after core features work correctly
+### Critical REPL Pitfall: Multi-line Input
 
-**Sources**:
-- [Anti-patterns You Should Avoid in Your Code](https://www.freecodecamp.org/news/antipatterns-to-avoid-in-code/)
-
-### 4. Undefined Behavior and Vague Semantics
-**Pitfall**: Leaving language behavior "implementation specific" or undefined.
+**What goes wrong:** User types `let f x =` and presses Enter. Parser throws "Unexpected end of input" and REPL shows error instead of continuation prompt.
 
-**Warning Signs**:
-- Tutorial says "you can implement this however you want"
-- Different implementations produce different results
-- No specification of error conditions
-- Students ask "what should happen when..."
+**Root cause:** Parser treats incomplete input as error, not as "needs more input".
 
-**Prevention Strategy**:
-- Define exact semantics for every operation
-- Specify error conditions explicitly
-- Provide reference implementation behavior
-- Include test cases with expected outputs
-
-**Address In**: Phase 1-2 - establish clear semantics early
+**Prevention:**
+1. Catch parse exceptions and check if error indicates incomplete input
+2. Patterns to detect: "Unexpected EOF", "Unexpected end of input"
+3. Accumulate lines with secondary prompt (`...`) until complete
+4. Provide `.break` command to abandon multi-line input
 
-**Sources**:
-- [5 Mistakes in Programming Language Design](https://beza1e1.tuxen.de/articles/proglang_mistakes.html)
-
-### 5. Non-Incremental Tutorial Structure
-**Pitfall**: Requiring students to write large amounts of code before seeing results, or breaking working code between chapters.
-
-**Warning Signs**:
-- Chapters ending with non-compiling code
-- "We'll fix this in Chapter 5" comments
-- Large code dumps without explanation
-- No working interpreter until final chapter
+**Detection:** Try entering `if true then` without the else clause.
 
-**Prevention Strategy**:
-- Every chapter must produce runnable code
-- Each chapter builds on previous working version
-- Provide complete code at each step
-- Test that students can stop at any chapter
-
-**Address In**: All phases - fundamental requirement
+---
 
-**Sources**:
-- [Crafting Interpreters Review](https://www.chidiwilliams.com/posts/crafting-interpreters-a-review)
-- [Crafting "Crafting Interpreters"](https://journal.stuffwithstuff.com/2020/04/05/crafting-crafting-interpreters/)
-
-### 6. Insufficient Error Handling Examples
-**Pitfall**: Only showing the "happy path" without demonstrating error cases and recovery.
-
-**Warning Signs**:
-- No examples of syntax errors
-- Parser crashes on invalid input
-- Unhelpful error messages
-- Students confused when code doesn't work
+## String Pitfalls
 
-**Prevention Strategy**:
-- Include error cases in each chapter
-- Show error handling patterns early
-- Provide helpful error messages
-- Test with intentionally broken code
-
-**Address In**: Phase 3-4 - after basic parsing works
-
-**Sources**:
-- [Writing a Parser — Syntax Error Handling](https://supunsetunga.medium.com/writing-a-parser-syntax-error-handling-b71b67a8ac66)
-- [Providing meaningful parse errors with fsyacc](http://fpish.net/topic/None/57043)
-
-### 7. Confusing Lexer and Parser Responsibilities
-**Pitfall**: Making lexer do semantic analysis, or parser do tokenization.
-
-**Warning Signs**:
-- Lexer checking variable types or scope
-- Parser doing string manipulation
-- Unclear separation of concerns
-- Difficulty explaining what each component does
-
-**Prevention Strategy**:
-- Lexer only identifies token existence
-- Parser handles context and structure
-- Clear examples of each responsibility
-- Diagram showing pipeline flow
-
-**Address In**: Phase 1 - establish clear separation immediately
-
-**Sources**:
-- [Lexer vs Parser: The Main Differences](https://thecontentauthority.com/blog/lexer-vs-parser)
-- [An Overview of Lexing and Parsing](https://www.perl.com/pub/2012/10/an-overview-of-lexing-and-parsing.html/)
-
-## fslex/fsyacc Specific Issues
-
-### 1. Build Order Dependencies
-**Pitfall**: F# requires files in dependency order, but fsyacc-generated files must come before fslex files.
-
-**Warning Signs**:
-- Build errors about undefined types
-- Token type not found in lexer
-- Intermittent build failures
-- Works after clean rebuild
+| Pitfall | Warning Signs | Prevention | Phase |
+|---------|--------------|------------|-------|
+| **String rule swallows everything including EOF** | Unterminated strings hang or consume rest of file | Use separate lexer state with explicit newline/EOF handling | String Lexer |
+| **Escape sequences not processed** | `"\n"` outputs literal backslash-n | Process escapes in lexer action or post-process; use StringBuilder accumulator | String Lexer |
+| **Newlines allowed in string literals** | Multi-line strings accepted but shouldn't be | Check for unescaped newline in string state; report "unterminated string" error | String Lexer |
+| **Lexer state not reset on error** | After bad string, all subsequent tokens wrong | Ensure error recovery returns to initial state | String Lexer |
+| **STRING token uses wrong type** | Token carries string but `%token` declares no type | Declare `%token <string> STRING` in Parser.fsy | Parser Integration |
+| **No StringValue in Value type** | Can lex/parse strings but cannot store them | Add `StringValue of string` to Value discriminated union | AST/Eval |
+| **String operations missing** | Have strings but cannot concatenate or get length | Plan string operations: `^` (concat), `length`, `substring` | String Operations |
+| **Quote escaping broken** | `"he said \"hello\""` doesn't work | Handle `\"` escape sequence explicitly in lexer state | String Lexer |
 
-**Prevention Strategy**:
-- Always define parser (.fsy) before lexer (.fsl)
-- Document build order in first chapter
-- Use fsyacc to generate token union type first
-- Show complete .fsproj file with correct order
-
-**Phase**: Phase 1 - address in initial setup chapter
-
-**Sources**:
-- [F Sharp Programming/Lexing and Parsing](https://en.wikibooks.org/wiki/F_Sharp_Programming/Lexing_and_Parsing)
-- [Using FSLexYacc, the F# lexer and parser](https://thanos.codes/blog/using-fslexyacc-the-fsharp-lexer-and-parser/)
-
-### 2. Generated File Management
-**Pitfall**: Generated files (.fs, .fsi) can be read-only, causing access denied errors when regenerating.
-
-**Warning Signs**:
-- "Access denied" when building
-- Build works first time, fails on rebuild
-- Files checked out as read-only from source control
-- Mysterious permission errors
-
-**Prevention Strategy**:
-- Document file generation process clearly
-- Add pre-build events to mark files writable
-- Include .gitignore for generated files
-- Provide build scripts that handle this
-
-**Phase**: Phase 1 - prevent in initial setup
-
-**Sources**:
-- [Use FsLex and FsYacc to make a parser in F#](https://learn.microsoft.com/en-us/archive/blogs/jomo_fisher/use-fslex-and-fsyacc-to-make-a-parser-in-f)
-
-### 3. Shift-Reduce and Reduce-Reduce Conflicts
-**Pitfall**: fsyacc reports conflicts that are difficult for beginners to understand and resolve.
-
-**Warning Signs**:
-- fsyacc output shows conflict warnings
-- Parser behaves unexpectedly on certain inputs
-- Grammar seems correct but doesn't work
-- Students stuck on grammar debugging
+### Critical String Pitfall: Lexer State Management
 
-**Prevention Strategy**:
-- Start with conflict-free grammars
-- Explain what conflicts mean before they occur
-- Use %left, %right, %nonassoc correctly
-- Provide debugging techniques
-- Note: fsyacc has bugs with %nonassoc and precedence
+**What goes wrong:** Simple regex like `'"' [^"]* '"'` fails because:
+1. Cannot handle escape sequences (`\"`)
+2. Includes newlines (should be error)
+3. No good error for unterminated string
 
-**Phase**: Phase 2 - after basic grammar works, before complex expressions
-
-**Sources**:
-- [Shift-Reduce Conflicts in Yacc](https://www2.cs.arizona.edu/~debray/Teaching/CSc453/DOCS/conflicts.pdf)
-- [%nonassoc not handled correctly · Issue #39](https://github.com/fsprojects/FsLexYacc/issues/39)
-- [Issue with reduce/reduce conflicts · Issue #40](https://github.com/fsprojects/FsLexYacc/issues/40)
+**Root cause:** String literals need stateful lexing, not single regex.
 
-### 4. Regular Expression Limitations in fslex
-**Pitfall**: fslex does not handle certain regular expression patterns correctly, especially with EOF.
+**Prevention:** Use fslex's multiple entry points:
 
-**Warning Signs**:
-- Lexer fails on valid input
-- EOF handling causes errors
-- Regex patterns work in other tools but not fslex
-- Unexpected token matching behavior
+```
+let str_buf = new System.Text.StringBuilder()
 
-**Prevention Strategy**:
-- Test regex patterns early
-- Avoid complex patterns with EOF
-- Provide tested pattern library
-- Document fslex-specific limitations
-
-**Phase**: Phase 1 - use only proven patterns initially
-
-**Sources**:
-- [F Sharp Programming/Lexing and Parsing](https://en.wikibooks.org/wiki/F_Sharp_Programming/Lexing_and_Parsing)
+rule tokenize = parse
+    | '"'      { str_buf.Clear() |> ignore; string_body lexbuf }
+    | ...
 
-### 5. Visual Studio Project Configuration
-**Pitfall**: Configuring VS projects correctly to use fslex/fsyacc is non-trivial for beginners.
-
-**Warning Signs**:
-- Tools not running on build
-- Generated files not included in compilation
-- IntelliSense not finding generated types
-- Build order issues
+and string_body = parse
+    | '"'      { STRING (str_buf.ToString()) }
+    | "\\n"    { str_buf.Append('\n') |> ignore; string_body lexbuf }
+    | "\\t"    { str_buf.Append('\t') |> ignore; string_body lexbuf }
+    | "\\\""   { str_buf.Append('"') |> ignore; string_body lexbuf }
+    | "\\\\"   { str_buf.Append('\\') |> ignore; string_body lexbuf }
+    | '\n'     { failwith "Unterminated string literal" }
+    | eof      { failwith "Unterminated string literal" }
+    | _        { str_buf.Append(lexbuf.LexemeChar 0) |> ignore; string_body lexbuf }
+```
 
-**Prevention Strategy**:
-- Provide complete, working .fsproj file
-- Document all necessary configuration
-- Use MSBuild targets properly
-- Consider providing project template
-
-**Phase**: Phase 0 - setup chapter with complete configuration
-
-**Sources**:
-- [Parsing with fslex and fsyacc](https://www.partario.com/blog/2009/05/lisp-compiler-in-f-parsing-with-fslex-and-fsyacc.html)
-
-### 6. Error Recovery Weakness
-**Pitfall**: Yacc-like parsers have notoriously weak error reporting/recovery requiring significant effort.
-
-**Warning Signs**:
-- Generic "syntax error" messages
-- Parser gives up after first error
-- No indication of what was expected
-- Difficult to debug grammar issues
-
-**Prevention Strategy**:
-- Set expectations early about error quality
-- Add custom error handling incrementally
-- Provide examples of improving errors
-- Consider error recovery in advanced chapter
-
-**Phase**: Phase 3-4 - basic errors first, advanced recovery later
-
-**Sources**:
-- [Providing meaningful parse errors with fsyacc](http://fpish.net/topic/None/57043)
-
-### 7. OCaml Documentation Dependency
-**Pitfall**: Best fslex/fsyacc learning resources are actually OCaml tutorials.
-
-**Warning Signs**:
-- Students struggling to find F#-specific examples
-- Confusion about F# vs OCaml syntax
-- Limited F# community resources
-- Translation errors from OCaml
-
-**Prevention Strategy**:
-- Acknowledge OCaml resources exist and are useful
-- Provide F#-specific translations
-- Show syntax differences explicitly
-- Build comprehensive F# examples
-
-**Phase**: Phase 0-1 - set expectations and provide resources
-
-**Sources**:
-- [Lexing and Parsing with F# – Part I](https://sergeytihon.com/2014/07/04/lexing-and-parsing-with-f-part-i/)
-
-## Tutorial Structure Pitfalls
-
-### 1. Tutorial Fever (Over-Complication)
-**Pitfall**: Trying to cover too much, making tutorial overwhelming instead of educational.
-
-**Warning Signs**:
-- Each chapter introduces 3+ new concepts
-- Students need prerequisite knowledge not taught
-- Tutorial tries to be comprehensive reference
-- Scope creep in chapter objectives
-
-**Prevention Strategy**:
-- One major concept per chapter
-- Build incrementally from simple to complex
-- Defer advanced features to later chapters
-- Focus on understanding over completeness
-
-**Address In**: All phases - maintain focus
-
-**Sources**:
-- [9 Anti-Patterns Every Programmer Should Be Aware Of](https://sahandsaba.com/nine-anti-patterns-every-programmer-should-be-aware-of-with-examples.html)
-
-### 2. Missing Working Examples
-**Pitfall**: Explaining concepts without concrete, runnable code examples.
-
-**Warning Signs**:
-- Pseudo-code instead of real code
-- "Exercise for the reader" for core features
-- Examples that don't compile
-- No test cases provided
-
-**Prevention Strategy**:
-- Every concept has working code
-- Provide complete files, not just snippets
-- Include tests that demonstrate features
-- Make examples copy-paste-runnable
-
-**Address In**: All phases - fundamental requirement
-
-**Sources**:
-- [Crafting Interpreters](https://craftinginterpreters.com/introduction.html)
-- [Book Review: Crafting Interpreters](https://eli.thegreenplace.net/2022/book-review-crafting-interpreters-by-robert-nystrom/)
-
-### 3. Inadequate Testing Examples
-**Pitfall**: Not showing how to test language implementations, leaving students unsure if code works.
-
-**Warning Signs**:
-- No test framework mentioned
-- Manual testing only
-- No regression tests
-- Students ask "how do I know it works?"
-
-**Prevention Strategy**:
-- Introduce testing in chapter 1
-- Grow test suite with each chapter
-- Show both unit and integration tests
-- Provide test data files
-
-**Address In**: Phase 1 - establish testing pattern early
-
-### 4. Ignoring Real-World Concerns
-**Pitfall**: Building toy examples that don't address practical considerations like Unicode, line numbers, source locations.
-
-**Warning Signs**:
-- ASCII-only examples
-- No error location information
-- Can't track source positions
-- Real-world code breaks tutorial examples
-
-**Prevention Strategy**:
-- Handle UTF-8 from start
-- Track positions early
-- Show file I/O, not just strings
-- Use realistic test cases
-
-**Address In**: Phases 1-3 - foundations first, enhance incrementally
-
-### 5. Poor Pacing and Prerequisite Management
-**Pitfall**: Assuming too much or too little background knowledge, or moving too fast/slow.
-
-**Warning Signs**:
-- Students lost on basic concepts
-- Tutorial too simplistic for target audience
-- Uneven chapter lengths
-- Sudden difficulty spikes
-
-**Prevention Strategy**:
-- State prerequisites clearly upfront
-- Review necessary F# concepts when used
-- Maintain consistent chapter scope
-- Provide "challenge" sections for advanced readers
-
-**Address In**: All phases - balance difficulty throughout
-
-### 6. Lack of Design Notes and Rationale
-**Pitfall**: Showing "what" without explaining "why", missing learning opportunities.
-
-**Warning Signs**:
-- No discussion of alternatives
-- Design decisions not justified
-- Students can't make own choices
-- Cargo-cult copying without understanding
-
-**Prevention Strategy**:
-- Include "design notes" sections
-- Discuss tradeoffs explicitly
-- Show alternative approaches
-- Explain historical context
-
-**Address In**: All phases - add context to implementations
-
-**Sources**:
-- [Crafting Interpreters](https://craftinginterpreters.com/introduction.html)
-
-### 7. Dead Code and Boat Anchors
-**Pitfall**: Leaving unused code "in case we need it later" or for "future chapters" that never come.
-
-**Warning Signs**:
-- Commented-out code blocks
-- Unused functions or types
-- "TODO" comments that stay forever
-- Code that's never called
-
-**Prevention Strategy**:
-- Only include code that's used
-- Remove code before adding new features
-- Keep examples minimal
-- Use version control, not comments
-
-**Address In**: All phases - keep code clean
-
-**Sources**:
-- [Anti-patterns You Should Avoid in Your Code](https://www.freecodecamp.org/news/antipatterns-to-avoid-in-code/)
-
-### 8. Magic Numbers and Unclear Constants
-**Pitfall**: Using unexplained numeric or string literals throughout code.
-
-**Warning Signs**:
-- Hardcoded values without names
-- Unclear what numbers represent
-- Difficult to modify behavior
-- Students copy values without understanding
-
-**Prevention Strategy**:
-- Name all constants
-- Explain magic values
-- Use discriminated unions instead of codes
-- Make intent explicit
-
-**Address In**: All phases - model good practices
-
-**Sources**:
-- [Anti-patterns You Should Avoid in Your Code](https://www.freecodecamp.org/news/antipatterns-to-avoid-in-code/)
-
-## Prevention Strategies
-
-### Strategy 1: Start Simple, Build Incrementally
-- Chapter 1: Minimal working interpreter (calculator)
-- Each chapter: Add ONE significant feature
-- Every chapter: Produces runnable code
-- Final chapter: Full-featured interpreter
-
-**Validates Against**: Non-incremental structure, tutorial fever, poor pacing
-
-### Strategy 2: Establish Architecture Early
-- Phase 0: Project setup and tooling
-- Phase 1: Clean separation (lexer/parser/evaluator)
-- Maintain separation throughout
-- Refactor rather than band-aid
-
-**Validates Against**: Mega interpreter, confusing responsibilities
-
-### Strategy 3: Test-Driven Tutorial Development
-- Write tests before tutorial prose
-- Ensure every example compiles
-- Validate each chapter independently
-- Regression test across chapters
-
-**Validates Against**: Missing examples, undefined behavior, non-buildable chapters
-
-### Strategy 4: Explicit fslex/fsyacc Setup Chapter
-- Complete project configuration
-- Document build order
-- Show file generation
-- Test with minimal grammar
-- Provide troubleshooting section
-
-**Validates Against**: All fslex/fsyacc-specific pitfalls
-
-### Strategy 5: Progressive Error Handling
-- Phase 1-2: Basic error detection
-- Phase 3-4: Helpful error messages
-- Phase 5-6: Error recovery
-- Phase 7+: Advanced diagnostics
-
-**Validates Against**: Insufficient error handling, error recovery weakness
-
-### Strategy 6: Design Notes Integration
-- Each chapter includes "Design Notes" section
-- Discuss alternatives and tradeoffs
-- Explain why this approach
-- Reference other language implementations
-
-**Validates Against**: Lack of rationale, cargo-cult copying
-
-### Strategy 7: F#-First Examples
-- All code in idiomatic F#
-- Use discriminated unions effectively
-- Leverage pattern matching
-- Show F#-specific advantages
-- Acknowledge OCaml resources but translate
-
-**Validates Against**: OCaml dependency confusion
-
-### Strategy 8: Continuous Validation Checkpoints
-- End of each chapter: "Checkpoint" section
-- List what should work
-- Provide test commands
-- Show expected output
-- Troubleshooting guide
-
-**Validates Against**: Students unsure if code works, inadequate testing
-
-### Strategy 9: Realistic Examples from Start
-- UTF-8 handling in Phase 1
-- Source locations in Phase 2
-- File I/O in Phase 3
-- Real-world test cases throughout
-
-**Validates Against**: Ignoring real-world concerns, ASCII-only
-
-### Strategy 10: Grammar Complexity Management
-- Phase 1: Expressions only (no statements)
-- Phase 2: Add simple statements
-- Phase 3: Control flow
-- Later phases: Advanced features
-- Validate grammar at each step
-- Provide conflict resolution guide
-
-**Validates Against**: Complex grammar, shift-reduce conflicts
-
-## Phase-Specific Pitfall Mapping
-
-### Phase 0: Project Setup
-**Critical Pitfalls to Address**:
-- VS project configuration (fslex/fsyacc specific issue #5)
-- Build order dependencies (#1)
-- Generated file management (#2)
-- Establish architecture early (prevention strategy #2)
-
-### Phase 1: Basic Lexer & Parser
-**Critical Pitfalls to Address**:
-- Confusing lexer/parser responsibilities (#7 common mistakes)
-- Complex grammar design (#1 common mistakes)
-- Regular expression limitations (#4 fslex/fsyacc)
-- Non-incremental structure (#5 common mistakes)
-- Establish testing (prevention strategy #3)
-
-### Phase 2-3: Expression Evaluation & Error Handling
-**Critical Pitfalls to Address**:
-- Undefined behavior (#4 common mistakes)
-- Insufficient error handling (#6 common mistakes)
-- Shift-reduce conflicts (#3 fslex/fsyacc)
-- Missing working examples (#2 tutorial structure)
-
-### Phase 4-6: Statements, Variables, Functions
-**Critical Pitfalls to Address**:
-- Mega interpreter anti-pattern (#2 common mistakes)
-- Tutorial fever (#1 tutorial structure)
-- Poor pacing (#5 tutorial structure)
-- Inadequate testing examples (#3 tutorial structure)
-
-### Phase 7-9: Advanced Features & Optimization
-**Critical Pitfalls to Address**:
-- Premature optimization (#3 common mistakes)
-- Error recovery weakness (#6 fslex/fsyacc)
-- Lack of design notes (#6 tutorial structure)
-- Ignoring real-world concerns (#4 tutorial structure)
-
-## Key Takeaways
-
-1. **Every chapter must build and run** - This is non-negotiable for a good tutorial
-2. **fslex/fsyacc has sharp edges** - Setup, build order, and conflicts need explicit documentation
-3. **Start simple, add incrementally** - Resist urge to show everything at once
-4. **Separate concerns clearly** - Lexer, parser, evaluator should be distinct from chapter 1
-5. **Test continuously** - Show testing patterns early, grow test suite with features
-6. **Explain why, not just what** - Design notes and rationale enhance learning
-7. **Handle errors progressively** - Start with detection, improve messaging over time
-8. **Keep code clean** - Model good practices, avoid anti-patterns in tutorial code
-9. **Use F# idiomatically** - Show language strengths, don't just translate from OCaml
-10. **Validate at checkpoints** - Help students verify progress at each step
+**Detection:** Test strings with escapes, newlines, and EOF.
+
+### Critical String Pitfall: Value Type Extension
+
+**What goes wrong:** Add STRING token and String AST node, but `eval` returns `IntValue 0` or crashes on string expressions.
+
+**Root cause:** Value discriminated union only has `IntValue | BoolValue | FunctionValue`.
+
+**Prevention:**
+1. Add `StringValue of string` to Value type
+2. Update `formatValue` to handle `StringValue`
+3. Add string-specific operations (concatenation at minimum)
+4. Update comparison operators if strings should be comparable
+
+**Detection:** Evaluating `"hello"` should return `StringValue "hello"`, not crash.
+
+---
+
+## Comment Pitfalls
+
+| Pitfall | Warning Signs | Prevention | Phase |
+|---------|--------------|------------|-------|
+| **Line comment consumes newline needed elsewhere** | `// comment` followed by code fails | Return to main rule after newline; do not consume newline in pattern | Comment Lexer |
+| **Block comment order wrong** | `/*` matches before `*` in multiply | Put `"/*"` before `'*'` in lexer rules; longer matches first | Comment Lexer |
+| **Block comment swallows EOF** | Unclosed `/*` hangs | Handle EOF in block comment state; report "unterminated comment" | Comment Lexer |
+| **Nested block comments not handled** | `/* /* */ */` leaves `*/` as code | Pass nesting depth as argument; increment on `/*`, decrement on `*/` | Comment Lexer |
+| **Comments inside strings processed** | `"foo // bar"` treated as comment | Only check for comments in main lexer state, not in string state | Comment Lexer |
+| **Newline handling in block comments** | Line numbers wrong after multi-line comment | Track newlines in block comment state to maintain position info | Comment Lexer |
+| **Line comment regex too greedy** | `//` followed by `*` causes issues | Use `"//" [^\n]*` pattern; do not try to match newline | Comment Lexer |
+
+### Critical Comment Pitfall: Pattern Order in fslex
+
+**What goes wrong:** You add `| '*'  { STAR }` for multiplication and `| "/*"  { ... }` for block comments. Block comments never match because `*` matches first.
+
+**Root cause:** fslex uses longest-match, but if matches are same length, first rule wins. The real issue is `'/'` may match before `"/*"` is considered.
+
+**Prevention:**
+1. Order multi-character tokens before single-character tokens
+2. Put `"/*"` and `"//"` BEFORE `'/'` if you have a division operator
+3. Current FunLang uses `SLASH` for `/`, so add comment patterns before it
+
+**Correct order in Lexer.fsl:**
+```
+// Comments (MUST be before SLASH)
+| "//"          { line_comment lexbuf }
+| "/*"          { block_comment 1 lexbuf }
+// Then single-char
+| '/'           { SLASH }
+```
+
+**Detection:** `1 /* comment */ + 2` should parse as `1 + 2`, not error.
+
+### Critical Comment Pitfall: Nested Block Comments
+
+**What goes wrong:** Users write `/* outer /* inner */ */` and get syntax error on trailing `*/`.
+
+**Root cause:** Simple block comment rule matches first `*/`, leaving outer `*/` as tokens.
+
+**Prevention:** Use argument passing to track nesting depth:
+
+```
+and block_comment depth = parse
+    | "/*"     { block_comment (depth + 1) lexbuf }
+    | "*/"     { if depth = 1 then tokenize lexbuf
+                 else block_comment (depth - 1) lexbuf }
+    | '\n'     { block_comment depth lexbuf }  // Track newlines if needed
+    | eof      { failwith "Unterminated block comment" }
+    | _        { block_comment depth lexbuf }
+```
+
+**Detection:** Test `/* /* nested */ */` and `/* /* /* triple */ */ */`.
+
+---
+
+## Integration Pitfalls
+
+These pitfalls are specific to integrating new features with the existing FunLang codebase.
+
+### 1. Token Type Sharing Disruption
+
+**What goes wrong:** Adding STRING token breaks existing lexer because Parser.fs must be regenerated first.
+
+**Warning Signs:**
+- Build error: "Token 'STRING' is not defined"
+- Lexer.fs fails to compile after adding token
+
+**Prevention:**
+1. Always add new tokens to Parser.fsy FIRST
+2. Run fsyacc before fslex
+3. Existing build order: `Parser.fsy -> Lexer.fsl -> *.fs`
+4. Add tokens in the `%token` section, not scattered
+
+**Phase:** Affects all feature phases; critical to do correctly.
+
+### 2. AST Extension Breaking Pattern Matches
+
+**What goes wrong:** Add `String of string` to Expr, but forget to update Eval.fs, Format.fs.
+
+**Warning Signs:**
+- Compiler warning: "Incomplete pattern matches"
+- Runtime: "Match failure" on new AST nodes
+
+**Prevention:**
+1. When adding to Expr type, grep for `match expr with`
+2. Update ALL pattern matches (Eval.fs, Format.fs, tests)
+3. F# compiler warnings help; do not suppress them
+
+**Affected files for Expr extension:**
+- `Ast.fs` - add case
+- `Eval.fs` - add eval logic
+- `Format.fs` - add formatting
+- `FunLang.Tests/AstTests.fs` - add tests
+
+**Phase:** All AST-extending features (strings).
+
+### 3. Value Type Extension Breaking Equality
+
+**What goes wrong:** Add StringValue but comparison operators crash.
+
+**Warning Signs:**
+- `"a" = "a"` throws "Type error: = requires operands of same type"
+- String equality returns wrong results
+
+**Prevention:**
+1. Extend `Equal` and `NotEqual` match cases in Eval.fs:
+```fsharp
+| Equal (left, right) ->
+    match eval env left, eval env right with
+    | IntValue l, IntValue r -> BoolValue (l = r)
+    | BoolValue l, BoolValue r -> BoolValue (l = r)
+    | StringValue l, StringValue r -> BoolValue (l = r)  // Add this
+    | _ -> failwith "Type error: = requires operands of same type"
+```
+2. Decide: should strings support `<`, `>` etc.? (lexicographic comparison)
+
+**Phase:** String evaluation phase.
+
+### 4. Program.fs Main Loop Not REPL-Ready
+
+**What goes wrong:** Try to add REPL by putting loop in main, but `evalExpr` design prevents state persistence.
+
+**Warning Signs:**
+- REPL works but variables don't persist
+- Have to restructure significant code to add REPL
+
+**Prevention:**
+1. Create separate REPL module (`Repl.fs`)
+2. Add REPL entry point to Program.fs:
+```fsharp
+| [| "--repl" |] | [| "-i" |] ->
+    Repl.run ()
+```
+3. Keep existing batch evaluation unchanged
+4. Repl module handles environment threading
+
+**Phase:** REPL implementation.
+
+### 5. Test Infrastructure Not Covering REPL
+
+**What goes wrong:** Existing fslit tests work for single expressions but cannot test multi-line REPL sessions.
+
+**Warning Signs:**
+- No way to test "line 1, then line 2, then check state"
+- REPL bugs found only in manual testing
+
+**Prevention:**
+1. Create separate REPL test module with session simulation
+2. Test pattern: `runReplSession ["let x = 5"; "x + 1"] = ["5"; "6"]`
+3. Keep fslit tests for expression evaluation
+4. Add Expecto tests for REPL behavior
+
+**Phase:** REPL testing phase.
+
+### 6. Comment Patterns Breaking Existing Operator Tests
+
+**What goes wrong:** Add `"//"` comment pattern, existing tests with division stop working.
+
+**Warning Signs:**
+- `6 / 2` returns wrong result or "unexpected token"
+- Division tests fail after adding comments
+
+**Prevention:**
+1. Put comment patterns AFTER checking they don't conflict
+2. Pattern `"//"` must come BEFORE pattern `'/'`
+3. Run full test suite after adding comments
+4. Note: FunLang uses `SLASH` for division, so check interaction
+
+**Phase:** Comment lexer phase.
+
+### 7. Format.fs Not Updated for New Types
+
+**What goes wrong:** New StringValue added but REPL shows `<unknown>` or crashes when printing.
+
+**Warning Signs:**
+- Evaluating strings shows wrong output
+- `--emit-tokens` shows unexpected format for STRING token
+
+**Prevention:**
+1. Update `formatValue` in Eval.fs (or Format.fs):
+```fsharp
+let formatValue (v: Value) : string =
+    match v with
+    | IntValue n -> string n
+    | BoolValue b -> if b then "true" else "false"
+    | FunctionValue _ -> "<function>"
+    | StringValue s -> sprintf "\"%s\"" s  // Add this
+```
+2. Consider escape handling in output (show `\n` or actual newline?)
+
+**Phase:** String evaluation phase.
+
+---
+
+## Phase-Specific Warnings
+
+| Phase Topic | Likely Pitfall | Mitigation |
+|-------------|---------------|------------|
+| Comment Lexer | Pattern order wrong; `/*` not matching | Order multi-char before single-char tokens |
+| Line Comments | Newline handling breaks subsequent parsing | Use `[^\n]*` without consuming newline |
+| Block Comments | Unterminated comment hangs | Handle EOF in comment state |
+| String Lexer | Simple regex fails on escapes | Use separate lexer state with StringBuilder |
+| String Escapes | `\n` outputs literal characters | Process escapes in lexer, not later |
+| String AST | Pattern matches incomplete | Update all `match expr with` locations |
+| String Value | Comparison operators crash | Extend Equal/NotEqual for StringValue |
+| REPL Core | Environment not persisted | Create REPL-specific eval with Env threading |
+| REPL Multi-line | Incomplete input shows error | Detect "Unexpected EOF" and prompt for more |
+| REPL Commands | `:quit` parsed as expression | Check for `:` prefix before parsing |
+| REPL Testing | No automated session tests | Add Expecto tests simulating sessions |
+
+---
+
+## Prevention Checklist
+
+Before starting implementation:
+
+- [ ] Verify fsyacc/fslex build order documented
+- [ ] Plan token additions to Parser.fsy
+- [ ] Identify all files needing Expr case additions
+- [ ] Identify all files needing Value case additions
+- [ ] Plan escape sequence set for strings
+- [ ] Decide on nested vs. non-nested block comments
+- [ ] Design REPL environment persistence strategy
+- [ ] Plan REPL command set (`:quit`, `:env`, etc.)
+- [ ] Verify test infrastructure can cover new features
+
+During implementation:
+
+- [ ] Add tokens to Parser.fsy BEFORE modifying Lexer.fsl
+- [ ] Run full test suite after each lexer modification
+- [ ] Test strings with: escapes, newlines (should error), quotes, empty string
+- [ ] Test comments with: line, block, nested (if supported), unterminated
+- [ ] Test REPL with: multi-line input, environment persistence, error recovery
+
+---
 
 ## Sources
 
-### Language Implementation Resources
-- [Crafting Interpreters](https://craftinginterpreters.com/introduction.html) - Gold standard for incremental interpreter tutorials
-- [Crafting Interpreters: A Review](https://www.chidiwilliams.com/posts/crafting-interpreters-a-review)
-- [Crafting "Crafting Interpreters"](https://journal.stuffwithstuff.com/2020/04/05/crafting-crafting-interpreters/)
-- [5 Mistakes in Programming Language Design](https://beza1e1.tuxen.de/articles/proglang_mistakes.html)
-- [A Guide To Parsing: Algorithms And Terminology](https://tomassetti.me/guide-parsing-algorithms-terminology/)
+### fslex/fsyacc
+- [FsLex Overview](https://fsprojects.github.io/FsLexYacc/content/fslex.html) - Official documentation with state management
+- [FsLexYacc fslex.md](https://github.com/fsprojects/FsLexYacc/blob/master/docs/content/fslex.md) - Multiple entry points, argument passing
+- [Using FSLexYacc](https://thanos.codes/blog/using-fslexyacc-the-fsharp-lexer-and-parser/) - Practical tutorial
+- [F Sharp Programming/Lexing and Parsing](https://en.wikibooks.org/wiki/F_Sharp_Programming/Lexing_and_Parsing) - Comprehensive guide
 
-### fslex/fsyacc Specific
-- [Using FSLexYacc, the F# lexer and parser](https://thanos.codes/blog/using-fslexyacc-the-fsharp-lexer-and-parser/)
-- [F Sharp Programming/Lexing and Parsing](https://en.wikibooks.org/wiki/F_Sharp_Programming/Lexing_and_Parsing)
-- [Use FsLex and FsYacc to make a parser in F#](https://learn.microsoft.com/en-us/archive/blogs/jomo_fisher/use-fslex-and-fsyacc-to-make-a-parser-in-f)
-- [Parsing with fslex and fsyacc](https://www.partario.com/blog/2009/05/lisp-compiler-in-f-parsing-with-fslex-and-fsyacc.html)
-- [Lexing and Parsing with F# – Part I](https://sergeytihon.com/2014/07/04/lexing-and-parsing-with-f-part-i/)
-- [%nonassoc not handled correctly · Issue #39](https://github.com/fsprojects/FsLexYacc/issues/39)
-- [Issue with reduce/reduce conflicts · Issue #40](https://github.com/fsprojects/FsLexYacc/issues/40)
-- [Providing meaningful parse errors with fsyacc](http://fpish.net/topic/None/57043)
+### REPL Implementation
+- [Statements and State - Crafting Interpreters](https://craftinginterpreters.com/statements-and-state.html) - Environment persistence
+- [Node.js REPL Documentation](https://nodejs.org/api/repl.html) - Recoverable errors for multi-line input
+- [Read-eval-print loop - Wikipedia](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) - REPL design patterns
 
-### Parser/Lexer Best Practices
-- [Lexer vs Parser: The Main Differences](https://thecontentauthority.com/blog/lexer-vs-parser)
-- [An Overview of Lexing and Parsing](https://www.perl.com/pub/2012/10/an-overview-of-lexing-and-parsing.html/)
-- [Writing a Parser — Syntax Error Handling](https://supunsetunga.medium.com/writing-a-parser-syntax-error-handling-b71b67a8ac66)
-- [Shift-Reduce Conflicts](https://www2.cs.arizona.edu/~debray/Teaching/CSc453/DOCS/conflicts.pdf)
-- [Shift-Reduce Conflicts](https://web.cs.wpi.edu/~cs544/PLT5.2.3.html)
+### String Literal Handling
+- [Improve error recovery for unterminated string literals](https://github.com/quick-lint/quick-lint-js/issues/56) - Error recovery strategies
+- [LexBuffer API](https://fsprojects.github.io/FsLexYacc/reference/fsharp-text-lexing-lexbuffer-1.html) - F# lexer buffer operations
 
-### Anti-Patterns and Code Quality
-- [9 Anti-Patterns Every Programmer Should Be Aware Of](https://sahandsaba.com/nine-anti-patterns-every-programmer-should-be-aware-of-with-examples.html)
-- [Anti-patterns You Should Avoid in Your Code](https://www.freecodecamp.org/news/antipatterns-to-avoid-in-code/)
-- [What Is an Anti-pattern?](https://www.baeldung.com/cs/anti-patterns)
+### Comment Handling
+- [ocamllex tutorial](https://ohama.github.io/ocaml/ocamllex-tutorial/) - Multiple lexer states for comments
+- [Lexer rules - ANTLR](https://github.com/antlr/antlr4/blob/master/doc/lexer-rules.md) - Pattern priority
