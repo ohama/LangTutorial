@@ -1,0 +1,21 @@
+% Code block styling with background color and border
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{framed}
+
+% Define colors
+\definecolor{codebg}{RGB}{245, 245, 245}
+\definecolor{codeborder}{RGB}{200, 200, 200}
+
+% Redefine code blocks with background
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+  commandchars=\\\{\},
+  frame=single,
+  framerule=0.5pt,
+  rulecolor=\color{codeborder},
+  fillcolor=\color{codebg},
+  formatcom=\color{black}
+}
+
+% Alternative: use shaded environment for code blocks
+\definecolor{shadecolor}{RGB}{245, 245, 245}
