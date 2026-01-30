@@ -25,7 +25,7 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-**Current focus:** Phase 1 준비 - .NET 10 + FsLexYacc 프로젝트 설정 및 Lexer/Parser 파이프라인 구축
+**Current focus:** Phase 3 준비 - Variables & Binding (let 바인딩, 변수 참조, let-in 스코프)
 
 **Tech stack:**
 - F# (.NET 10)
@@ -56,14 +56,15 @@ Phase 7 [██████████] 100% ✓ Complete (parallel track)
 
 ## Performance Metrics
 
-**Velocity:** 1 phase/session (Phase 1 complete)
-**Avg plans per phase:** 3.0 (3 plans in Phase 1)
-**Completion rate:** 17% (1/6 phases)
+**Velocity:** 2 phases/session
+**Avg plans per phase:** 2.3 (7 plans in 3 phases)
+**Completion rate:** 43% (3/7 phases)
 
 **Milestones:**
-- [ ] Phase 2 complete: 첫 실행 가능한 계산기
+- [x] Phase 2 complete: 첫 실행 가능한 계산기
 - [ ] Phase 5 complete: Turing-complete 언어 달성
 - [ ] Phase 6 complete: 전체 튜토리얼 완성
+- [x] Phase 7 complete: CLI 옵션 및 파일 기반 테스트
 
 ---
 

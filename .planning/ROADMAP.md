@@ -211,8 +211,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Token formatter + CLI expansion
-- [ ] 07-02-PLAN.md — fslit test suite
+- [x] 07-01-PLAN.md — Token formatter + CLI expansion
+- [x] 07-02-PLAN.md — fslit test suite
 
 **Notes:**
 - emit 옵션은 디버깅과 테스트에 유용
@@ -231,9 +231,9 @@ Plans:
 | 4 - Control Flow | ○ Pending | 0/4 requirements |
 | 5 - Functions & Abstraction | ○ Pending | 0/4 requirements |
 | 6 - Quality & Polish | ○ Pending | 0/3 requirements |
-| 7 - CLI Options & File-Based Tests | ○ Pending | 0/5 requirements |
+| 7 - CLI Options & File-Based Tests | ● Complete | 5/5 requirements |
 
-**Overall:** 2/7 phases complete (29%)
+**Overall:** 3/7 phases complete (43%)
 
 **Legend:**
 - ○ Pending: Not started
@@ -295,9 +295,9 @@ Phase 6 (Quality)
 
 ## Next Steps
 
-**Immediate:** `/gsd:execute-phase 7` to execute Phase 7 (CLI Options & File-Based Tests)
+**Immediate:** `/gsd:plan-phase 3` to plan Phase 3 (Variables & Binding)
 
 ---
 
 *Roadmap created: 2025-01-30*
-*Last updated: 2026-01-30 (Phase 7 planned)*
+*Last updated: 2026-01-30 (Phase 7 complete)*
