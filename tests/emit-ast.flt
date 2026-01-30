@@ -1,0 +1,31 @@
+// AST emission tests
+
+// Test: Simple addition AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "2 + 3"
+// --- Output:
+Add (Number 2, Number 3)
+
+// Test: Precedence in AST (3 * 4 is nested under Add)
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "2 + 3 * 4"
+// --- Output:
+Add (Number 2, Multiply (Number 3, Number 4))
+
+// Test: Parentheses change AST structure
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "(2 + 3) * 4"
+// --- Output:
+Multiply (Add (Number 2, Number 3), Number 4)
+
+// Test: Unary minus AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "-5"
+// --- Output:
+Negate (Number 5)
+
+// Test: Subtraction AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "10 - 3"
+// --- Output:
+Subtract (Number 10, Number 3)
+
+// Test: Division AST
+// --- Command: dotnet run --project FunLang -- --emit-ast --expr "10 / 2"
+// --- Output:
+Divide (Number 10, Number 2)
