@@ -36,10 +36,9 @@ ls -la tutorial/*.md 2>/dev/null || echo "No chapters yet"
 
 각 chapter는 다음을 포함해야 한다:
 - 개요: 이 chapter에서 추가하는 기능
-- 코드 변경: Lexer, Parser, AST, Evaluator 수정 사항
-- 전체 코드: 해당 시점의 완전한 코드
+- 핵심 코드: 주요 변경 사항만 설명 (Lexer, Parser, AST, Evaluator)
 - 실행 예제: 입력과 출력 예시
-- 테스트: Expecto 테스트 코드
+- 소스 참조: 전체 코드는 `FunLang/` 디렉토리 참고하라고 안내
 
 ## 인자 처리
 
