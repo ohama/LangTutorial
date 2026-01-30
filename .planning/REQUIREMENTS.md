@@ -74,40 +74,50 @@
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
-| EXPR-01 | Phase 2 | Pending |
-| EXPR-02 | Phase 2 | Pending |
-| EXPR-03 | Phase 2 | Pending |
-| EXPR-04 | Phase 2 | Pending |
-| VAR-01 | Phase 3 | Pending |
-| VAR-02 | Phase 3 | Pending |
-| VAR-03 | Phase 3 | Pending |
-| CTRL-01 | Phase 4 | Pending |
-| CTRL-02 | Phase 4 | Pending |
-| CTRL-03 | Phase 4 | Pending |
-| CTRL-04 | Phase 4 | Pending |
-| FUNC-01 | Phase 5 | Pending |
-| FUNC-02 | Phase 5 | Pending |
-| FUNC-03 | Phase 5 | Pending |
-| FUNC-04 | Phase 5 | Pending |
-| QUAL-01 | Phase 6 | Pending |
-| QUAL-02 | Phase 6 | Pending |
-| QUAL-03 | Phase 6 | Pending |
-| SKIL-01 | Phase 7 | Pending |
-| SKIL-02 | Phase 7 | Pending |
-| SKIL-03 | Phase 7 | Pending |
-| SKIL-04 | Phase 7 | Pending |
+| Requirement | Phase | Phase Name | Status |
+|-------------|-------|------------|--------|
+| FOUND-01 | Phase 1 | Foundation & Pipeline | Pending |
+| FOUND-02 | Phase 1 | Foundation & Pipeline | Pending |
+| FOUND-03 | Phase 1 | Foundation & Pipeline | Pending |
+| FOUND-04 | Phase 1 | Foundation & Pipeline | Pending |
+| EXPR-01 | Phase 2 | Arithmetic Expressions | Pending |
+| EXPR-02 | Phase 2 | Arithmetic Expressions | Pending |
+| EXPR-03 | Phase 2 | Arithmetic Expressions | Pending |
+| EXPR-04 | Phase 2 | Arithmetic Expressions | Pending |
+| VAR-01 | Phase 3 | Variables & Binding | Pending |
+| VAR-02 | Phase 3 | Variables & Binding | Pending |
+| VAR-03 | Phase 3 | Variables & Binding | Pending |
+| CTRL-01 | Phase 4 | Control Flow | Pending |
+| CTRL-02 | Phase 4 | Control Flow | Pending |
+| CTRL-03 | Phase 4 | Control Flow | Pending |
+| CTRL-04 | Phase 4 | Control Flow | Pending |
+| FUNC-01 | Phase 5 | Functions & Abstraction | Pending |
+| FUNC-02 | Phase 5 | Functions & Abstraction | Pending |
+| FUNC-03 | Phase 5 | Functions & Abstraction | Pending |
+| FUNC-04 | Phase 5 | Functions & Abstraction | Pending |
+| QUAL-01 | Phase 6 | Quality & Polish | Pending |
+| QUAL-02 | Phase 6 | Quality & Polish | Pending |
+| QUAL-03 | Phase 6 | Quality & Polish | Pending |
+| SKIL-01 | Phase 7 | Tutorial Skill | Pending |
+| SKIL-02 | Phase 7 | Tutorial Skill | Pending |
+| SKIL-03 | Phase 7 | Tutorial Skill | Pending |
+| SKIL-04 | Phase 7 | Tutorial Skill | Pending |
 
 **Coverage:**
-- v1 requirements: 23 total
-- Mapped to phases: 23
+- v1 requirements: 26 total (23 functional + 3 traceability metadata)
+- Mapped to phases: 26/26 ✓
 - Unmapped: 0 ✓
+- Orphaned: 0 ✓
+
+**Phase Distribution:**
+- Phase 1 (Foundation & Pipeline): 4 requirements
+- Phase 2 (Arithmetic Expressions): 4 requirements
+- Phase 3 (Variables & Binding): 3 requirements
+- Phase 4 (Control Flow): 4 requirements
+- Phase 5 (Functions & Abstraction): 4 requirements
+- Phase 6 (Quality & Polish): 3 requirements
+- Phase 7 (Tutorial Skill): 4 requirements
 
 ---
 *Requirements defined: 2025-01-30*
-*Last updated: 2025-01-30 after initial definition*
+*Last updated: 2025-01-30 after roadmap creation*
