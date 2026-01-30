@@ -38,6 +38,7 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - Expecto — 단위 테스트
 - FsCheck — 속성 기반 테스트
 - fslit — 파일 기반 테스트 (https://github.com/ohama/fslit)
+- Serilog — 로깅 (필요시)
 
 **디렉토리 구조:**
 - `tutorial/` — 튜토리얼 문서 (Markdown)
