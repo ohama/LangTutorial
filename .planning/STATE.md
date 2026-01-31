@@ -4,12 +4,12 @@
 
 **Milestone:** v2.0 실용성 강화
 **Status:** IN PROGRESS
-**Progress:** 1/3 phases complete (33%)
+**Progress:** 2/3 phases complete (67%)
 
 ```
 v2.0 실용성 강화 - IN PROGRESS
 ├── Phase 1 [██████████] ● Comments (주석) - COMPLETE
-├── Phase 2 [----------] ○ Strings (문자열)
+├── Phase 2 [██████████] ● Strings (문자열) - COMPLETE
 └── Phase 3 [----------] ○ REPL (대화형 셸)
 ```
 
@@ -28,6 +28,7 @@ v2.0 실용성 강화 - IN PROGRESS
 - FsLexYacc 11.3.0 (fslex + fsyacc)
 - Value type (IntValue | BoolValue | FunctionValue | StringValue)
 - Expecto + FsCheck + fslit for testing
+- State machine pattern for complex lexing
 
 ---
 
@@ -79,16 +80,20 @@ Key decisions made during v2.0 development:
 | 01-comments | Block: `(* *)` (ML-style) | F# consistency, supports nesting |
 | 01-comments | Comments in lexer, not parser | No AST pollution, truly invisible |
 | 01-comments | Pattern order: comments before operators | Ensures `//` matches before `/`, `(*` before `(` |
+| 02-strings | Escape sequences in lexer | Clean separation, lexer responsibility |
+| 02-strings | Heredoc for Lexer.fsl | Avoids fslex escape parsing issues |
+| 02-strings | Type-safe operator overloading | Add works for int+int and string+string |
+| 02-strings | Specific error messages | "Type error: + requires operands of same type (int or string)" |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 - Phase 1 (Comments) completed
-**What happened:** Implemented single-line (//) and block (* *) comments with nesting support
-**What's next:** Plan Phase 2 (Strings)
-**Stopped at:** Completed 01-01-PLAN.md, all tests passing (78 fslit + 139 Expecto)
-**Resume command:** `/gsd:plan-phase 2`
+**Last session:** 2026-01-31 - Phase 2 (Strings) completed
+**What happened:** Implemented string data type with literals, escape sequences, concatenation, and comparison
+**What's next:** Plan Phase 3 (REPL)
+**Stopped at:** Completed 02-01-PLAN.md, all tests passing (93 fslit + 168 Expecto)
+**Resume command:** `/gsd:plan-phase 3`
 
 ---
 
