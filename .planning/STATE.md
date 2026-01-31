@@ -3,14 +3,14 @@
 ## Current Status
 
 **Milestone:** v2.0 실용성 강화
-**Status:** IN PROGRESS
-**Progress:** Phase 3/3 Plan 1/2 (83%)
+**Status:** COMPLETE
+**Progress:** Phase 3/3 Plan 2/2 (100%)
 
 ```
-v2.0 실용성 강화 - IN PROGRESS
+v2.0 실용성 강화 - COMPLETE
 ├── Phase 1 [██████████] ● Comments (주석) - COMPLETE
 ├── Phase 2 [██████████] ● Strings (문자열) - COMPLETE
-└── Phase 3 [█████-----] ◐ REPL (대화형 셸) - Plan 1/2 complete
+└── Phase 3 [██████████] ● REPL (대화형 셸) - COMPLETE
 ```
 
 ---
@@ -54,7 +54,7 @@ v2.0 실용성 강화 - IN PROGRESS
 | Milestone | Shipped | Phases | Key Achievement |
 |-----------|---------|--------|-----------------|
 | v1.0 MVP | 2026-01-31 | 1-5, 7 | Turing-complete 언어 |
-| v2.0 실용성 | - | 1-3 | REPL, 문자열, 주석 (예정) |
+| v2.0 실용성 | 2026-01-31 | 1-3 | REPL, 문자열, 주석 |
 
 **Archives:** `.planning/milestones/`
 
@@ -88,18 +88,21 @@ Key decisions made during v2.0 development:
 | 03-repl | Argu for CLI parsing | Declarative approach replaces 120 lines of pattern matching |
 | 03-repl | Auto underscore-to-hyphen | Emit_Tokens becomes --emit-tokens automatically |
 | 03-repl | ProcessExiter with colorizer | Red errors, uncolored help text |
+| 03-repl | #quit command | F# Interactive convention instead of exit |
+| 03-repl | No-args starts REPL | Better UX - default to interactive mode |
+| 03-repl | Error recovery in REPL | Errors print, REPL continues with same environment |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 - Phase 3 Plan 1 (CLI Modernization) completed
-**What happened:** Modernized CLI with Argu library, replaced 120 lines of pattern matching with declarative approach
-**What's next:** Execute Plan 03-02 (REPL Implementation)
-**Stopped at:** Completed 03-01-PLAN.md, all tests passing (93 fslit + 168 Expecto)
-**Resume command:** `/gsd:execute-phase .planning/phases/03-repl/03-02-PLAN.md`
+**Last session:** 2026-01-31 - v2.0 Milestone COMPLETE
+**What happened:** Implemented interactive REPL with #quit, error recovery, and comprehensive testing
+**What's next:** v2.0 milestone complete - ready for release or next milestone planning
+**Stopped at:** Completed 03-02-PLAN.md, all tests passing (100 fslit + 175 Expecto)
+**Resume command:** None - milestone complete
 
 ---
 
 *Last updated: 2026-01-31*
-*Status: v2.0 IN PROGRESS*
+*Status: v2.0 COMPLETE*
