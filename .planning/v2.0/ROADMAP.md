@@ -100,7 +100,10 @@ true
 **Plans:** 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — Add string type with full pipeline support
+- [x] 02-01-PLAN.md — Add string type with full pipeline support
+
+### Status
+**Completed:** 2026-01-31
 
 ---
 
@@ -178,14 +181,14 @@ Phase 1 → Phase 2 → Phase 3
 - [x] 기존 테스트 통과
 - [x] 새 테스트 22개 추가 (12 fslit + 10 Expecto)
 
-### Phase 2: Strings
-- [ ] 문자열 리터럴 파싱
-- [ ] 이스케이프 시퀀스 4종
-- [ ] 문자열 연결 `+`
-- [ ] 문자열 비교 `=`, `<>`
-- [ ] 타입 오류 메시지
-- [ ] 기존 테스트 통과
-- [ ] 새 테스트 15개 추가
+### Phase 2: Strings ✓
+- [x] 문자열 리터럴 파싱
+- [x] 이스케이프 시퀀스 4종
+- [x] 문자열 연결 `+`
+- [x] 문자열 비교 `=`, `<>`
+- [x] 타입 오류 메시지
+- [x] 기존 테스트 통과
+- [x] 새 테스트 44개 추가 (15 fslit + 29 Expecto)
 
 ### Phase 3: REPL
 - [ ] 기본 루프 동작

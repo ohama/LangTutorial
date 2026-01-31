@@ -54,24 +54,24 @@ Error: Unterminated comment
 
 ---
 
-## Phase 2: Strings (문자열)
+## Phase 2: Strings (문자열) ✓ COMPLETE
 
 ### Requirements
 
-| ID | Requirement | Priority | Acceptance Criteria |
-|----|-------------|----------|---------------------|
-| STR-01 | 문자열 리터럴 | MUST | `"hello"` → StringValue "hello" |
-| STR-02 | 이스케이프: `\\` | MUST | `"\\"` → 백슬래시 문자 |
-| STR-03 | 이스케이프: `\"` | MUST | `"\""` → 큰따옴표 문자 |
-| STR-04 | 이스케이프: `\n` | MUST | `"\n"` → 개행 문자 |
-| STR-05 | 이스케이프: `\t` | MUST | `"\t"` → 탭 문자 |
-| STR-06 | 문자열 연결 | MUST | `"a" + "b"` → `"ab"` |
-| STR-07 | 문자열 동등 비교 | MUST | `"a" = "a"` → true |
-| STR-08 | 문자열 부등 비교 | MUST | `"a" <> "b"` → true |
-| STR-09 | 빈 문자열 | MUST | `""` → StringValue "" |
-| STR-10 | 미종료 문자열 오류 | MUST | `"unclosed` → 명확한 오류 |
-| STR-11 | 문자열 내 개행 금지 | MUST | 리터럴 개행 → 오류 |
-| STR-12 | 혼합 타입 연산 오류 | MUST | `"a" + 1` → 타입 오류 |
+| ID | Requirement | Priority | Status | Acceptance Criteria |
+|----|-------------|----------|--------|---------------------|
+| STR-01 | 문자열 리터럴 | MUST | ✓ | `"hello"` → StringValue "hello" |
+| STR-02 | 이스케이프: `\\` | MUST | ✓ | `"\\"` → 백슬래시 문자 |
+| STR-03 | 이스케이프: `\"` | MUST | ✓ | `"\""` → 큰따옴표 문자 |
+| STR-04 | 이스케이프: `\n` | MUST | ✓ | `"\n"` → 개행 문자 |
+| STR-05 | 이스케이프: `\t` | MUST | ✓ | `"\t"` → 탭 문자 |
+| STR-06 | 문자열 연결 | MUST | ✓ | `"a" + "b"` → `"ab"` |
+| STR-07 | 문자열 동등 비교 | MUST | ✓ | `"a" = "a"` → true |
+| STR-08 | 문자열 부등 비교 | MUST | ✓ | `"a" <> "b"` → true |
+| STR-09 | 빈 문자열 | MUST | ✓ | `""` → StringValue "" |
+| STR-10 | 미종료 문자열 오류 | MUST | ✓ | `"unclosed` → 명확한 오류 |
+| STR-11 | 문자열 내 개행 금지 | MUST | ✓ | 리터럴 개행 → 오류 |
+| STR-12 | 혼합 타입 연산 오류 | MUST | ✓ | `"a" + 1` → 타입 오류 |
 
 ### Success Criteria
 
