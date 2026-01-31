@@ -1,0 +1,6 @@
+// String equality - true
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+"abc" = "abc"
+// --- Output:
+true

@@ -1,0 +1,6 @@
+// String in if expression
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+if "a" = "a" then "yes" else "no"
+// --- Output:
+"yes"

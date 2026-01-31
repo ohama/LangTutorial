@@ -1,0 +1,6 @@
+// Simple string literal
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+"hello"
+// --- Output:
+"hello"

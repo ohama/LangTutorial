@@ -1,0 +1,7 @@
+// Newline escape sequence
+// --- Command: dotnet run --project FunLang -- --emit-tokens %input
+// --- Input:
+"a\nb"
+// --- Output:
+STRING(a
+b) EOF

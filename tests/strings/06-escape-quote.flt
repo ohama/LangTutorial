@@ -1,0 +1,6 @@
+// Quote escape sequence
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+"say \"hi\""
+// --- Output:
+"say "hi""

@@ -1,0 +1,6 @@
+// Backslash escape sequence
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+"a\\b"
+// --- Output:
+"a\b"

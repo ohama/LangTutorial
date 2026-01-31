@@ -1,0 +1,6 @@
+// Concatenate with empty string
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+"" + "text"
+// --- Output:
+"text"

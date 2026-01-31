@@ -21,6 +21,7 @@ let evaluate (input: string) : int =
     | IntValue n -> n
     | BoolValue _ -> failwith "Expected int but got bool"
     | FunctionValue _ -> failwith "Expected int but got function"
+    | StringValue _ -> failwith "Expected int but got string"
 
 /// Parse and evaluate a string expression, extracting bool
 let evaluateToBool (input: string) : bool =
@@ -28,12 +29,21 @@ let evaluateToBool (input: string) : bool =
     | BoolValue b -> b
     | IntValue _ -> failwith "Expected bool but got int"
     | FunctionValue _ -> failwith "Expected bool but got function"
+    | StringValue _ -> failwith "Expected bool but got string"
 
 /// Check if value is a function
 let isFunction (input: string) : bool =
     match evaluateToValue input with
     | FunctionValue _ -> true
     | _ -> false
+
+/// Parse and evaluate a string expression, extracting string
+let evaluateToString (input: string) : string =
+    match evaluateToValue input with
+    | StringValue s -> s
+    | IntValue _ -> failwith "Expected string but got int"
+    | BoolValue _ -> failwith "Expected string but got bool"
+    | FunctionValue _ -> failwith "Expected string but got function"
 
 // ============================================================
 // Phase 1: Comments (v2.0)
@@ -104,6 +114,160 @@ let commentTests =
             test "parentheses still work" {
                 let result = parseAndEval "(1 + 2) * 3"
                 Expect.equal result (IntValue 9) "parens should not trigger block comment"
+            }
+        ]
+    ]
+
+// ============================================================
+// Phase 2: Strings (v2.0)
+// ============================================================
+
+[<Tests>]
+let stringTests =
+    testList "Strings" [
+        testList "STR-01: String Literals" [
+            test "simple string" {
+                let result = parseAndEval "\"hello\""
+                Expect.equal result (StringValue "hello") ""
+            }
+            test "empty string" {
+                let result = parseAndEval "\"\""
+                Expect.equal result (StringValue "") ""
+            }
+            test "string with spaces" {
+                let result = parseAndEval "\"hello world\""
+                Expect.equal result (StringValue "hello world") ""
+            }
+        ]
+
+        testList "STR-02 to STR-05: Escape Sequences" [
+            test "escape backslash" {
+                let result = parseAndEval "\"a\\\\b\""
+                Expect.equal result (StringValue "a\\b") ""
+            }
+            test "escape quote" {
+                let result = parseAndEval "\"say \\\"hi\\\"\""
+                Expect.equal result (StringValue "say \"hi\"") ""
+            }
+            test "escape newline" {
+                let result = parseAndEval "\"line1\\nline2\""
+                Expect.equal result (StringValue "line1\nline2") ""
+            }
+            test "escape tab" {
+                let result = parseAndEval "\"col1\\tcol2\""
+                Expect.equal result (StringValue "col1\tcol2") ""
+            }
+            test "multiple escapes" {
+                let result = parseAndEval "\"a\\tb\\nc\""
+                Expect.equal result (StringValue "a\tb\nc") ""
+            }
+        ]
+
+        testList "STR-06: String Concatenation" [
+            test "concat two strings" {
+                let result = parseAndEval "\"hello\" + \" world\""
+                Expect.equal result (StringValue "hello world") ""
+            }
+            test "concat three strings" {
+                let result = parseAndEval "\"a\" + \"b\" + \"c\""
+                Expect.equal result (StringValue "abc") ""
+            }
+            test "concat with empty" {
+                let result = parseAndEval "\"\" + \"text\""
+                Expect.equal result (StringValue "text") ""
+            }
+            test "concat empty with empty" {
+                let result = parseAndEval "\"\" + \"\""
+                Expect.equal result (StringValue "") ""
+            }
+        ]
+
+        testList "STR-07 and STR-08: String Comparison" [
+            test "equal true" {
+                let result = evaluateToBool "\"abc\" = \"abc\""
+                Expect.isTrue result ""
+            }
+            test "equal false" {
+                let result = evaluateToBool "\"abc\" = \"xyz\""
+                Expect.isFalse result ""
+            }
+            test "not equal true" {
+                let result = evaluateToBool "\"abc\" <> \"xyz\""
+                Expect.isTrue result ""
+            }
+            test "not equal false" {
+                let result = evaluateToBool "\"abc\" <> \"abc\""
+                Expect.isFalse result ""
+            }
+            test "empty string equal" {
+                let result = evaluateToBool "\"\" = \"\""
+                Expect.isTrue result ""
+            }
+        ]
+
+        testList "STR-10 to STR-12: Error Handling" [
+            test "unterminated string throws" {
+                Expect.throws
+                    (fun () -> parseAndEval "\"unclosed" |> ignore)
+                    "should throw on unterminated string"
+            }
+            test "string + int throws type error" {
+                Expect.throws
+                    (fun () -> parseAndEval "\"text\" + 1" |> ignore)
+                    "should throw on string + int"
+            }
+            test "int + string throws type error" {
+                Expect.throws
+                    (fun () -> parseAndEval "1 + \"text\"" |> ignore)
+                    "should throw on int + string"
+            }
+            test "string = int throws type error" {
+                Expect.throws
+                    (fun () -> parseAndEval "\"text\" = 1" |> ignore)
+                    "should throw on string = int"
+            }
+        ]
+
+        testList "Integration" [
+            test "string in let binding" {
+                let result = parseAndEval "let s = \"hello\" in s"
+                Expect.equal result (StringValue "hello") ""
+            }
+            test "string concat in let" {
+                let result = parseAndEval "let s = \"hello\" in s + \" world\""
+                Expect.equal result (StringValue "hello world") ""
+            }
+            test "string in if condition" {
+                let result = evaluate "if \"a\" = \"a\" then 1 else 0"
+                Expect.equal result 1 ""
+            }
+            test "string result from if" {
+                let result = parseAndEval "if true then \"yes\" else \"no\""
+                Expect.equal result (StringValue "yes") ""
+            }
+        ]
+
+        testList "Lexer" [
+            test "tokenizes string" {
+                let lexbuf = LexBuffer<char>.FromString "\"hello\""
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token (Parser.STRING "hello") ""
+            }
+            test "tokenizes empty string" {
+                let lexbuf = LexBuffer<char>.FromString "\"\""
+                let token = Lexer.tokenize lexbuf
+                Expect.equal token (Parser.STRING "") ""
+            }
+        ]
+
+        testList "AST" [
+            test "parse string literal" {
+                let ast = parse "\"hello\""
+                Expect.equal ast (String "hello") ""
+            }
+            test "parse string concat" {
+                let ast = parse "\"a\" + \"b\""
+                Expect.equal ast (Add(String "a", String "b")) ""
             }
         ]
     ]
@@ -736,6 +900,7 @@ let phase5Tests =
 let main argv =
     runTestsWithCLIArgs [] argv <| testList "FunLang Tests" [
         commentTests
+        stringTests
         phase2Tests
         phase3Tests
         phase4Tests
