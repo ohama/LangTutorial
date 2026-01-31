@@ -4,13 +4,13 @@
 
 **Milestone:** v2.0 실용성 강화
 **Status:** IN PROGRESS
-**Progress:** 2/3 phases complete (67%)
+**Progress:** Phase 3/3 Plan 1/2 (83%)
 
 ```
 v2.0 실용성 강화 - IN PROGRESS
 ├── Phase 1 [██████████] ● Comments (주석) - COMPLETE
 ├── Phase 2 [██████████] ● Strings (문자열) - COMPLETE
-└── Phase 3 [----------] ○ REPL (대화형 셸)
+└── Phase 3 [█████-----] ◐ REPL (대화형 셸) - Plan 1/2 complete
 ```
 
 ---
@@ -26,6 +26,7 @@ v2.0 실용성 강화 - IN PROGRESS
 **Tech stack:**
 - F# (.NET 10)
 - FsLexYacc 11.3.0 (fslex + fsyacc)
+- Argu 6.2.5 (CLI argument parsing)
 - Value type (IntValue | BoolValue | FunctionValue | StringValue)
 - Expecto + FsCheck + fslit for testing
 - State machine pattern for complex lexing
@@ -84,16 +85,19 @@ Key decisions made during v2.0 development:
 | 02-strings | Heredoc for Lexer.fsl | Avoids fslex escape parsing issues |
 | 02-strings | Type-safe operator overloading | Add works for int+int and string+string |
 | 02-strings | Specific error messages | "Type error: + requires operands of same type (int or string)" |
+| 03-repl | Argu for CLI parsing | Declarative approach replaces 120 lines of pattern matching |
+| 03-repl | Auto underscore-to-hyphen | Emit_Tokens becomes --emit-tokens automatically |
+| 03-repl | ProcessExiter with colorizer | Red errors, uncolored help text |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 - Phase 2 (Strings) completed
-**What happened:** Implemented string data type with literals, escape sequences, concatenation, and comparison
-**What's next:** Plan Phase 3 (REPL)
-**Stopped at:** Completed 02-01-PLAN.md, all tests passing (93 fslit + 168 Expecto)
-**Resume command:** `/gsd:plan-phase 3`
+**Last session:** 2026-01-31 - Phase 3 Plan 1 (CLI Modernization) completed
+**What happened:** Modernized CLI with Argu library, replaced 120 lines of pattern matching with declarative approach
+**What's next:** Execute Plan 03-02 (REPL Implementation)
+**Stopped at:** Completed 03-01-PLAN.md, all tests passing (93 fslit + 168 Expecto)
+**Resume command:** `/gsd:execute-phase .planning/phases/03-repl/03-02-PLAN.md`
 
 ---
 
