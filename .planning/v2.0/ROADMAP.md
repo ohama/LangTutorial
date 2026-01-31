@@ -117,29 +117,53 @@ Plans:
 - 환경 지속성 (let 바인딩 유지)
 - 오류 복구
 - 정상 종료 (Ctrl+D, exit)
+- **Argu CLI integration**
 
 ### Requirements
-- REPL-01 ~ REPL-08
+| ID | Requirement | Priority | Acceptance Criteria |
+|----|-------------|----------|---------------------|
+| REPL-01 | 기본 루프 | MUST | 프롬프트 표시, 입력 읽기, 평가, 결과 출력 |
+| REPL-02 | 프롬프트 | MUST | `funlang> ` 프롬프트 표시 |
+| REPL-03 | 환경 지속성 | MUST | let 바인딩이 다음 입력에서도 유효 |
+| REPL-04 | 오류 복구 | MUST | 오류 발생 시 루프 계속 |
+| REPL-05 | EOF 종료 | MUST | Ctrl+D (EOF) 시 정상 종료 |
+| REPL-06 | exit 명령 | MUST | `exit` 입력 시 정상 종료 |
+| REPL-07 | CLI 플래그 | SHOULD | `--repl` 또는 인자 없이 실행 |
+| REPL-08 | 시작 메시지 | SHOULD | 버전, 종료 방법 안내 |
 
 ### Files to Modify
 ```
-FunLang/Program.fs   - REPL 루프 추가, --repl 플래그
-tests/*.fslit        - REPL 테스트 (가능한 경우)
+FunLang/FunLang.fsproj  - Argu package, new files
+FunLang/Cli.fs          - NEW: Argu argument type
+FunLang/Repl.fs         - NEW: REPL loop implementation
+FunLang/Program.fs      - Refactored: Argu-based dispatch
+tests/repl.fslit        - REPL CLI tests
 ```
 
 ### Success Criteria
 ```bash
 $ funlang --repl
-funlang> let x = 10
-()
-funlang> x + 5
-15
+FunLang REPL v2.0
+Type 'exit' or Ctrl+D to quit.
+
+funlang> 2 + 3
+5
 funlang> exit
 ```
 
 ### Dependencies
 - Phase 1 (Comments)
 - Phase 2 (Strings) - 완전한 언어로 REPL 제공
+
+### Plans
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — CLI modernization with Argu
+- [ ] 03-02-PLAN.md — REPL implementation and tests
+
+### Status
+**In Progress**
 
 ---
 
@@ -191,6 +215,7 @@ Phase 1 → Phase 2 → Phase 3
 - [x] 새 테스트 44개 추가 (15 fslit + 29 Expecto)
 
 ### Phase 3: REPL
+- [ ] Argu CLI 통합
 - [ ] 기본 루프 동작
 - [ ] 환경 지속성
 - [ ] 오류 복구
@@ -214,4 +239,5 @@ v2.0이 완료되면:
 ---
 
 *Created: 2026-01-31*
+*Updated: 2026-02-01 - Phase 3 plans added*
 *Based on: `.planning/v2.0/REQUIREMENTS.md`*
