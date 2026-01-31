@@ -8,9 +8,9 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-## Current State (v1.0 Shipped)
+## Current State (v2.0 Shipped)
 
-**Shipped:** 2026-01-31
+**v2.0 Shipped:** 2026-02-01 (2 days after v1.0)
 
 **What's implemented:**
 - Foundation & Pipeline - .NET 10 + FsLexYacc 파이프라인
@@ -18,12 +18,22 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - Variables - let 바인딩, 환경 기반 스코프
 - Control Flow - Boolean, if-then-else, 비교/논리 연산자
 - Functions - 람다, 함수 호출, 재귀, 클로저
-- CLI & Testing - emit-tokens/ast, 파일 입력, 195개 테스트
+- **Comments** - `//` 단일행, `(* *)` 다중행 중첩 주석 (v2.0)
+- **Strings** - 리터럴, 이스케이프, 연결, 비교 (v2.0)
+- **REPL** - 대화형 루프, 오류 복구, #quit (v2.0)
+- **Argu CLI** - 선언적 CLI 파싱 (v2.0)
 
 **Codebase:**
-- 2,117 lines F#
-- 147 project files
-- 66 fslit tests + 129 Expecto tests
+- ~2,317 lines F#
+- 73 files added/modified in v2.0
+- 100 fslit tests + 175 Expecto tests = 275 total
+
+## Next Milestone Goals
+
+**Options:**
+- v2.1 품질 개선 - 사용자 친화적 에러 메시지, REPL 히스토리
+- v3.0 타입 시스템 - 정적 타입 검사 추가
+- Project complete - 튜토리얼 문서 마무리
 
 ## Requirements
 
@@ -50,10 +60,19 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - **FUNC-04**: 클로저 — v1.0
 - **CLI-01~05**: CLI 옵션 및 테스트 — v1.0
 
-### On Hold (Phase 6)
+### Validated (v2.0)
+
+- **CMT-01**: 단일행 주석 `//` — v2.0
+- **CMT-02**: 다중행 주석 `(* *)` — v2.0
+- **CMT-03**: 중첩 주석 지원 — v2.0
+- **CMT-04**: 미종료 주석 오류 — v2.0
+- **STR-01~12**: 문자열 타입 전체 — v2.0 (리터럴, 이스케이프, 연결, 비교, 오류 처리)
+- **REPL-01~08**: REPL 전체 — v2.0 (루프, 프롬프트, 환경, 오류 복구, 종료)
+
+### On Hold (v2.1+)
 
 - **QUAL-01**: 사용자 친화적 에러 메시지
-- **QUAL-02**: 대화형 REPL 셸
+- **QUAL-02**: REPL 히스토리 (readline)
 - **QUAL-03**: 테스트 프레임워크 통합 (부분 완료)
 
 ### Out of Scope
@@ -96,6 +115,13 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | Value 타입 (Int\|Bool\|Function) | 다형적 평가 결과 | Good |
 | 클로저 환경 캡처 | First-class function 지원 | Good |
 | Phase 6 보류 | MVP 달성, REPL/에러 메시지는 선택적 | Acceptable |
+| `//` 주석 (C-style) | 개발자 친숙함 | Good |
+| `(* *)` 주석 (ML-style) | F# 일관성, 중첩 지원 | Good |
+| 주석은 Lexer에서 처리 | AST 오염 방지 | Good |
+| 이스케이프는 Lexer에서 처리 | 관심사 분리 | Good |
+| Argu CLI | 선언적, 120 LOC 대체 | Good |
+| #quit 명령 | F# Interactive 관례 | Good |
+| no-args → REPL | 더 나은 UX | Good |
 
 ---
-*Last updated: 2026-01-31 after v1.0 milestone*
+*Last updated: 2026-02-01 after v2.0 milestone*
