@@ -56,12 +56,16 @@
     <!-- 7. Evaluator (uses Ast, used by Program) -->
     <Compile Include="Eval.fs" />
 
-    <!-- 8. Main program -->
+    <!-- 8. CLI argument parsing (uses Argu) -->
+    <Compile Include="Cli.fs" />
+
+    <!-- 9. Main program -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FsLexYacc" Version="11.3.0" />
+    <PackageReference Include="Argu" Version="6.2.5" />
   </ItemGroup>
 
 </Project>
