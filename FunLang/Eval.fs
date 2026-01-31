@@ -12,6 +12,7 @@ let formatValue (v: Value) : string =
     | IntValue n -> string n
     | BoolValue b -> if b then "true" else "false"
     | FunctionValue _ -> "<function>"
+    | StringValue s -> sprintf "\"%s\"" s
 
 /// Evaluate an expression in an environment
 /// Returns Value (IntValue, BoolValue, or FunctionValue)
@@ -20,6 +21,7 @@ let rec eval (env: Env) (expr: Expr) : Value =
     match expr with
     | Number n -> IntValue n
     | Bool b -> BoolValue b
+    | String s -> StringValue s
 
     | Var name ->
         match Map.tryFind name env with
@@ -35,7 +37,8 @@ let rec eval (env: Env) (expr: Expr) : Value =
     | Add (left, right) ->
         match eval env left, eval env right with
         | IntValue l, IntValue r -> IntValue (l + r)
-        | _ -> failwith "Type error: + requires integer operands"
+        | StringValue l, StringValue r -> StringValue (l + r)
+        | _ -> failwith "Type error: + requires operands of same type (int or string)"
 
     | Subtract (left, right) ->
         match eval env left, eval env right with
@@ -83,12 +86,14 @@ let rec eval (env: Env) (expr: Expr) : Value =
         match eval env left, eval env right with
         | IntValue l, IntValue r -> BoolValue (l = r)
         | BoolValue l, BoolValue r -> BoolValue (l = r)
+        | StringValue l, StringValue r -> BoolValue (l = r)
         | _ -> failwith "Type error: = requires operands of same type"
 
     | NotEqual (left, right) ->
         match eval env left, eval env right with
         | IntValue l, IntValue r -> BoolValue (l <> r)
         | BoolValue l, BoolValue r -> BoolValue (l <> r)
+        | StringValue l, StringValue r -> BoolValue (l <> r)
         | _ -> failwith "Type error: <> requires operands of same type"
 
     // Logical operators - short-circuit evaluation

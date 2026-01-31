@@ -36,6 +36,8 @@ let formatToken (token: Parser.token) : string =
     | Parser.FUN -> "FUN"
     | Parser.REC -> "REC"
     | Parser.ARROW -> "ARROW"
+    // Phase 2 (v2.0): String token
+    | Parser.STRING s -> sprintf "STRING(%s)" s
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string
