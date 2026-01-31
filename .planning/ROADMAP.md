@@ -39,6 +39,12 @@ v3.0 데이터 구조
 
 **Dependencies:** None (기존 Lexer/Parser/Eval 확장)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — AST, Lexer, Parser infrastructure for tuple syntax
+- [ ] 01-02-PLAN.md — Evaluation, pattern matching, integration tests
+
 ---
 
 ### Phase 2: Lists (리스트)
@@ -135,7 +141,7 @@ Phase 1과 2는 병렬로 진행 가능. Phase 3은 1, 2 완료 후. Phase 4는 
 | Phase 4 | PRE-01~09 | 9 |
 | **Total** | | **25** |
 
-**Coverage:** 100% ✓
+**Coverage:** 100%
 
 ---
 
