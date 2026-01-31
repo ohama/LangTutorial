@@ -17,7 +17,7 @@ v2.0 실용성 강화 - COMPLETE
 
 ## Project Reference
 
-**See:** .planning/PROJECT.md (updated 2026-01-31)
+**See:** .planning/PROJECT.md (updated 2026-02-01)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
@@ -53,8 +53,8 @@ v2.0 실용성 강화 - COMPLETE
 
 | Milestone | Shipped | Phases | Key Achievement |
 |-----------|---------|--------|-----------------|
-| v1.0 MVP | 2026-01-31 | 1-5, 7 | Turing-complete 언어 |
-| v2.0 실용성 | 2026-01-31 | 1-3 | REPL, 문자열, 주석 |
+| v1.0 MVP | 2026-02-01 | 1-5, 7 | Turing-complete 언어 |
+| v2.0 실용성 | 2026-02-01 | 1-3 | REPL, 문자열, 주석 |
 
 **Archives:** `.planning/milestones/`
 
@@ -96,7 +96,7 @@ Key decisions made during v2.0 development:
 
 ## Session Continuity
 
-**Last session:** 2026-01-31 - v2.0 Milestone COMPLETE
+**Last session:** 2026-02-01 - v2.0 Milestone COMPLETE
 **What happened:** Implemented interactive REPL with #quit, error recovery, and comprehensive testing
 **What's next:** v2.0 milestone complete - ready for release or next milestone planning
 **Stopped at:** Completed 03-02-PLAN.md, all tests passing (100 fslit + 175 Expecto)
@@ -104,5 +104,5 @@ Key decisions made during v2.0 development:
 
 ---
 
-*Last updated: 2026-01-31*
+*Last updated: 2026-02-01*
 *Status: v2.0 COMPLETE*

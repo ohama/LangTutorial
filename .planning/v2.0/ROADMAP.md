@@ -116,7 +116,7 @@ Plans:
 - 기본 REPL 루프
 - 환경 지속성 (let 바인딩 유지)
 - 오류 복구
-- 정상 종료 (Ctrl+D, exit)
+- 정상 종료 (Ctrl+D, #quit)
 - **Argu CLI integration**
 
 ### Requirements
@@ -127,7 +127,7 @@ Plans:
 | REPL-03 | 환경 지속성 | MUST | let 바인딩이 다음 입력에서도 유효 |
 | REPL-04 | 오류 복구 | MUST | 오류 발생 시 루프 계속 |
 | REPL-05 | EOF 종료 | MUST | Ctrl+D (EOF) 시 정상 종료 |
-| REPL-06 | exit 명령 | MUST | `exit` 입력 시 정상 종료 |
+| REPL-06 | #quit 명령 | MUST | `#quit` 입력 시 정상 종료 |
 | REPL-07 | CLI 플래그 | SHOULD | `--repl` 또는 인자 없이 실행 |
 | REPL-08 | 시작 메시지 | SHOULD | 버전, 종료 방법 안내 |
 
@@ -143,12 +143,12 @@ tests/repl.fslit        - REPL CLI tests
 ### Success Criteria
 ```bash
 $ funlang --repl
-FunLang REPL v2.0
-Type 'exit' or Ctrl+D to quit.
+FunLang REPL
+Type '#quit' or Ctrl+D to quit.
 
 funlang> 2 + 3
 5
-funlang> exit
+funlang> #quit
 ```
 
 ### Dependencies
@@ -159,11 +159,11 @@ funlang> exit
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — CLI modernization with Argu
-- [ ] 03-02-PLAN.md — REPL implementation and tests
+- [x] 03-01-PLAN.md — CLI modernization with Argu
+- [x] 03-02-PLAN.md — REPL implementation and tests
 
 ### Status
-**In Progress**
+**Completed:** 2026-02-01
 
 ---
 
@@ -214,30 +214,30 @@ Phase 1 → Phase 2 → Phase 3
 - [x] 기존 테스트 통과
 - [x] 새 테스트 44개 추가 (15 fslit + 29 Expecto)
 
-### Phase 3: REPL
-- [ ] Argu CLI 통합
-- [ ] 기본 루프 동작
-- [ ] 환경 지속성
-- [ ] 오류 복구
-- [ ] Ctrl+D, exit 종료
-- [ ] `--repl` CLI 플래그
-- [ ] 기존 테스트 통과
-- [ ] 새 테스트 10개 추가 (가능한 경우)
+### Phase 3: REPL ✓
+- [x] Argu CLI 통합
+- [x] 기본 루프 동작
+- [x] 환경 지속성 (현재 let-in 방식)
+- [x] 오류 복구
+- [x] Ctrl+D, #quit 종료
+- [x] `--repl` CLI 플래그
+- [x] 기존 테스트 통과
+- [x] 새 테스트 14개 추가 (7 fslit + 7 Expecto)
 
 ---
 
-## Milestone Completion Criteria
+## Milestone Completion Criteria ✓
 
-v2.0이 완료되면:
+v2.0 완료:
 
-1. **주석** - 모든 코드에 주석 추가 가능
-2. **문자열** - `"hello"` 리터럴, 연결, 비교 동작
-3. **REPL** - `funlang --repl`로 대화형 세션 시작
-4. **테스트** - 약 230개 테스트 (기존 195 + 새 35)
-5. **문서** - `tutorial/chapter-06-strings.md`, `chapter-07-repl.md`
+1. **주석** ✓ - 모든 코드에 주석 추가 가능
+2. **문자열** ✓ - `"hello"` 리터럴, 연결, 비교 동작
+3. **REPL** ✓ - `funlang --repl`로 대화형 세션 시작
+4. **테스트** ✓ - 275개 테스트 (100 fslit + 175 Expecto)
+5. **문서** - (미완료) tutorial chapters
 
 ---
 
 *Created: 2026-01-31*
-*Updated: 2026-02-01 - Phase 3 plans added*
+*Completed: 2026-02-01 - All 3 phases complete*
 *Based on: `.planning/v2.0/REQUIREMENTS.md`*
