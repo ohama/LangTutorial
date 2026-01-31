@@ -1,0 +1,7 @@
+// Test: No arguments starts REPL
+// --- Command: echo "" | dotnet run --project FunLang
+// --- Output:
+FunLang REPL v2.0
+Type '#quit' or Ctrl+D to quit.
+
+funlang> funlang> 

@@ -1,0 +1,8 @@
+// Test: REPL evaluates string
+// --- Command: echo '"hello"' | dotnet run --project FunLang -- --repl
+// --- Output:
+FunLang REPL v2.0
+Type '#quit' or Ctrl+D to quit.
+
+funlang> "hello"
+funlang> 

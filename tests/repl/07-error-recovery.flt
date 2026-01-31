@@ -1,0 +1,9 @@
+// Test: Error recovery - REPL continues after error
+// --- Command: printf "undefined\n2 + 2\n" | dotnet run --project FunLang -- --repl 2>&1
+// --- Output:
+FunLang REPL v2.0
+Type '#quit' or Ctrl+D to quit.
+
+funlang> Error: Undefined variable: undefined
+funlang> 4
+funlang> 
