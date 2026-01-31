@@ -12,11 +12,6 @@ let parse (input: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
     Parser.start Lexer.tokenize lexbuf
 
-/// Placeholder for REPL (implemented in next plan)
-let startRepl () =
-    printfn "REPL not yet implemented"
-    0
-
 [<EntryPoint>]
 let main argv =
     let parser = ArgumentParser.Create<CliArgs>(
@@ -34,7 +29,7 @@ let main argv =
             0
         // --repl flag
         elif results.Contains Repl then
-            startRepl()
+            Repl.startRepl()
         // --emit-tokens with --expr
         elif results.Contains Emit_Tokens && results.Contains Expr then
             let expr = results.GetResult Expr
@@ -114,10 +109,9 @@ let main argv =
             else
                 eprintfn "File not found: %s" filename
                 1
-        // no arguments
+        // no arguments - start REPL
         else
-            printfn "%s" (parser.PrintUsage())
-            0
+            Repl.startRepl()
     with
     | :? ArguParseException as ex ->
         eprintfn "%s" ex.Message
