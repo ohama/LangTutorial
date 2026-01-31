@@ -8,6 +8,16 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
+## Current Milestone: v3.0 데이터 구조
+
+**Goal:** 복합 데이터 타입, 패턴 매칭, 표준 라이브러리를 추가하여 FunLang을 실용적인 함수형 언어로 발전
+
+**Target features:**
+- 튜플 (Tuples) — 고정 크기 이종 데이터 컬렉션, 패턴 분해
+- 리스트 (Lists) — 동종 데이터의 가변 길이 컬렉션, cons 연산자
+- 패턴 매칭 (Pattern Matching) — 구조적 분해와 조건 분기 통합
+- Prelude (표준 라이브러리) — map, filter, fold 등 기본 함수
+
 ## Current State (v2.0 Shipped)
 
 **v2.0 Shipped:** 2026-02-01 (2 days after v1.0)
@@ -27,13 +37,6 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ~2,317 lines F#
 - 73 files added/modified in v2.0
 - 100 fslit tests + 175 Expecto tests = 275 total
-
-## Next Milestone Goals
-
-**Options:**
-- v2.1 품질 개선 - 사용자 친화적 에러 메시지, REPL 히스토리
-- v3.0 타입 시스템 - 정적 타입 검사 추가
-- Project complete - 튜토리얼 문서 마무리
 
 ## Requirements
 
@@ -124,4 +127,4 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | no-args → REPL | 더 나은 UX | Good |
 
 ---
-*Last updated: 2026-02-01 after v2.0 milestone*
+*Last updated: 2026-02-01 after v3.0 milestone start*
