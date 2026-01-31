@@ -1,7 +1,7 @@
 // Test: --repl flag is recognized
 // --- Command: echo "" | dotnet run --project FunLang -- --repl
 // --- Output:
-FunLang REPL v2.0
+FunLang REPL
 Type '#quit' or Ctrl+D to quit.
 
 funlang> funlang> 

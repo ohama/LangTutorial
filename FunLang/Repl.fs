@@ -37,7 +37,7 @@ let rec private replLoop (env: Env) : unit =
 
 /// Start the REPL with welcome message
 let startRepl () : int =
-    printfn "FunLang REPL v2.0"
+    printfn "FunLang REPL"
     printfn "Type '#quit' or Ctrl+D to quit."
     printfn ""
     replLoop emptyEnv

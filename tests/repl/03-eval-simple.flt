@@ -1,7 +1,7 @@
 // Test: REPL evaluates simple expression
 // --- Command: echo "2 + 3" | dotnet run --project FunLang -- --repl
 // --- Output:
-FunLang REPL v2.0
+FunLang REPL
 Type '#quit' or Ctrl+D to quit.
 
 funlang> 5
