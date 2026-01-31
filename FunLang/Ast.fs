@@ -18,6 +18,8 @@ type Expr =
     // Phase 4: Control flow
     | Bool of bool            // Boolean literal (true, false)
     | If of Expr * Expr * Expr  // if condition then expr1 else expr2
+    // Phase 2 (v2.0): Strings
+    | String of string        // String literal
     // Phase 4: Comparison operators (return BoolValue)
     | Equal of Expr * Expr       // =
     | NotEqual of Expr * Expr    // <>
@@ -41,6 +43,7 @@ and Value =
     | IntValue of int
     | BoolValue of bool
     | FunctionValue of param: string * body: Expr * closure: Env
+    | StringValue of string   // v2.0: String values
 
 /// Environment mapping variable names to values
 /// Phase 5: Defined here for mutual recursion with Value

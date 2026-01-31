@@ -34,6 +34,8 @@ rule tokenize = parse
     | "rec"         { REC }
     // Identifier: starts with letter or underscore
     | ident_start ident_char* { IDENT (lexeme lexbuf) }
+    // String literals (before multi-char operators)
+    | '"'           { read_string (System.Text.StringBuilder()) lexbuf }
     // Multi-char operators MUST come before single-char
     | "<="          { LE }
     | ">="          { GE }
@@ -65,3 +67,14 @@ and block_comment depth = parse
     | newline { block_comment depth lexbuf }           // Continue on newline
     | eof     { failwith "Unterminated comment" }      // Error on EOF
     | _       { block_comment depth lexbuf }           // Skip any other char
+
+// String literal handler with escape sequences
+and read_string buf = parse
+    | '"'           { STRING (buf.ToString()) }
+    | "\\n"         { buf.Append('\n') |> ignore; read_string buf lexbuf }
+    | "\\t"         { buf.Append('\t') |> ignore; read_string buf lexbuf }
+    | "\\\\"        { buf.Append('\\') |> ignore; read_string buf lexbuf }
+    | "\\\""        { buf.Append('\"') |> ignore; read_string buf lexbuf }
+    | newline       { failwith "Newline in string literal" }
+    | eof           { failwith "Unterminated string literal" }
+    | _             { buf.Append(lexeme lexbuf) |> ignore; read_string buf lexbuf }

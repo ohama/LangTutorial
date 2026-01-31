@@ -5,6 +5,7 @@ open Ast
 // Token declarations
 %token <int> NUMBER
 %token <string> IDENT
+%token <string> STRING
 %token PLUS MINUS STAR SLASH
 %token LPAREN RPAREN
 %token LET IN EQUALS
@@ -82,4 +83,5 @@ Atom:
     | IDENT              { Var($1) }
     | TRUE               { Bool(true) }
     | FALSE              { Bool(false) }
+    | STRING             { String($1) }
     | LPAREN Expr RPAREN { $2 }
