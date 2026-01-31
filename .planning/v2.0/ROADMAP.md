@@ -96,6 +96,12 @@ true
 ### Dependencies
 - Phase 1 (Comments) - 문자열 관련 코드에 주석 가능
 
+### Plans
+**Plans:** 1 plan
+
+Plans:
+- [ ] 02-01-PLAN.md — Add string type with full pipeline support
+
 ---
 
 ## Phase 3: REPL (대화형 셸)
