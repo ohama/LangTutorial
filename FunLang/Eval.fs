@@ -34,6 +34,21 @@ let rec matchPattern (pat: Pattern) (value: Value) : (string * Value) list optio
                 Some (List.collect Option.get bindings)
             else
                 None
+    // Constant patterns
+    | ConstPat (IntConst n), IntValue m ->
+        if n = m then Some [] else None
+    | ConstPat (BoolConst b1), BoolValue b2 ->
+        if b1 = b2 then Some [] else None
+    // Empty list pattern
+    | EmptyListPat, ListValue [] -> Some []
+    // Cons pattern - matches non-empty list
+    | ConsPat (headPat, tailPat), ListValue (h :: t) ->
+        match matchPattern headPat h with
+        | Some headBindings ->
+            match matchPattern tailPat (ListValue t) with
+            | Some tailBindings -> Some (headBindings @ tailBindings)
+            | None -> None
+        | None -> None
     | _ -> None  // Type mismatch (e.g., TuplePat vs IntValue)
 
 /// Evaluate an expression in an environment
