@@ -44,6 +44,8 @@ rule tokenize = parse
     | "<>"          { NE }
     | "&&"          { AND }
     | "||"          { OR }
+    // Phase 2 (v3.0): Cons operator
+    | "::"          { CONS }
     // Phase 5: Arrow for lambda expressions
     | "->"          { ARROW }
     // Comments (MUST come before operators to match first)
@@ -60,6 +62,9 @@ rule tokenize = parse
     | ')'           { RPAREN }
     | '='           { EQUALS }
     | ','           { COMMA }
+    // Phase 2 (v3.0): List brackets
+    | '['           { LBRACKET }
+    | ']'           { RBRACKET }
     | eof           { EOF }                       // End of input
 
 // Block comment handler with nesting support
