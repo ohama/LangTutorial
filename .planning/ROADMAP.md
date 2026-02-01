@@ -79,10 +79,14 @@ Plans:
   9. Lists (EmptyList, List, Cons) infer parameterized list types
   10. Match expressions infer pattern types and unify all branches
   11. LetPat generalizes pattern bindings
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- TBD
+- [ ] 04-01-PLAN.md — Core functions (freshVar, instantiate, generalize)
+- [ ] 04-02-PLAN.md — Basic inference (literals, operators, variables)
+- [ ] 04-03-PLAN.md — Binding inference (Let, Lambda, App, LetRec)
+- [ ] 04-04-PLAN.md — Data inference (If, Tuple, List, EmptyList, Cons)
+- [ ] 04-05-PLAN.md — Pattern inference (Match, LetPat, inferPattern)
 
 ### Phase 5: Integration
 **Goal**: Type system integrated with CLI and Prelude functions typed
@@ -126,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Type Definition | 1/1 | Complete | 2026-02-01 |
 | 2. Substitution | 1/1 | Complete | 2026-02-01 |
 | 3. Unification | 1/1 | Complete | 2026-02-01 |
-| 4. Inference | 0/TBD | Not started | - |
+| 4. Inference | 0/5 | Not started | - |
 | 5. Integration | 0/TBD | Not started | - |
 | 6. Testing | 0/TBD | Not started | - |
 
