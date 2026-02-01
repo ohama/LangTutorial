@@ -69,8 +69,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — AST, Lexer, Parser infrastructure for list syntax
-- [ ] 02-02-PLAN.md — Evaluation, formatting, integration tests
+- [x] 02-01-PLAN.md — AST, Lexer, Parser infrastructure for list syntax
+- [x] 02-02-PLAN.md — Evaluation, formatting, integration tests
 
 ---
 
