@@ -1,0 +1,6 @@
+// Test: Heterogeneous tuple (TUP-04)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(1, true, "hello")
+// --- Output:
+(1, true, "hello")

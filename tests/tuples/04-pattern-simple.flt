@@ -1,0 +1,6 @@
+// Test: Simple tuple pattern matching (TUP-02)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let (x, y) = (1, 2) in x + y
+// --- Output:
+3

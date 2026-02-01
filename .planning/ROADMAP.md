@@ -42,8 +42,8 @@ v3.0 데이터 구조
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — AST, Lexer, Parser infrastructure for tuple syntax
-- [ ] 01-02-PLAN.md — Evaluation, pattern matching, integration tests
+- [x] 01-01-PLAN.md — AST, Lexer, Parser infrastructure for tuple syntax
+- [x] 01-02-PLAN.md — Evaluation, pattern matching, integration tests
 
 ---
 

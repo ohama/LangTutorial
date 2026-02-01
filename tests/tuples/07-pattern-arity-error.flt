@@ -1,0 +1,7 @@
+// Test: Pattern arity mismatch error
+// --- Command: dotnet run --project FunLang -- %input
+// --- Exit: 1
+// --- Input:
+let (x, y, z) = (1, 2) in x
+// --- Error:
+Pattern match failed: tuple pattern expects 3 elements but value has 2

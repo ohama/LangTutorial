@@ -32,7 +32,9 @@ rule tokenize = parse
     // Phase 5: Function keywords
     | "fun"         { FUN }
     | "rec"         { REC }
-    // Identifier: starts with letter or underscore
+    // Phase 1 (v3.0): Wildcard pattern (must come before identifier)
+    | '_'           { UNDERSCORE }
+    // Identifier: starts with letter or underscore (but _ alone is UNDERSCORE)
     | ident_start ident_char* { IDENT (lexeme lexbuf) }
     // String literals (before multi-char operators)
     | '"'           { read_string (System.Text.StringBuilder()) lexbuf }
@@ -57,6 +59,7 @@ rule tokenize = parse
     | '('           { LPAREN }
     | ')'           { RPAREN }
     | '='           { EQUALS }
+    | ','           { COMMA }
     | eof           { EOF }                       // End of input
 
 // Block comment handler with nesting support

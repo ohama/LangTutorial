@@ -1,0 +1,6 @@
+// Test: Tuple structural equality
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+(1, 2) = (1, 2)
+// --- Output:
+true

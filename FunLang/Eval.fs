@@ -7,17 +7,36 @@ open Ast
 let emptyEnv : Env = Map.empty
 
 /// Format a value for user-friendly output
-let formatValue (v: Value) : string =
+let rec formatValue (v: Value) : string =
     match v with
     | IntValue n -> string n
     | BoolValue b -> if b then "true" else "false"
     | FunctionValue _ -> "<function>"
     | StringValue s -> sprintf "\"%s\"" s
+    | TupleValue values ->
+        let formattedElements = List.map formatValue values
+        sprintf "(%s)" (String.concat ", " formattedElements)
+
+/// Match a pattern against a value, returning bindings if successful
+let rec matchPattern (pat: Pattern) (value: Value) : (string * Value) list option =
+    match pat, value with
+    | VarPat name, v -> Some [(name, v)]
+    | WildcardPat, _ -> Some []
+    | TuplePat pats, TupleValue vals ->
+        if List.length pats <> List.length vals then
+            None  // Arity mismatch
+        else
+            let bindings = List.map2 matchPattern pats vals
+            if List.forall Option.isSome bindings then
+                Some (List.collect Option.get bindings)
+            else
+                None
+    | _ -> None  // Type mismatch (e.g., TuplePat vs IntValue)
 
 /// Evaluate an expression in an environment
 /// Returns Value (IntValue, BoolValue, or FunctionValue)
 /// Raises exception for type errors and undefined variables
-let rec eval (env: Env) (expr: Expr) : Value =
+and eval (env: Env) (expr: Expr) : Value =
     match expr with
     | Number n -> IntValue n
     | Bool b -> BoolValue b
@@ -32,6 +51,27 @@ let rec eval (env: Env) (expr: Expr) : Value =
         let value = eval env binding
         let extendedEnv = Map.add name value env
         eval extendedEnv body
+
+    // Phase 1 (v3.0): Tuples
+    | Tuple exprs ->
+        let values = List.map (eval env) exprs
+        TupleValue values
+
+    | LetPat (pat, bindingExpr, bodyExpr) ->
+        let value = eval env bindingExpr
+        match matchPattern pat value with
+        | Some bindings ->
+            let extendedEnv = List.fold (fun e (n, v) -> Map.add n v e) env bindings
+            eval extendedEnv bodyExpr
+        | None ->
+            match pat, value with
+            | TuplePat pats, TupleValue vals ->
+                failwithf "Pattern match failed: tuple pattern expects %d elements but value has %d"
+                          (List.length pats) (List.length vals)
+            | TuplePat _, _ ->
+                failwith "Pattern match failed: expected tuple value"
+            | _ ->
+                failwith "Pattern match failed"
 
     // Arithmetic operations - type check for IntValue
     | Add (left, right) ->
@@ -87,6 +127,7 @@ let rec eval (env: Env) (expr: Expr) : Value =
         | IntValue l, IntValue r -> BoolValue (l = r)
         | BoolValue l, BoolValue r -> BoolValue (l = r)
         | StringValue l, StringValue r -> BoolValue (l = r)
+        | TupleValue l, TupleValue r -> BoolValue (l = r)  // Structural equality
         | _ -> failwith "Type error: = requires operands of same type"
 
     | NotEqual (left, right) ->
@@ -94,6 +135,7 @@ let rec eval (env: Env) (expr: Expr) : Value =
         | IntValue l, IntValue r -> BoolValue (l <> r)
         | BoolValue l, BoolValue r -> BoolValue (l <> r)
         | StringValue l, StringValue r -> BoolValue (l <> r)
+        | TupleValue l, TupleValue r -> BoolValue (l <> r)  // Structural inequality
         | _ -> failwith "Type error: <> requires operands of same type"
 
     // Logical operators - short-circuit evaluation

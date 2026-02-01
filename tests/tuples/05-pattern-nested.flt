@@ -1,0 +1,6 @@
+// Test: Nested tuple pattern matching (TUP-03)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let ((a, b), c) = ((1, 2), 3) in a + b + c
+// --- Output:
+6

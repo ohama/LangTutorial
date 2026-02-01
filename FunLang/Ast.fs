@@ -35,6 +35,16 @@ type Expr =
     | App of func: Expr * arg: Expr             // func arg (function application)
     | LetRec of name: string * param: string * body: Expr * inExpr: Expr
     // let rec name param = body in inExpr
+    // Phase 1 (v3.0): Tuples
+    | Tuple of Expr list               // Tuple expression: (e1, e2, ...)
+    | LetPat of Pattern * Expr * Expr  // Let with pattern binding: let pat = expr in body
+
+/// Pattern for destructuring bindings
+/// Phase 1 (v3.0): Tuple patterns
+and Pattern =
+    | VarPat of string           // Variable pattern: x
+    | TuplePat of Pattern list   // Tuple pattern: (p1, p2, ...)
+    | WildcardPat                // Wildcard pattern: _
 
 /// Value type for evaluation results
 /// Phase 4: Heterogeneous types (int and bool)
@@ -44,6 +54,7 @@ and Value =
     | BoolValue of bool
     | FunctionValue of param: string * body: Expr * closure: Env
     | StringValue of string   // v2.0: String values
+    | TupleValue of Value list  // v3.0: Tuple values
 
 /// Environment mapping variable names to values
 /// Phase 5: Defined here for mutual recursion with Value

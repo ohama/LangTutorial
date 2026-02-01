@@ -2,6 +2,8 @@
 module Parser
 type token = 
   | EOF
+  | UNDERSCORE
+  | COMMA
   | FUN
   | REC
   | ARROW
@@ -26,10 +28,13 @@ type token =
   | MINUS
   | STAR
   | SLASH
+  | STRING of (string)
   | IDENT of (string)
   | NUMBER of (int)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_UNDERSCORE
+    | TOKEN_COMMA
     | TOKEN_FUN
     | TOKEN_REC
     | TOKEN_ARROW
@@ -54,6 +59,7 @@ type tokenId =
     | TOKEN_MINUS
     | TOKEN_STAR
     | TOKEN_SLASH
+    | TOKEN_STRING
     | TOKEN_IDENT
     | TOKEN_NUMBER
     | TOKEN_end_of_input
@@ -66,6 +72,10 @@ type nonTerminalId =
     | NONTERM_Factor
     | NONTERM_AppExpr
     | NONTERM_Atom
+    | NONTERM_ExprList
+    | NONTERM_TuplePattern
+    | NONTERM_PatternList
+    | NONTERM_Pattern
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 

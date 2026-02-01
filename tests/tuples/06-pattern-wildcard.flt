@@ -1,0 +1,6 @@
+// Test: Wildcard pattern in tuple (TUP-02)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let (x, _) = (42, 99) in x
+// --- Output:
+42
