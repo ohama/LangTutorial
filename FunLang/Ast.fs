@@ -42,13 +42,30 @@ type Expr =
     | EmptyList                        // Empty list: []
     | List of Expr list                // List literal: [e1, e2, ...]
     | Cons of Expr * Expr              // Cons operator: h :: t
+    // Phase 3 (v3.0): Pattern Matching
+    | Match of scrutinee: Expr * clauses: MatchClause list
 
 /// Pattern for destructuring bindings
 /// Phase 1 (v3.0): Tuple patterns
+/// Phase 3 (v3.0): Extended with ConsPat, EmptyListPat, ConstPat
 and Pattern =
     | VarPat of string           // Variable pattern: x
     | TuplePat of Pattern list   // Tuple pattern: (p1, p2, ...)
     | WildcardPat                // Wildcard pattern: _
+    // Phase 3 (v3.0): New pattern types for match expressions
+    | ConsPat of Pattern * Pattern     // Cons pattern: h :: t
+    | EmptyListPat                     // Empty list pattern: []
+    | ConstPat of Constant             // Constant pattern: 1, true, false
+
+/// Match clause: pattern -> expression
+/// Phase 3 (v3.0)
+and MatchClause = Pattern * Expr
+
+/// Constant values for patterns
+/// Phase 3 (v3.0)
+and Constant =
+    | IntConst of int
+    | BoolConst of bool
 
 /// Value type for evaluation results
 /// Phase 4: Heterogeneous types (int and bool)
