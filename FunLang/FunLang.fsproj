@@ -6,13 +6,14 @@
     BUILD ORDER (CRITICAL):
     =======================
     1. Ast.fs       - AST type definitions (Discriminated Unions)
-    2. Parser.fsy   - fsyacc specification (generates Parser.fs, Parser.fsi)
-    3. Lexer.fsl    - fslex specification (generates Lexer.fs)
-    4. Parser.fsi   - Generated parser signature
-    5. Parser.fs    - Generated parser implementation
-    6. Lexer.fs     - Generated lexer implementation
-    7. Eval.fs      - Evaluator (pattern matching on AST)
-    8. Program.fs   - Main entry point
+    2. Type.fs      - Type system definitions (Type, Scheme, TypeEnv)
+    3. Parser.fsy   - fsyacc specification (generates Parser.fs, Parser.fsi)
+    4. Lexer.fsl    - fslex specification (generates Lexer.fs)
+    5. Parser.fsi   - Generated parser signature
+    6. Parser.fs    - Generated parser implementation
+    7. Lexer.fs     - Generated lexer implementation
+    8. Eval.fs      - Evaluator (pattern matching on AST)
+    9. Program.fs   - Main entry point
 
     WHY THIS ORDER:
     - Lexer.fsl opens Parser to access token types (NUMBER, EOF, etc.)
@@ -33,39 +34,42 @@
     <!-- 1. AST definitions (manually written) -->
     <Compile Include="Ast.fs" />
 
-    <!-- 2. Parser generator - MUST come before Lexer -->
+    <!-- 2. Type system definitions (manually written) -->
+    <Compile Include="Type.fs" />
+
+    <!-- 3. Parser generator - MUST come before Lexer -->
     <FsYacc Include="Parser.fsy">
       <OtherFlags>--module Parser</OtherFlags>
     </FsYacc>
 
-    <!-- 3. Lexer generator - depends on Parser tokens -->
+    <!-- 4. Lexer generator - depends on Parser tokens -->
     <FsLex Include="Lexer.fsl">
       <OtherFlags>--module Lexer --unicode</OtherFlags>
     </FsLex>
 
-    <!-- 4. Generated parser files (FsYacc generates in source directory) -->
+    <!-- 5. Generated parser files (FsYacc generates in source directory) -->
     <Compile Include="Parser.fsi" />
     <Compile Include="Parser.fs" />
 
-    <!-- 5. Generated lexer file (FsLex generates in source directory) -->
+    <!-- 6. Generated lexer file (FsLex generates in source directory) -->
     <Compile Include="Lexer.fs" />
 
-    <!-- 6. Format utilities (uses Parser tokens and Lexer) -->
+    <!-- 7. Format utilities (uses Parser tokens and Lexer) -->
     <Compile Include="Format.fs" />
 
-    <!-- 7. Evaluator (uses Ast, used by Program) -->
+    <!-- 8. Evaluator (uses Ast, used by Program) -->
     <Compile Include="Eval.fs" />
 
-    <!-- 8. Prelude loading (uses Eval) -->
+    <!-- 9. Prelude loading (uses Eval) -->
     <Compile Include="Prelude.fs" />
 
-    <!-- 9. REPL implementation (uses Eval) -->
+    <!-- 10. REPL implementation (uses Eval) -->
     <Compile Include="Repl.fs" />
 
-    <!-- 10. CLI argument parsing (uses Argu) -->
+    <!-- 11. CLI argument parsing (uses Argu) -->
     <Compile Include="Cli.fs" />
 
-    <!-- 11. Main program -->
+    <!-- 12. Main program -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
