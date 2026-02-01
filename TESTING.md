@@ -103,7 +103,9 @@ LangTutorial/
 │   ├── file-input/           # 파일 입력 (%input)
 │   ├── variables/            # Phase 3: let, let-in
 │   ├── control/              # Phase 4: if, bool, comparison, logical
-│   └── functions/            # Phase 5: fn, rec, closures
+│   ├── functions/            # Phase 5: fn, rec, closures
+│   ├── type-inference/       # Phase 6: --emit-type output verification
+│   └── type-errors/          # Phase 6: Type error message verification
 │
 └── FunLang.Tests/            # Expecto 단위 테스트 프로젝트
     ├── FunLang.Tests.fsproj
@@ -496,6 +498,18 @@ test "inner scope doesn't affect outer" {
 - AST construction tests
 - Edge cases (subtraction vs application, negative arguments)
 
+### Phase 6: Testing (v4.0 Type System)
+
+**fslit 테스트:** `tests/type-inference/` (22개), `tests/type-errors/` (10개)
+- 01-22: --emit-type output for literals, functions, polymorphism, lists, tuples, Prelude
+- 01-10: Type error messages (infinite type, unbound var, type mismatch, branch mismatch, operator errors)
+
+**Expecto 테스트:** `FunLang.Tests/` (~65개 추가)
+- TypeTests.fs: Type module (formatType, apply, compose, freeVars)
+- UnifyTests.fs: Unify module (occurs check, unification)
+- InferTests.fs: Infer module (Algorithm W for all expressions)
+- TypeCheckTests.fs: TypeCheck integration (Prelude types, end-to-end)
+
 ---
 
 ## 테스트 추가 워크플로우
@@ -538,18 +552,21 @@ git commit -m "test: add <feature> tests"
 | variables | 12 | 3 | ✓ 완료 |
 | control | 20 | 4 | ✓ 완료 |
 | functions | 13 | 5 | ✓ 완료 |
+| type-inference | 22 | 6 | ✓ 완료 |
+| type-errors | 10 | 6 | ✓ 완료 |
 
-**fslit 총 테스트: 66개** (Phase 2, 3, 4, 5, 7 완료)
+**fslit 총 테스트: 98개** (Phase 2, 3, 4, 5, 6, 7 완료)
 
 | 프로젝트 | 테스트 수 | 상태 |
 |----------|-----------|------|
-| FunLang.Tests | 129 | ✓ 완료 |
+| FunLang.Tests | 362 | ✓ 완료 |
 
 **Expecto 테스트 구성:**
 - Phase 2 (산술): 18개
 - Phase 3 (변수): 15개
 - Phase 4 (제어흐름): 30개
 - Phase 5 (함수): 36개
+- Phase 6 (타입 시스템): ~65개 (Type, Unify, Infer, TypeCheck)
 - Property Tests: 11개 (FsCheck)
 - Lexer Tests: 9개
 - 기타: 10개
