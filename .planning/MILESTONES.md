@@ -1,5 +1,33 @@
 # Project Milestones: LangTutorial
 
+## v4.0 타입 시스템 (Shipped: 2026-02-01)
+
+**Delivered:** Hindley-Milner 타입 추론 시스템으로 정적 타입 검사 지원
+
+**Phases completed:** 1-6 (12 plans total)
+
+**Key accomplishments:**
+
+- Type AST — 7개 타입 생성자 (TInt, TBool, TString, TVar, TArrow, TTuple, TList)
+- Algorithm W — 완전한 Hindley-Milner 타입 추론 구현
+- Let-polymorphism — 다형성 let 바인딩 지원
+- Prelude 타입 — 11개 표준 라이브러리 함수 타입 정의
+- CLI 통합 — --emit-type 플래그로 타입 표시
+- 460 total tests — 362 Expecto + 98 fslit (219개 타입 시스템 테스트 추가)
+
+**Stats:**
+
+- 4,805 lines of F# (2,608 core + 2,197 tests)
+- 6 phases, 12 plans, 33 requirements
+- 84 files modified
+- 3.3 hours (2026-02-01 18:33 → 21:53)
+
+**Git range:** `bde5582` → `c4a9f0a`
+
+**What's next:** v5.0 (ADT, TCO, 예외 처리) 또는 프로젝트 완료
+
+---
+
 ## v3.0 데이터 구조 (Shipped: 2026-02-01)
 
 **Delivered:** 튜플, 리스트, 패턴 매칭, 자체 호스팅 표준 라이브러리를 추가하여 FunLang을 실용적인 함수형 언어로 발전

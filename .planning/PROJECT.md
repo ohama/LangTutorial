@@ -8,25 +8,9 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-## Current Milestone: v4.0 타입 시스템
+## Previous State (v4.0 Shipped)
 
-**Goal:** Hindley-Milner 타입 추론으로 정적 타입 검사 지원
-
-**Target features:**
-- Type AST (TInt, TBool, TString, TArrow, TTuple, TList, TVar)
-- 대체(Substitution) 연산과 단일화(Unification)
-- Algorithm W 타입 추론
-- Let-polymorphism (다형성)
-- Prelude 함수 타입 정의
-- CLI 통합 (--emit-type, --no-typecheck)
-
-**Reference:** `docs/todo.md` — 상세 구현 계획
-
----
-
-## Previous State (v3.0 Shipped)
-
-**v3.0 Shipped:** 2026-02-01
+**v4.0 Shipped:** 2026-02-01
 
 **What's implemented:**
 - Foundation & Pipeline - .NET 10 + FsLexYacc 파이프라인
@@ -38,14 +22,17 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - Strings - 리터럴, 이스케이프, 연결, 비교
 - REPL - 대화형 루프, 오류 복구, #quit
 - Argu CLI - 선언적 CLI 파싱
-- **Tuples** - 고정 크기 이종 데이터, 패턴 분해 (v3.0)
-- **Lists** - 가변 길이 컬렉션, cons 연산자 (v3.0)
-- **Pattern Matching** - match 표현식, 7가지 패턴 타입 (v3.0)
-- **Prelude** - 자체 호스팅 표준 라이브러리 11개 함수 (v3.0)
+- Tuples - 고정 크기 이종 데이터, 패턴 분해 (v3.0)
+- Lists - 가변 길이 컬렉션, cons 연산자 (v3.0)
+- Pattern Matching - match 표현식, 7가지 패턴 타입 (v3.0)
+- Prelude - 자체 호스팅 표준 라이브러리 11개 함수 (v3.0)
+- **Type System** - Hindley-Milner 타입 추론, Algorithm W (v4.0)
+- **Let-polymorphism** - 다형성 let 바인딩 (v4.0)
+- **--emit-type** - CLI 타입 표시 플래그 (v4.0)
 
 **Codebase:**
-- ~2,325 lines F#
-- 333 total tests (158 fslit + 175 Expecto)
+- ~4,805 lines F# (2,608 core + 2,197 tests)
+- 460 total tests (98 fslit + 362 Expecto)
 
 ## Requirements
 
@@ -71,17 +58,18 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ PAT-01~08: 패턴 매칭 (match, 변수, 와일드카드, 상수, cons, 튜플, 빈 리스트, 완전성)
 - ✓ PRE-01~09: Prelude (map, filter, fold, length, reverse, append, id, const, compose, hd, tl, 자동 로드)
 
-### Active (v4.0)
+### Validated (v4.0)
 
-- [ ] **TYPE-01**: Type AST 정의 (TInt, TBool, TString, TArrow, TTuple, TList, TVar)
-- [ ] **TYPE-02**: Scheme 타입 (다형성 지원)
-- [ ] **TYPE-03**: 대체(Substitution) 연산
-- [ ] **TYPE-04**: 단일화(Unification) 알고리즘
-- [ ] **TYPE-05**: Algorithm W 타입 추론
-- [ ] **TYPE-06**: 패턴 타입 추론
-- [ ] **TYPE-07**: Prelude 함수 타입 정의
-- [ ] **TYPE-08**: CLI 통합 (--emit-type)
-- [ ] **TYPE-09**: 타입 오류 메시지
+- ✓ TYPE-01~04: 타입 정의 (Type AST, Scheme, TypeEnv, formatType)
+- ✓ SUBST-01~03: 대체 연산 (apply, compose, freeVars)
+- ✓ UNIFY-01~03: 단일화 (occurs check, unify, TypeError)
+- ✓ INFER-01~15: 타입 추론 (Algorithm W, let-polymorphism, 패턴)
+- ✓ INTEG-01~04: 통합 (Prelude 타입, typecheck, --emit-type, 오류 처리)
+- ✓ TEST-01~07: 테스트 (Type, Subst, Unify, Infer, TypeCheck, fslit)
+
+### Active (v5.0+)
+
+(No active requirements — project complete or awaiting next milestone)
 
 ### On Hold (v5.0+)
 
@@ -136,5 +124,7 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | First-match semantics | 패턴 매칭에서 첫 번째 매치 사용 | Good |
 | Right-associative cons | `1 :: 2 :: []` = `1 :: (2 :: [])` | Good |
 
+| Hindley-Milner 타입 추론 | 타입 클래스 없이 완전한 추론, 교육 목적에 적합 | Good |
+
 ---
-*Last updated: 2026-02-01 after v4.0 milestone start*
+*Last updated: 2026-02-01 after v4.0 milestone complete*

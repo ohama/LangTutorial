@@ -5,81 +5,32 @@
 See: .planning/PROJECT.md (updated 2026-02-01)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
-**Current focus:** Phase 6 - Testing
+**Current focus:** Milestone complete — awaiting next milestone
 
 ## Current Position
 
-Phase: 6 of 6 (Testing)
-Plan: 3 of 3 complete
-Status: Phase complete - All Phase 6 tests complete
-Last activity: 2026-02-01 - Completed 06-03-PLAN.md (CLI integration tests for --emit-type and type errors)
+Phase: None (v4.0 milestone archived)
+Plan: N/A
+Status: Ready for next milestone
+Last activity: 2026-02-01 — v4.0 타입 시스템 milestone complete
 
-Progress: [██████████] 100%
+Progress: [██████████] 100% (v4.0)
 
-## Performance Metrics
+## Milestone Summary
 
-**Velocity:**
-- Total plans completed: 12
-- Average duration: 3.9 min
-- Total execution time: 0.78 hours
+**v4.0 타입 시스템** shipped 2026-02-01:
+- 6 phases, 12 plans, 33 requirements
+- Hindley-Milner type inference with Algorithm W
+- 460 total tests (362 Expecto + 98 fslit)
+- 4,805 lines F#
 
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01-type-definition | 1 | 2 min | 2 min |
-| 02-substitution | 1 | 1 min | 1 min |
-| 03-unification | 1 | 1.5 min | 1.5 min |
-| 04-inference | 5 | 8.7 min | 1.74 min |
-| 05-integration | 1 | 3.4 min | 3.4 min |
-| 06-testing | 3 | 30.1 min | 10 min |
-
-**Recent Trend:**
-- Last 5 plans: 05-01 (3.4 min), 06-01 (4.6 min), 06-02 (7 min), 06-03 (18.5 min)
-- Trend: Testing tasks take longer (more comprehensive coverage)
+See: .planning/MILESTONES.md for full history
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- Previous milestones (v1.0-v3.0): Self-hosted Prelude, Pattern matching, First-match semantics
-- v4.0: Hindley-Milner type inference, No type annotations, Let-polymorphism
-- 01-01: Use int for type variables (TVar of int) for simplicity in substitution
-- 01-01: formatType uses modulo 26 for letter cycling ('a through 'z)
-- 01-01: Arrow parenthesization: left operand only if also TArrow (right-associative)
-- 02-01: apply recursively calls itself when TVar maps to another type (transitive chains)
-- 02-01: compose s2 s1 = s2 after s1 (apply s2 to s1 values, merge s2 bindings)
-- 03-01: Symmetric TVar pattern `| TVar n, t | t, TVar n ->` handles both orderings
-- 03-01: Substitution threading: apply s1 before recursive unify call
-- 04-01: freshVar uses ref cell for mutable counter (standard F# pattern)
-- 04-01: instantiate short-circuits for monomorphic schemes (vars=[])
-- 04-01: generalize uses Set.difference (tyFree - envFree)
-- 04-02: inferBinaryOp helper abstracts common binary operator pattern
-- 04-02: Substitution threading: applyEnv s1 env before second operand
-- 04-02: Comparison operators typed as int -> int -> bool (not polymorphic)
-- 04-03: Lambda params monomorphic (Scheme([], paramTy) binding)
-- 04-03: Let-polymorphism: generalize AFTER infer, applyEnv before generalize
-- 04-03: LetRec: pre-bind function name with fresh type for recursive calls
-- 04-04: If branches apply s4 before unification (after condition check)
-- 04-04: Tuple uses fold with reversed accumulator, then List.rev
-- 04-04: Cons unifies tail with TList of head type (proper constraint propagation)
-- 04-05: inferPattern extracts bindings as monomorphic schemes
-- 04-05: Match uses fold over clauses accumulating substitutions
-- 04-05: LetPat generalizes each pattern binding separately
-- 04-05: ConsPat returns TList of head type (tail unification in Match)
-- 05-01: Type variables 0-9 reserved for Prelude schemes (freshVar starts at 1000)
-- 05-01: Type checking runs before evaluation by default (catch errors early)
-- 05-01: --emit-type displays inferred types without evaluation
-- 06-01: Use match statement for Scheme destructuring to avoid F# formatter issues
-- 06-01: Test organization by function groups for clear structure
-- 06-01: Symmetric unification tests verify both TVar/concrete orderings
-- 06-02: InferTests uses inferEmpty and inferWithPrelude helpers for different contexts
-- 06-02: Tests organized by INFER-XX requirement tags for traceability
-- 06-02: Pattern matching on inferred types to verify polymorphic structure
-- 06-02: Multi-parameter lambdas must use curried form (fun x -> fun y -> ...)
+All decisions archived in PROJECT.md Key Decisions table.
 
 ### Pending Todos
 
@@ -91,7 +42,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T12:51:59Z
-Stopped at: Completed 06-03-PLAN.md (CLI integration tests for --emit-type and type errors)
+Last session: 2026-02-01
+Stopped at: v4.0 milestone complete
 Resume file: None
-Next: Phase 6 complete - All type system tests implemented (460 total: 98 fslit + 362 Expecto)
+Next: /gsd:new-milestone (if continuing) or project complete
