@@ -1,0 +1,6 @@
+// Type inference for lambda with arithmetic body
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+fun x -> x + 1
+// --- Output:
+int -> int

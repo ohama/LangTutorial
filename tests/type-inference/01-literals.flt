@@ -1,0 +1,6 @@
+// Type inference for integer literal
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+42
+// --- Output:
+int

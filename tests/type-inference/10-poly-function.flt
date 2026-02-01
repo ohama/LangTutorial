@@ -1,0 +1,6 @@
+// Polymorphic function returned from let
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+let id = fun x -> x in id
+// --- Output:
+'n -> 'n

@@ -1,0 +1,6 @@
+// Recursive function type inference
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+let rec fact n = if n <= 1 then 1 else n * fact (n - 1) in fact
+// --- Output:
+int -> int

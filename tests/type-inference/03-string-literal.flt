@@ -1,0 +1,6 @@
+// Type inference for string literal
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+"hello"
+// --- Output:
+string

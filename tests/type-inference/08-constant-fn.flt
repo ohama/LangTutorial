@@ -1,0 +1,6 @@
+// Type inference for constant function
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+fun x -> 42
+// --- Output:
+'m -> int

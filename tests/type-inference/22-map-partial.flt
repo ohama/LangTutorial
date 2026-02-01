@@ -1,0 +1,6 @@
+// Type inference for map partial application
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+map (fun x -> x + 1)
+// --- Output:
+int list -> int list

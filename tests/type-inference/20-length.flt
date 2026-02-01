@@ -1,0 +1,6 @@
+// Type inference for Prelude length function
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+length
+// --- Output:
+'m list -> int

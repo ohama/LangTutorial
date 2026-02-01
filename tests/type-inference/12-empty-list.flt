@@ -1,0 +1,6 @@
+// Type inference for empty list
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+[]
+// --- Output:
+'m list

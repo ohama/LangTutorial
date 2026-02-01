@@ -1,0 +1,6 @@
+// Let-polymorphism: identity used at multiple types
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+let id = fun x -> x in (id 5, id true)
+// --- Output:
+int * bool

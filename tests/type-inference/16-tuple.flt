@@ -1,0 +1,6 @@
+// Type inference for tuple
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+(1, true, "hello")
+// --- Output:
+int * bool * string

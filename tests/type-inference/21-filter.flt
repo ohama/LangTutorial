@@ -1,0 +1,6 @@
+// Type inference for Prelude filter function
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+filter
+// --- Output:
+('m -> bool) -> 'm list -> 'm list

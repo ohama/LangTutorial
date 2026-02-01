@@ -1,0 +1,6 @@
+// Type inference for curried function
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+fun x -> fun y -> x + y
+// --- Output:
+int -> int -> int
