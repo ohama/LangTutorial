@@ -1,0 +1,6 @@
+// PRE-07: id function
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+id 42
+// --- Output:
+42

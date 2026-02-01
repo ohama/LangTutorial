@@ -1,0 +1,6 @@
+// PRE-03: fold product
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+fold (fun a -> fun b -> a * b) 1 [1, 2, 3, 4]
+// --- Output:
+24

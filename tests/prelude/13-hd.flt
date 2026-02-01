@@ -1,0 +1,6 @@
+// PRE-08: hd function
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+hd [1, 2, 3]
+// --- Output:
+1

@@ -1,0 +1,6 @@
+// PRE-06: append with empty
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+append [] [1, 2]
+// --- Output:
+[1, 2]

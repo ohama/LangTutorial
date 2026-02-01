@@ -1,0 +1,6 @@
+// PRE-05: reverse empty list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+reverse []
+// --- Output:
+[]

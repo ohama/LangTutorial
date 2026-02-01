@@ -1,0 +1,6 @@
+// PRE-01: map with empty list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+map (fun x -> x + 1) []
+// --- Output:
+[]

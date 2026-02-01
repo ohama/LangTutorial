@@ -1,0 +1,6 @@
+// PRE-02: filter all pass
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+filter (fun x -> x > 0) [1, 2, 3]
+// --- Output:
+[1, 2, 3]

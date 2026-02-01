@@ -1,0 +1,6 @@
+// PRE-04: length empty list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+length []
+// --- Output:
+0

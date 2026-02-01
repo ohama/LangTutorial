@@ -1,0 +1,6 @@
+// PRE-03: fold is left-associative
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+fold (fun a -> fun b -> a - b) 10 [1, 2, 3]
+// --- Output:
+4

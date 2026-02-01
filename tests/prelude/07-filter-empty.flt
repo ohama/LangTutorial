@@ -1,0 +1,6 @@
+// PRE-02: filter empty list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+filter (fun x -> true) []
+// --- Output:
+[]

@@ -1,0 +1,6 @@
+// PRE-07: id with list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+id [1, 2, 3]
+// --- Output:
+[1, 2, 3]

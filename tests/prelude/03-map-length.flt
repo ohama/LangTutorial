@@ -1,0 +1,6 @@
+// PRE-01: map preserves length
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+length (map (fun x -> x) [1, 2, 3, 4, 5])
+// --- Output:
+5

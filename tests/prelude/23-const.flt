@@ -1,0 +1,6 @@
+// PRE-07: const function
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+const 5 99
+// --- Output:
+5

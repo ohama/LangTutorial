@@ -1,0 +1,6 @@
+// PRE-07: compose function
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let double = fun x -> x * 2 in let succ = fun x -> x + 1 in (compose double succ) 5
+// --- Output:
+12

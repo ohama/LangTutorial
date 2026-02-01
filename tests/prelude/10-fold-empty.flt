@@ -1,0 +1,6 @@
+// PRE-03: fold empty list returns initial
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+fold (fun a -> fun b -> a + b) 42 []
+// --- Output:
+42

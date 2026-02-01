@@ -1,0 +1,6 @@
+// PRE-06: append function
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+append [1, 2] [3, 4]
+// --- Output:
+[1, 2, 3, 4]
