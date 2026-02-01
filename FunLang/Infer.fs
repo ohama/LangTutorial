@@ -96,6 +96,69 @@ let rec infer (env: TypeEnv) (expr: Expr): Subst * Type =
         let finalSubst = compose s5 (compose s4 (compose s3 (compose s2 s1)))
         (finalSubst, apply s5 thenTy)
 
+    // === Let with polymorphism (INFER-07) ===
+    | Let (name, value, body) ->
+        let s1, valueTy = infer env value
+        let env' = applyEnv s1 env
+        let scheme = generalize env' (apply s1 valueTy)
+        let bodyEnv = Map.add name scheme env'
+        let s2, bodyTy = infer bodyEnv body
+        (compose s2 s1, bodyTy)
+
+    // === LetRec (INFER-09) ===
+    | LetRec (name, param, body, expr) ->
+        // Pre-bind function with fresh type for recursive calls
+        let funcTy = freshVar()
+        let paramTy = freshVar()
+        let recEnv = Map.add name (Scheme ([], funcTy)) env
+        let bodyEnv = Map.add param (Scheme ([], paramTy)) recEnv
+        // Infer body type
+        let s1, bodyTy = infer bodyEnv body
+        // Unify function type with inferred arrow
+        let s2 = unify (apply s1 funcTy) (TArrow (apply s1 paramTy, bodyTy))
+        let s = compose s2 s1
+        // Generalize and add to env for expression
+        let env' = applyEnv s env
+        let scheme = generalize env' (apply s funcTy)
+        let exprEnv = Map.add name scheme env'
+        let s3, exprTy = infer exprEnv expr
+        (compose s3 s, exprTy)
+
+    // === Tuple (INFER-11) ===
+    | Tuple exprs ->
+        let folder (s, tys) e =
+            let s', ty = infer (applyEnv s env) e
+            (compose s' s, ty :: tys)
+        let finalS, revTys = List.fold folder (empty, []) exprs
+        (finalS, TTuple (List.rev revTys))
+
+    // === EmptyList (INFER-12) ===
+    | EmptyList ->
+        let elemTy = freshVar()
+        (empty, TList elemTy)
+
+    // === List literal (INFER-12) ===
+    | List exprs ->
+        match exprs with
+        | [] ->
+            let elemTy = freshVar()
+            (empty, TList elemTy)
+        | first :: rest ->
+            let s1, elemTy = infer env first
+            let folder (s, ty) e =
+                let s', eTy = infer (applyEnv s env) e
+                let s'' = unify (apply s' ty) eTy
+                (compose s'' (compose s' s), apply s'' eTy)
+            let finalS, elemTy' = List.fold folder (s1, elemTy) rest
+            (finalS, TList elemTy')
+
+    // === Cons (INFER-12) ===
+    | Cons (head, tail) ->
+        let s1, headTy = infer env head
+        let s2, tailTy = infer (applyEnv s1 env) tail
+        let s3 = unify tailTy (TList (apply s2 headTy))
+        (compose s3 (compose s2 s1), apply s3 tailTy)
+
     // Placeholder for remaining cases (will be implemented in later plans)
     | _ -> failwith "Not yet implemented"
 
