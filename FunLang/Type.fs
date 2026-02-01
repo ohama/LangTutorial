@@ -73,3 +73,23 @@ let applyScheme (s: Subst) (Scheme (vars, ty)): Scheme =
 /// Apply substitution to all schemes in environment
 let applyEnv (s: Subst) (env: TypeEnv): TypeEnv =
     Map.map (fun _ scheme -> applyScheme s scheme) env
+
+// ============================================================================
+// Free Variable Operations
+// ============================================================================
+
+/// Collect free type variables in a type
+let rec freeVars = function
+    | TInt | TBool | TString -> Set.empty
+    | TVar n -> Set.singleton n
+    | TArrow (t1, t2) -> Set.union (freeVars t1) (freeVars t2)
+    | TTuple ts -> ts |> List.map freeVars |> Set.unionMany
+    | TList t -> freeVars t
+
+/// Free variables in a type scheme (excludes bound variables)
+let freeVarsScheme (Scheme (vars, ty)) =
+    Set.difference (freeVars ty) (Set.ofList vars)
+
+/// Free variables in entire type environment
+let freeVarsEnv (env: TypeEnv) =
+    env |> Map.values |> Seq.map freeVarsScheme |> Set.unionMany
