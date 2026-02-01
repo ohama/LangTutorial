@@ -56,13 +56,16 @@
     <!-- 7. Evaluator (uses Ast, used by Program) -->
     <Compile Include="Eval.fs" />
 
-    <!-- 8. REPL implementation (uses Eval) -->
+    <!-- 8. Prelude loading (uses Eval) -->
+    <Compile Include="Prelude.fs" />
+
+    <!-- 9. REPL implementation (uses Eval) -->
     <Compile Include="Repl.fs" />
 
-    <!-- 9. CLI argument parsing (uses Argu) -->
+    <!-- 10. CLI argument parsing (uses Argu) -->
     <Compile Include="Cli.fs" />
 
-    <!-- 10. Main program -->
+    <!-- 11. Main program -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
