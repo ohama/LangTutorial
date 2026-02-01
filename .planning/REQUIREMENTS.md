@@ -74,13 +74,13 @@ Requirements for v4.0 타입 시스템. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TYPE-01 | Phase 1 | Pending |
-| TYPE-02 | Phase 1 | Pending |
-| TYPE-03 | Phase 1 | Pending |
-| TYPE-04 | Phase 1 | Pending |
-| SUBST-01 | Phase 2 | Pending |
-| SUBST-02 | Phase 2 | Pending |
-| SUBST-03 | Phase 2 | Pending |
+| TYPE-01 | Phase 1 | Complete |
+| TYPE-02 | Phase 1 | Complete |
+| TYPE-03 | Phase 1 | Complete |
+| TYPE-04 | Phase 1 | Complete |
+| SUBST-01 | Phase 2 | Complete |
+| SUBST-02 | Phase 2 | Complete |
+| SUBST-03 | Phase 2 | Complete |
 | UNIFY-01 | Phase 3 | Pending |
 | UNIFY-02 | Phase 3 | Pending |
 | UNIFY-03 | Phase 3 | Pending |
