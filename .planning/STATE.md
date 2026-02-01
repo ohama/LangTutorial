@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 4 of 6 (Inference)
-Plan: 3 of 5 complete
+Plan: 4 of 5 complete
 Status: In progress
-Last activity: 2026-02-01 - Completed 04-03-PLAN.md (Lambda/App/Let/LetRec)
+Last activity: 2026-02-01 - Completed 04-04-PLAN.md (If/Tuple/List Inference)
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 1.5 min
-- Total execution time: 0.15 hours
+- Total execution time: 0.18 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [██████░░░░] 60%
 | 01-type-definition | 1 | 2 min | 2 min |
 | 02-substitution | 1 | 1 min | 1 min |
 | 03-unification | 1 | 1.5 min | 1.5 min |
-| 04-inference | 3 | 4.7 min | 1.57 min |
+| 04-inference | 4 | 6.7 min | 1.68 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (1.5 min), 04-01 (2 min), 04-02 (1.7 min), 04-03 (1 min)
+- Last 5 plans: 04-01 (2 min), 04-02 (1.7 min), 04-03 (1 min), 04-04 (2 min)
 - Trend: Stable velocity
 
 ## Accumulated Context
@@ -61,6 +61,9 @@ Recent decisions affecting current work:
 - 04-03: Lambda params monomorphic (Scheme([], paramTy) binding)
 - 04-03: Let-polymorphism: generalize AFTER infer, applyEnv before generalize
 - 04-03: LetRec: pre-bind function name with fresh type for recursive calls
+- 04-04: If branches apply s4 before unification (after condition check)
+- 04-04: Tuple uses fold with reversed accumulator, then List.rev
+- 04-04: Cons unifies tail with TList of head type (proper constraint propagation)
 
 ### Pending Todos
 
@@ -72,7 +75,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T11:01:24Z
-Stopped at: Completed 04-03-PLAN.md (Lambda/App/Let/LetRec)
+Last session: 2026-02-01T11:02:07Z
+Stopped at: Completed 04-04-PLAN.md (If/Tuple/List Inference)
 Resume file: None
-Next: Execute 04-04-PLAN.md (If expression) or 04-05-PLAN.md (Tuple/List)
+Next: Execute 04-05-PLAN.md (Pattern Matching Inference)
