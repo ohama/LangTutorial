@@ -58,10 +58,10 @@ Plans:
   2. unify finds most general unifier for compatible types
   3. unify correctly handles all type constructors (arrows, tuples, lists)
   4. TypeError provides clear messages when types cannot be unified
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- TBD
+- [ ] 03-01-PLAN.md — Implement Unify.fs with occurs check and unify function
 
 ### Phase 4: Inference
 **Goal**: Algorithm W infers types for all FunLang expressions
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Type Definition | 1/1 | Complete | 2026-02-01 |
 | 2. Substitution | 1/1 | Complete | 2026-02-01 |
-| 3. Unification | 0/TBD | Not started | - |
+| 3. Unification | 0/1 | Planned | - |
 | 4. Inference | 0/TBD | Not started | - |
 | 5. Integration | 0/TBD | Not started | - |
 | 6. Testing | 0/TBD | Not started | - |
