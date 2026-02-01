@@ -1,0 +1,7 @@
+// Infinite type error: 'm = 'n -> 'm
+// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- ExitCode: 1
+// --- Input:
+let rec f x = f in f
+// --- Output:
+TypeError: Infinite type: 'm = 'n -> 'm

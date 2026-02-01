@@ -1,0 +1,7 @@
+// Type mismatch: cannot unify bool with int
+// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- ExitCode: 1
+// --- Input:
+1 + true
+// --- Output:
+TypeError: Cannot unify bool with int

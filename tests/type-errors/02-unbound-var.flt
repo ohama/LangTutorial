@@ -1,0 +1,7 @@
+// Unbound variable error
+// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- ExitCode: 1
+// --- Input:
+x + 1
+// --- Output:
+TypeError: Unbound variable: x
