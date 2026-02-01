@@ -3,7 +3,7 @@
 ## Current Status
 
 **Milestone:** v3.0 데이터 구조
-**Status:** Phase 3 complete (2/2 plans done)
+**Status:** Phase 4 in progress (1/2 plans done)
 **Started:** 2026-02-01
 
 ```
@@ -11,7 +11,7 @@ v3.0 데이터 구조 - IN PROGRESS
 ├── Phase 1 [██████████] ● Tuples (튜플) ✓
 ├── Phase 2 [██████████] ● Lists (리스트) ✓
 ├── Phase 3 [██████████] ● Pattern Matching (패턴 매칭) ✓
-└── Phase 4 [░░░░░░░░░░] ○ Prelude (표준 라이브러리)
+└── Phase 4 [█████░░░░░] ◐ Prelude (표준 라이브러리)
 ```
 
 ---
@@ -67,18 +67,21 @@ Key decisions from previous milestones:
 | v3.0 | Leading PIPE required | F# 스타일 match 문법 |
 | v3.0 | First-match semantics | 패턴 순차 평가, 첫 매치 승리 |
 | v3.0 | Runtime Match failure | 비완전 매치는 런타임 에러 |
+| v3.0 | evalToEnv recursive accumulation | 중첩된 let-in 표현식 처리, 환경 축적 |
+| v3.0 | Self-hosted standard library | Prelude.fun in FunLang source (dogfooding) |
+| v3.0 | Graceful prelude degradation | loadPrelude returns emptyEnv on error |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 - Phase 3 complete
-**What happened:** Executed plan 03-02 (Pattern Matching Evaluation). Extended matchPattern for ConstPat, EmptyListPat, ConsPat. Implemented Match expression evaluation with evalMatchClauses helper. Created 12 integration tests. Fixed Format.fs to include MATCH/WITH/PIPE tokens. All 134 fslit + 175 Expecto tests pass.
-**What's next:** Execute Phase 4 (Prelude)
-**Stopped at:** 03-02 complete - Pattern matching fully operational
-**Resume command:** `/gsd:plan-phase` for Phase 4
+**Last session:** 2026-02-01 - Phase 4 Plan 01 complete
+**What happened:** Created Prelude infrastructure with evalToEnv and loadPrelude in Prelude.fs. Implemented 11 standard library functions in Prelude.fun (map, filter, fold, length, reverse, append, hd, tl, id, const, compose). Self-hosted stdlib approach established.
+**What's next:** Execute Phase 4 Plan 02 (integrate Prelude loading into REPL/CLI)
+**Stopped at:** 04-01 complete - Prelude infrastructure ready
+**Resume command:** `/gsd:execute-phase` for 04-02
 
 ---
 
 *Last updated: 2026-02-01*
-*Status: Phase 3 complete*
+*Status: Phase 4 in progress (1/2 plans done)*
