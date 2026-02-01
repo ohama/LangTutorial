@@ -3,13 +3,13 @@
 ## Current Status
 
 **Milestone:** v3.0 데이터 구조
-**Status:** Phase 1 complete
+**Status:** Phase 2 plan 1 complete
 **Started:** 2026-02-01
 
 ```
 v3.0 데이터 구조 - IN PROGRESS
 ├── Phase 1 [██████████] ● Tuples (튜플) ✓
-├── Phase 2 [░░░░░░░░░░] ○ Lists (리스트)
+├── Phase 2 [██░░░░░░░░] ◐ Lists (리스트) - 1/3 plans
 ├── Phase 3 [░░░░░░░░░░] ○ Pattern Matching (패턴 매칭)
 └── Phase 4 [░░░░░░░░░░] ○ Prelude (표준 라이브러리)
 ```
@@ -28,7 +28,7 @@ v3.0 데이터 구조 - IN PROGRESS
 - F# (.NET 10)
 - FsLexYacc 11.3.0 (fslex + fsyacc)
 - Argu 6.2.5 (CLI argument parsing)
-- Value type (IntValue | BoolValue | FunctionValue | StringValue)
+- Value type (IntValue | BoolValue | FunctionValue | StringValue | TupleValue | ListValue)
 - Expecto + FsCheck + fslit for testing
 - State machine pattern for complex lexing
 
@@ -58,18 +58,20 @@ Key decisions from previous milestones:
 | v2.0 | `(* *)` 주석 (ML-style) | F# 일관성, 중첩 지원 |
 | v2.0 | 주석은 Lexer에서 처리 | AST 오염 방지 |
 | v2.0 | Argu CLI | 선언적, 120 LOC 대체 |
+| v3.0 | ExprList 재사용 (리스트/튜플) | 코드 중복 제거, 일관성 |
+| v3.0 | Cons 연산자 우선순위 | 비교와 산술 사이 배치 (F# 일관성) |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 - Phase 1 executed
-**What happened:** Executed 2 plans for Phase 1 (Tuples). Added tuple literals, tuple patterns, TupleValue, pattern matching with wildcard support. All 110 fslit tests pass (100 existing + 10 new). All 175 Expecto tests pass.
-**What's next:** Plan and execute Phase 2 (Lists)
-**Stopped at:** Phase 1 complete
-**Resume command:** `/gsd:plan-phase 2`
+**Last session:** 2026-02-01 - Phase 2 plan 1 executed
+**What happened:** Executed plan 02-01 (List Infrastructure). Added List AST types (EmptyList, List, Cons), ListValue, lexer tokens (LBRACKET, RBRACKET, CONS), and parser grammar with %right CONS. All 110 fslit + 175 Expecto tests pass. Parser verified: [] → EmptyList, [1,2,3] → List, 1::2::[] → Cons (right-associative).
+**What's next:** Execute plan 02-02 (List Evaluation)
+**Stopped at:** 02-01 complete - List parsing infrastructure ready
+**Resume command:** `/gsd:execute-phase` with 02-02-PLAN.md
 
 ---
 
 *Last updated: 2026-02-01*
-*Status: Phase 1 complete*
+*Status: Phase 2 plan 1 complete*
