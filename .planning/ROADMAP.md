@@ -12,7 +12,7 @@ Implement Hindley-Milner type inference system for FunLang, enabling static type
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Type Definition** - Define type AST, schemes, and type environment
+- [x] **Phase 1: Type Definition** - Define type AST, schemes, and type environment
 - [ ] **Phase 2: Substitution** - Implement substitution operations and free variable tracking
 - [ ] **Phase 3: Unification** - Implement unification algorithm with occurs check
 - [ ] **Phase 4: Inference** - Implement Algorithm W for complete type inference
@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Create Type.fs with type definitions and formatType
+- [x] 01-01-PLAN.md — Create Type.fs with type definitions and formatType
 
 ### Phase 2: Substitution
 **Goal**: Substitution operations work correctly for types, schemes, and environments
@@ -44,10 +44,10 @@ Plans:
   2. compose function chains substitutions in correct order (s2 after s1)
   3. freeVars correctly identifies free type variables in types, schemes, and environments
   4. applyScheme respects bound variables (doesn't substitute forall variables)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- TBD
+- [ ] 02-01-PLAN.md — Implement substitution operations and free variable tracking
 
 ### Phase 3: Unification
 **Goal**: Unification algorithm finds substitutions that make types equal
@@ -123,8 +123,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Type Definition | 0/1 | Planned | - |
-| 2. Substitution | 0/TBD | Not started | - |
+| 1. Type Definition | 1/1 | Complete | 2026-02-01 |
+| 2. Substitution | 0/1 | Planned | - |
 | 3. Unification | 0/TBD | Not started | - |
 | 4. Inference | 0/TBD | Not started | - |
 | 5. Integration | 0/TBD | Not started | - |
