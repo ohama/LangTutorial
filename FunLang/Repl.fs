@@ -40,5 +40,6 @@ let startRepl () : int =
     printfn "FunLang REPL"
     printfn "Type '#quit' or Ctrl+D to quit."
     printfn ""
-    replLoop emptyEnv
+    let initialEnv = Prelude.loadPrelude()
+    replLoop initialEnv
     0

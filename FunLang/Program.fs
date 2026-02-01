@@ -23,6 +23,9 @@ let main argv =
     try
         let results = parser.Parse(argv, raiseOnUsage = false)
 
+        // Load prelude for evaluation modes
+        let initialEnv = Prelude.loadPrelude()
+
         // Check if help was requested
         if results.IsUsageRequested then
             printfn "%s" (parser.PrintUsage())
@@ -88,7 +91,7 @@ let main argv =
         elif results.Contains Expr then
             let expr = results.GetResult Expr
             try
-                let result = expr |> parse |> evalExpr
+                let result = eval initialEnv (parse expr)
                 printfn "%s" (formatValue result)
                 0
             with ex ->
@@ -100,7 +103,7 @@ let main argv =
             if File.Exists filename then
                 try
                     let input = File.ReadAllText filename
-                    let result = input |> parse |> evalExpr
+                    let result = eval initialEnv (parse input)
                     printfn "%s" (formatValue result)
                     0
                 with ex ->
