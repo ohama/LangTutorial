@@ -30,10 +30,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Scheme type supports polymorphism with forall quantification
   3. TypeEnv maps variable names to type schemes
   4. formatType displays types in readable notation ('a -> 'b, int list, etc.)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- TBD
+- [ ] 01-01-PLAN.md — Create Type.fs with type definitions and formatType
 
 ### Phase 2: Substitution
 **Goal**: Substitution operations work correctly for types, schemes, and environments
@@ -123,7 +123,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Type Definition | 0/TBD | Not started | - |
+| 1. Type Definition | 0/1 | Planned | - |
 | 2. Substitution | 0/TBD | Not started | - |
 | 3. Unification | 0/TBD | Not started | - |
 | 4. Inference | 0/TBD | Not started | - |
