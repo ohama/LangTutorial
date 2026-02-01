@@ -16,6 +16,9 @@ let rec formatValue (v: Value) : string =
     | TupleValue values ->
         let formattedElements = List.map formatValue values
         sprintf "(%s)" (String.concat ", " formattedElements)
+    | ListValue values ->
+        let formattedElements = List.map formatValue values
+        sprintf "[%s]" (String.concat ", " formattedElements)
 
 /// Match a pattern against a value, returning bindings if successful
 let rec matchPattern (pat: Pattern) (value: Value) : (string * Value) list option =
@@ -73,6 +76,20 @@ and eval (env: Env) (expr: Expr) : Value =
             | _ ->
                 failwith "Pattern match failed"
 
+    // Phase 2 (v3.0): Lists
+    | EmptyList ->
+        ListValue []
+
+    | List exprs ->
+        let values = List.map (eval env) exprs
+        ListValue values
+
+    | Cons (headExpr, tailExpr) ->
+        let headVal = eval env headExpr
+        match eval env tailExpr with
+        | ListValue tailVals -> ListValue (headVal :: tailVals)
+        | _ -> failwith "Type error: cons (::) requires list as second argument"
+
     // Arithmetic operations - type check for IntValue
     | Add (left, right) ->
         match eval env left, eval env right with
@@ -128,6 +145,7 @@ and eval (env: Env) (expr: Expr) : Value =
         | BoolValue l, BoolValue r -> BoolValue (l = r)
         | StringValue l, StringValue r -> BoolValue (l = r)
         | TupleValue l, TupleValue r -> BoolValue (l = r)  // Structural equality
+        | ListValue l, ListValue r -> BoolValue (l = r)
         | _ -> failwith "Type error: = requires operands of same type"
 
     | NotEqual (left, right) ->
@@ -136,6 +154,7 @@ and eval (env: Env) (expr: Expr) : Value =
         | BoolValue l, BoolValue r -> BoolValue (l <> r)
         | StringValue l, StringValue r -> BoolValue (l <> r)
         | TupleValue l, TupleValue r -> BoolValue (l <> r)  // Structural inequality
+        | ListValue l, ListValue r -> BoolValue (l <> r)
         | _ -> failwith "Type error: <> requires operands of same type"
 
     // Logical operators - short-circuit evaluation
