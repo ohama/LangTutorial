@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-01)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
-**Current focus:** Phase 3 - Unification
+**Current focus:** Phase 3 - Unification (complete)
 
 ## Current Position
 
 Phase: 3 of 6 (Unification)
-Plan: Ready to plan
-Status: Phase 2 complete, ready for Phase 3
-Last activity: 2026-02-01 - Completed Phase 2 Substitution
+Plan: 1 of 1 (complete)
+Status: Phase 3 complete
+Last activity: 2026-02-01 - Completed 03-01-PLAN.md (Unification)
 
-Progress: [████░░░░░░] 33%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: 1.5 min
-- Total execution time: 0.05 hours
+- Total execution time: 0.075 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [████░░░░░░] 33%
 |-------|-------|-------|----------|
 | 01-type-definition | 1 | 2 min | 2 min |
 | 02-substitution | 1 | 1 min | 1 min |
+| 03-unification | 1 | 1.5 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 02-01 (1 min)
-- Trend: Improving velocity
+- Last 5 plans: 01-01 (2 min), 02-01 (1 min), 03-01 (1.5 min)
+- Trend: Stable velocity
 
 ## Accumulated Context
 
@@ -48,6 +49,8 @@ Recent decisions affecting current work:
 - 01-01: Arrow parenthesization: left operand only if also TArrow (right-associative)
 - 02-01: apply recursively calls itself when TVar maps to another type (transitive chains)
 - 02-01: compose s2 s1 = s2 after s1 (apply s2 to s1 values, merge s2 bindings)
+- 03-01: Symmetric TVar pattern `| TVar n, t | t, TVar n ->` handles both orderings
+- 03-01: Substitution threading: apply s1 before recursive unify call
 
 ### Pending Todos
 
@@ -59,7 +62,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T10:07:00Z
-Stopped at: Completed 02-01-PLAN.md (Substitution Operations)
+Last session: 2026-02-01T10:30:39Z
+Stopped at: Completed 03-01-PLAN.md (Unification)
 Resume file: None
-Next: Run `/gsd:plan-phase 3` to start Phase 3 (Unification) planning, or `/gsd:discuss-phase 3` to clarify approach first
+Next: Run `/gsd:plan-phase 4` to start Phase 4 (Inference) planning
