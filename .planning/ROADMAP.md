@@ -132,8 +132,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Prelude infrastructure and standard library source
-- [ ] 04-02-PLAN.md — Integration into REPL/CLI and tests
+- [x] 04-01-PLAN.md — Prelude infrastructure and standard library source
+- [x] 04-02-PLAN.md — Integration into REPL/CLI and tests
 
 ---
 
