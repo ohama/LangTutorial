@@ -195,8 +195,45 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         let s3 = unify tailTy (TList (apply s2 headTy))
         (compose s3 (compose s2 s1), apply s3 tailTy)
 
-    // Placeholder for remaining cases (will be implemented in later plans)
-    | _ -> failwith "Not yet implemented"
+    // === Match expression (INFER-13) ===
+    | Match (scrutinee, clauses) ->
+        let s1, scrutTy = infer env scrutinee
+        let resultTy = freshVar()
+        let folder s (pat, expr) =
+            let patEnv, patTy = inferPattern pat
+            // Unify scrutinee with pattern type
+            let s' = unify (apply s scrutTy) patTy
+            // Merge pattern env with current env (after applying substitution)
+            let clauseEnv = Map.fold (fun acc k v -> Map.add k v acc)
+                                     (applyEnv s' (applyEnv s env)) patEnv
+            // Infer clause body
+            let s'', exprTy = infer clauseEnv expr
+            // Unify with result type
+            let s''' = unify (apply s'' resultTy) exprTy
+            compose s''' (compose s'' (compose s' s))
+        let finalS = List.fold folder s1 clauses
+        (finalS, apply finalS resultTy)
+
+    // === LetPat (INFER-14) ===
+    | LetPat (pat, value, body) ->
+        // Infer value type
+        let s1, valueTy = infer env value
+        // Get pattern bindings and type
+        let patEnv, patTy = inferPattern pat
+        // Unify value type with pattern type
+        let s2 = unify (apply s1 valueTy) patTy
+        let s = compose s2 s1
+        // Apply substitution and generalize each binding
+        let env' = applyEnv s env
+        let generalizedPatEnv =
+            patEnv
+            |> Map.map (fun _ (Scheme (_, ty)) ->
+                let ty' = apply s ty
+                generalize env' ty')
+        // Merge into environment
+        let bodyEnv = Map.fold (fun acc k v -> Map.add k v acc) env' generalizedPatEnv
+        let s3, bodyTy = infer bodyEnv body
+        (compose s3 s, bodyTy)
 
 /// Helper: infer binary operator with expected operand and result types
 and inferBinaryOp env e1 e2 leftTy rightTy resultTy =
