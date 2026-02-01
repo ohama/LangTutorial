@@ -2,6 +2,9 @@
 module Parser
 type token = 
   | EOF
+  | LBRACKET
+  | RBRACKET
+  | CONS
   | UNDERSCORE
   | COMMA
   | FUN
@@ -33,6 +36,9 @@ type token =
   | NUMBER of (int)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_LBRACKET
+    | TOKEN_RBRACKET
+    | TOKEN_CONS
     | TOKEN_UNDERSCORE
     | TOKEN_COMMA
     | TOKEN_FUN
