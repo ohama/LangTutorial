@@ -1,7 +1,7 @@
 # FunLang File-Based Tests
 # Run: make -C tests
 
-.PHONY: all test cli emit-tokens emit-ast file-input variables control functions comments strings repl tuples lists build check clean
+.PHONY: all test cli emit-tokens emit-ast file-input variables control functions comments strings repl tuples lists pattern-matching build check clean
 
 # Default: run all tests
 all: test
@@ -46,6 +46,9 @@ tuples:
 
 lists:
 	@cd .. && fslit tests/lists/
+
+pattern-matching:
+	@cd .. && fslit tests/pattern-matching/
 
 # Build before testing
 build:

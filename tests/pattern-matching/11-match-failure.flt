@@ -1,0 +1,7 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match 5 with
+| 1 -> "one"
+| 2 -> "two"
+// --- Expected-Error:
+Match failure

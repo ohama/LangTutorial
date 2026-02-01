@@ -1,0 +1,7 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match [] with
+| [] -> "empty"
+| _ -> "not empty"
+// --- Output:
+"empty"

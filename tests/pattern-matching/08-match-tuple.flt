@@ -1,0 +1,6 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match (1, 2) with
+| (x, y) -> x + y
+// --- Output:
+3

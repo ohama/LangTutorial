@@ -45,6 +45,10 @@ let formatToken (token: Parser.token) : string =
     | Parser.LBRACKET -> "LBRACKET"
     | Parser.RBRACKET -> "RBRACKET"
     | Parser.CONS -> "CONS"
+    // Phase 3 (v3.0): Match tokens
+    | Parser.MATCH -> "MATCH"
+    | Parser.WITH -> "WITH"
+    | Parser.PIPE -> "PIPE"
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string

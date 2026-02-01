@@ -1,0 +1,7 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match true with
+| true -> 1
+| false -> 0
+// --- Output:
+1

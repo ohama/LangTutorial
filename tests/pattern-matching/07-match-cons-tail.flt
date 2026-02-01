@@ -1,0 +1,6 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match [1, 2, 3] with
+| h :: t -> t
+// --- Output:
+[2, 3]

@@ -1,0 +1,6 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match 5 with
+| x -> x * 2
+// --- Output:
+10

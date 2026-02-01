@@ -1,0 +1,9 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let rec sum xs =
+    match xs with
+    | [] -> 0
+    | h :: t -> h + sum t
+in sum [1, 2, 3, 4, 5]
+// --- Output:
+15

@@ -1,0 +1,8 @@
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+match 1 with
+| 1 -> "one"
+| 2 -> "two"
+| _ -> "other"
+// --- Output:
+"one"
