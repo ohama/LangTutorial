@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Type Definition** - Define type AST, schemes, and type environment
 - [x] **Phase 2: Substitution** - Implement substitution operations and free variable tracking
 - [x] **Phase 3: Unification** - Implement unification algorithm with occurs check
-- [ ] **Phase 4: Inference** - Implement Algorithm W for complete type inference
+- [x] **Phase 4: Inference** - Implement Algorithm W for complete type inference
 - [ ] **Phase 5: Integration** - Integrate with CLI and define Prelude types
 - [ ] **Phase 6: Testing** - Comprehensive test coverage for type system
 
@@ -82,11 +82,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Core functions (freshVar, instantiate, generalize)
-- [ ] 04-02-PLAN.md — Basic inference (literals, operators, variables)
-- [ ] 04-03-PLAN.md — Binding inference (Let, Lambda, App, LetRec)
-- [ ] 04-04-PLAN.md — Data inference (If, Tuple, List, EmptyList, Cons)
-- [ ] 04-05-PLAN.md — Pattern inference (Match, LetPat, inferPattern)
+- [x] 04-01-PLAN.md — Core functions (freshVar, instantiate, generalize)
+- [x] 04-02-PLAN.md — Basic inference (literals, operators, variables)
+- [x] 04-03-PLAN.md — Binding inference (Let, Lambda, App, LetRec)
+- [x] 04-04-PLAN.md — Data inference (If, Tuple, List, EmptyList, Cons)
+- [x] 04-05-PLAN.md — Pattern inference (Match, LetPat, inferPattern)
 
 ### Phase 5: Integration
 **Goal**: Type system integrated with CLI and Prelude functions typed
@@ -130,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Type Definition | 1/1 | Complete | 2026-02-01 |
 | 2. Substitution | 1/1 | Complete | 2026-02-01 |
 | 3. Unification | 1/1 | Complete | 2026-02-01 |
-| 4. Inference | 0/5 | Not started | - |
+| 4. Inference | 5/5 | Complete | 2026-02-01 |
 | 5. Integration | 0/TBD | Not started | - |
 | 6. Testing | 0/TBD | Not started | - |
 
