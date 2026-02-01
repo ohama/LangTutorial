@@ -3,15 +3,15 @@
 ## Current Status
 
 **Milestone:** v3.0 데이터 구조
-**Status:** Phase 4 in progress (1/2 plans done)
+**Status:** Phase 4 complete (2/2 plans done) - **MILESTONE COMPLETE**
 **Started:** 2026-02-01
 
 ```
-v3.0 데이터 구조 - IN PROGRESS
+v3.0 데이터 구조 - COMPLETE
 ├── Phase 1 [██████████] ● Tuples (튜플) ✓
 ├── Phase 2 [██████████] ● Lists (리스트) ✓
 ├── Phase 3 [██████████] ● Pattern Matching (패턴 매칭) ✓
-└── Phase 4 [█████░░░░░] ◐ Prelude (표준 라이브러리)
+└── Phase 4 [██████████] ● Prelude (표준 라이브러리) ✓
 ```
 
 ---
@@ -40,6 +40,7 @@ v3.0 데이터 구조 - IN PROGRESS
 |-----------|---------|--------|-----------------|
 | v1.0 MVP | 2026-01-31 | 1-5, 7 | Turing-complete 언어 |
 | v2.0 실용성 | 2026-02-01 | 1-3 | REPL, 문자열, 주석 |
+| v3.0 데이터 구조 | 2026-02-01 | 1-4 | Tuples, Lists, Pattern Matching, Prelude |
 
 **Archives:** `.planning/milestones/`
 
@@ -70,18 +71,20 @@ Key decisions from previous milestones:
 | v3.0 | evalToEnv recursive accumulation | 중첩된 let-in 표현식 처리, 환경 축적 |
 | v3.0 | Self-hosted standard library | Prelude.fun in FunLang source (dogfooding) |
 | v3.0 | Graceful prelude degradation | loadPrelude returns emptyEnv on error |
+| v3.0 | Prelude auto-loads on startup | REPL and CLI initialize with prelude environment |
+| v3.0 | let rec grammar syntax | `let rec name param = body` not `let rec name = fun param -> body` |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 - Phase 4 Plan 01 complete
-**What happened:** Created Prelude infrastructure with evalToEnv and loadPrelude in Prelude.fs. Implemented 11 standard library functions in Prelude.fun (map, filter, fold, length, reverse, append, hd, tl, id, const, compose). Self-hosted stdlib approach established.
-**What's next:** Execute Phase 4 Plan 02 (integrate Prelude loading into REPL/CLI)
-**Stopped at:** 04-01 complete - Prelude infrastructure ready
-**Resume command:** `/gsd:execute-phase` for 04-02
+**Last session:** 2026-02-01 - Phase 4 complete (v3.0 milestone complete)
+**What happened:** Integrated prelude loading into REPL and CLI. Fixed Prelude.fun syntax to match parser grammar. Added 24 fslit integration tests for all prelude functions. All success criteria verified.
+**What's next:** Plan next milestone (v4.0 or other features)
+**Stopped at:** v3.0 데이터 구조 milestone complete
+**Resume command:** Plan next milestone
 
 ---
 
 *Last updated: 2026-02-01*
-*Status: Phase 4 in progress (1/2 plans done)*
+*Status: v3.0 milestone complete*
