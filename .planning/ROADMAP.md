@@ -66,6 +66,12 @@ Plans:
 
 **Dependencies:** None (Phase 1과 독립적으로 구현 가능)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — AST, Lexer, Parser infrastructure for list syntax
+- [ ] 02-02-PLAN.md — Evaluation, formatting, integration tests
+
 ---
 
 ### Phase 3: Pattern Matching (패턴 매칭)
