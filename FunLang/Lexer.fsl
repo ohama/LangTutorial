@@ -32,6 +32,9 @@ rule tokenize = parse
     // Phase 5: Function keywords
     | "fun"         { FUN }
     | "rec"         { REC }
+    // Phase 3 (v3.0): Pattern matching keywords
+    | "match"       { MATCH }
+    | "with"        { WITH }
     // Phase 1 (v3.0): Wildcard pattern (must come before identifier)
     | '_'           { UNDERSCORE }
     // Identifier: starts with letter or underscore (but _ alone is UNDERSCORE)
@@ -65,6 +68,8 @@ rule tokenize = parse
     // Phase 2 (v3.0): List brackets
     | '['           { LBRACKET }
     | ']'           { RBRACKET }
+    // Phase 3 (v3.0): Pipe for match clauses
+    | '|'           { PIPE }
     | eof           { EOF }                       // End of input
 
 // Block comment handler with nesting support
