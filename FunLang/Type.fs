@@ -32,3 +32,44 @@ let rec formatType = function
         sprintf "%s -> %s" left (formatType t2)
     | TTuple ts -> ts |> List.map formatType |> String.concat " * "
     | TList t -> sprintf "%s list" (formatType t)
+
+// ============================================================================
+// Substitution Operations
+// ============================================================================
+
+/// Empty substitution
+let empty: Subst = Map.empty
+
+/// Create a single variable substitution
+let singleton (v: int) (t: Type): Subst = Map.ofList [(v, t)]
+
+/// Apply substitution to type
+/// CRITICAL: TVar case recursively applies for transitive chains
+/// Example: {0 -> TVar 1, 1 -> TInt} applied to TVar 0 -> TInt
+let rec apply (s: Subst) = function
+    | TInt -> TInt
+    | TBool -> TBool
+    | TString -> TString
+    | TVar n ->
+        match Map.tryFind n s with
+        | Some t -> apply s t  // Recursive for transitive substitution
+        | None -> TVar n
+    | TArrow (t1, t2) -> TArrow (apply s t1, apply s t2)
+    | TTuple ts -> TTuple (List.map (apply s) ts)
+    | TList t -> TList (apply s t)
+
+/// Compose two substitutions: s2 after s1 (like function composition)
+/// Apply s2 to all values in s1, then merge s2 bindings
+let compose (s2: Subst) (s1: Subst): Subst =
+    let s1' = Map.map (fun _ t -> apply s2 t) s1
+    Map.fold (fun acc k v -> Map.add k v acc) s1' s2
+
+/// Apply substitution to scheme
+/// CRITICAL: Remove bound vars from substitution before applying
+let applyScheme (s: Subst) (Scheme (vars, ty)): Scheme =
+    let s' = List.fold (fun acc v -> Map.remove v acc) s vars
+    Scheme (vars, apply s' ty)
+
+/// Apply substitution to all schemes in environment
+let applyEnv (s: Subst) (env: TypeEnv): TypeEnv =
+    Map.map (fun _ scheme -> applyScheme s scheme) env
