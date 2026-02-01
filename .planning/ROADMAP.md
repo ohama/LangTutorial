@@ -98,10 +98,10 @@ Plans:
   3. --emit-type CLI option displays inferred type
   4. Programs with type errors exit with code 1 and clear error message
   5. Type checking happens before evaluation by default
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- TBD
+- [ ] 05-01-PLAN.md — Create TypeCheck.fs and integrate with CLI
 
 ### Phase 6: Testing
 **Goal**: Comprehensive test coverage validates type system correctness
@@ -131,7 +131,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Substitution | 1/1 | Complete | 2026-02-01 |
 | 3. Unification | 1/1 | Complete | 2026-02-01 |
 | 4. Inference | 5/5 | Complete | 2026-02-01 |
-| 5. Integration | 0/TBD | Not started | - |
+| 5. Integration | 0/1 | Planned | - |
 | 6. Testing | 0/TBD | Not started | - |
 
 ---
