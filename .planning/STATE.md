@@ -5,33 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-02-01)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
-**Current focus:** Phase 1 - Type Definition
+**Current focus:** Phase 2 - Substitution
 
 ## Current Position
 
-Phase: 1 of 6 (Type Definition)
+Phase: 2 of 6 (Substitution)
 Plan: 1 of 1 complete
-Status: Phase 1 complete
-Last activity: 2026-02-01 - Completed 01-01-PLAN.md (Type Definition)
+Status: Phase 2 complete
+Last activity: 2026-02-01 - Completed 02-01-PLAN.md (Substitution Operations)
 
-Progress: [██░░░░░░░░] 17%
+Progress: [████░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: 0.03 hours
+- Total plans completed: 2
+- Average duration: 1.5 min
+- Total execution time: 0.05 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-type-definition | 1 | 2 min | 2 min |
+| 02-substitution | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min)
-- Trend: Initial plan
+- Last 5 plans: 01-01 (2 min), 02-01 (1 min)
+- Trend: Improving velocity
 
 ## Accumulated Context
 
@@ -45,6 +46,8 @@ Recent decisions affecting current work:
 - 01-01: Use int for type variables (TVar of int) for simplicity in substitution
 - 01-01: formatType uses modulo 26 for letter cycling ('a through 'z)
 - 01-01: Arrow parenthesization: left operand only if also TArrow (right-associative)
+- 02-01: apply recursively calls itself when TVar maps to another type (transitive chains)
+- 02-01: compose s2 s1 = s2 after s1 (apply s2 to s1 values, merge s2 bindings)
 
 ### Pending Todos
 
@@ -56,7 +59,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T09:52:00Z
-Stopped at: Completed 01-01-PLAN.md (Type Definition)
+Last session: 2026-02-01T10:07:00Z
+Stopped at: Completed 02-01-PLAN.md (Substitution Operations)
 Resume file: None
-Next: Run `/gsd:plan-phase 2` to start Phase 2 (Substitution) planning
+Next: Run `/gsd:plan-phase 3` to start Phase 3 (Unification) planning
