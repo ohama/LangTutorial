@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 4 of 6 (Inference)
-Plan: 2 of 5 complete
+Plan: 3 of 5 complete
 Status: In progress
-Last activity: 2026-02-01 - Completed 04-02-PLAN.md (Infer Function)
+Last activity: 2026-02-01 - Completed 04-03-PLAN.md (Lambda/App/Let/LetRec)
 
 Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 1.6 min
-- Total execution time: 0.1 hours
+- Total plans completed: 6
+- Average duration: 1.5 min
+- Total execution time: 0.15 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [██████░░░░] 60%
 | 01-type-definition | 1 | 2 min | 2 min |
 | 02-substitution | 1 | 1 min | 1 min |
 | 03-unification | 1 | 1.5 min | 1.5 min |
-| 04-inference | 2 | 3.7 min | 1.85 min |
+| 04-inference | 3 | 4.7 min | 1.57 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (1 min), 03-01 (1.5 min), 04-01 (2 min), 04-02 (1.7 min)
+- Last 5 plans: 03-01 (1.5 min), 04-01 (2 min), 04-02 (1.7 min), 04-03 (1 min)
 - Trend: Stable velocity
 
 ## Accumulated Context
@@ -58,6 +58,9 @@ Recent decisions affecting current work:
 - 04-02: inferBinaryOp helper abstracts common binary operator pattern
 - 04-02: Substitution threading: applyEnv s1 env before second operand
 - 04-02: Comparison operators typed as int -> int -> bool (not polymorphic)
+- 04-03: Lambda params monomorphic (Scheme([], paramTy) binding)
+- 04-03: Let-polymorphism: generalize AFTER infer, applyEnv before generalize
+- 04-03: LetRec: pre-bind function name with fresh type for recursive calls
 
 ### Pending Todos
 
@@ -69,7 +72,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T10:57:48Z
-Stopped at: Completed 04-02-PLAN.md (Infer Function)
+Last session: 2026-02-01T11:01:24Z
+Stopped at: Completed 04-03-PLAN.md (Lambda/App/Let/LetRec)
 Resume file: None
-Next: Execute 04-03-PLAN.md (If/Let expressions) or continue with remaining Phase 4 plans
+Next: Execute 04-04-PLAN.md (If expression) or 04-05-PLAN.md (Tuple/List)
