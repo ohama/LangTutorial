@@ -4,8 +4,9 @@ open Type
 open Unify
 
 /// Generate fresh type variable (unique ID via mutable counter)
+/// Start at 1000 to avoid collision with scheme bound variable indices
 let freshVar =
-    let counter = ref 0
+    let counter = ref 1000
     fun () ->
         let n = !counter
         counter := n + 1
