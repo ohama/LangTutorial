@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 4 of 6 (Inference)
-Plan: 1 of 3 complete
+Plan: 2 of 5 complete
 Status: In progress
-Last activity: 2026-02-01 - Completed 04-01-PLAN.md (Core Inference Helpers)
+Last activity: 2026-02-01 - Completed 04-02-PLAN.md (Infer Function)
 
-Progress: [██████░░░░] 57%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 1.6 min
 - Total execution time: 0.1 hours
 
@@ -30,10 +30,10 @@ Progress: [██████░░░░] 57%
 | 01-type-definition | 1 | 2 min | 2 min |
 | 02-substitution | 1 | 1 min | 1 min |
 | 03-unification | 1 | 1.5 min | 1.5 min |
-| 04-inference | 1 | 2 min | 2 min |
+| 04-inference | 2 | 3.7 min | 1.85 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 02-01 (1 min), 03-01 (1.5 min), 04-01 (2 min)
+- Last 5 plans: 02-01 (1 min), 03-01 (1.5 min), 04-01 (2 min), 04-02 (1.7 min)
 - Trend: Stable velocity
 
 ## Accumulated Context
@@ -55,6 +55,9 @@ Recent decisions affecting current work:
 - 04-01: freshVar uses ref cell for mutable counter (standard F# pattern)
 - 04-01: instantiate short-circuits for monomorphic schemes (vars=[])
 - 04-01: generalize uses Set.difference (tyFree - envFree)
+- 04-02: inferBinaryOp helper abstracts common binary operator pattern
+- 04-02: Substitution threading: applyEnv s1 env before second operand
+- 04-02: Comparison operators typed as int -> int -> bool (not polymorphic)
 
 ### Pending Todos
 
@@ -66,7 +69,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T10:53:59Z
-Stopped at: Completed 04-01-PLAN.md (Core Inference Helpers)
+Last session: 2026-02-01T10:57:48Z
+Stopped at: Completed 04-02-PLAN.md (Infer Function)
 Resume file: None
-Next: Execute 04-02-PLAN.md (Infer Function) or continue with remaining Phase 4 plans
+Next: Execute 04-03-PLAN.md (If/Let expressions) or continue with remaining Phase 4 plans
