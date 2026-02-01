@@ -38,6 +38,13 @@ let formatToken (token: Parser.token) : string =
     | Parser.ARROW -> "ARROW"
     // Phase 2 (v2.0): String token
     | Parser.STRING s -> sprintf "STRING(%s)" s
+    // Phase 1 (v3.0): Tuple tokens
+    | Parser.COMMA -> "COMMA"
+    | Parser.UNDERSCORE -> "UNDERSCORE"
+    // Phase 2 (v3.0): List tokens
+    | Parser.LBRACKET -> "LBRACKET"
+    | Parser.RBRACKET -> "RBRACKET"
+    | Parser.CONS -> "CONS"
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string
