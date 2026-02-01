@@ -69,6 +69,33 @@ let rec infer (env: TypeEnv) (expr: Expr): Subst * Type =
     | And (e1, e2) | Or (e1, e2) ->
         inferBinaryOp env e1 e2 TBool TBool TBool
 
+    // === Lambda (INFER-08) ===
+    | Lambda (param, body) ->
+        let paramTy = freshVar()
+        let bodyEnv = Map.add param (Scheme ([], paramTy)) env
+        let s, bodyTy = infer bodyEnv body
+        (s, TArrow (apply s paramTy, bodyTy))
+
+    // === Application (INFER-08) ===
+    | App (func, arg) ->
+        let s1, funcTy = infer env func
+        let s2, argTy = infer (applyEnv s1 env) arg
+        let resultTy = freshVar()
+        let s3 = unify (apply s2 funcTy) (TArrow (argTy, resultTy))
+        (compose s3 (compose s2 s1), apply s3 resultTy)
+
+    // === If expression (INFER-10) ===
+    | If (cond, thenExpr, elseExpr) ->
+        let s1, condTy = infer env cond
+        let s2, thenTy = infer (applyEnv s1 env) thenExpr
+        let s3, elseTy = infer (applyEnv (compose s2 s1) env) elseExpr
+        // Condition must be bool
+        let s4 = unify (apply (compose s3 (compose s2 s1)) condTy) TBool
+        // Branches must have same type
+        let s5 = unify (apply s4 thenTy) (apply s4 elseTy)
+        let finalSubst = compose s5 (compose s4 (compose s3 (compose s2 s1)))
+        (finalSubst, apply s5 thenTy)
+
     // Placeholder for remaining cases (will be implemented in later plans)
     | _ -> failwith "Not yet implemented"
 
