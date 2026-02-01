@@ -3,14 +3,14 @@
 ## Current Status
 
 **Milestone:** v3.0 데이터 구조
-**Status:** Phase 2 complete
+**Status:** Phase 3 in progress (plan 1/2 complete)
 **Started:** 2026-02-01
 
 ```
 v3.0 데이터 구조 - IN PROGRESS
 ├── Phase 1 [██████████] ● Tuples (튜플) ✓
 ├── Phase 2 [██████████] ● Lists (리스트) ✓
-├── Phase 3 [░░░░░░░░░░] ○ Pattern Matching (패턴 매칭)
+├── Phase 3 [█████░░░░░] ◐ Pattern Matching (패턴 매칭) - Plan 1 complete
 └── Phase 4 [░░░░░░░░░░] ○ Prelude (표준 라이브러리)
 ```
 
@@ -62,18 +62,21 @@ Key decisions from previous milestones:
 | v3.0 | Cons 연산자 우선순위 | 비교와 산술 사이 배치 (F# 일관성) |
 | v3.0 | F# 구조적 동등성 사용 (리스트) | 커스텀 동등성 함수 불필요, 튜플 패턴 따름 |
 | v3.0 | 리스트 포매팅 [1, 2, 3] | F# 스타일 일관성 |
+| v3.0 | MatchClause as tuple | Pattern * Expr - 간단하고 충분 |
+| v3.0 | Constant type for patterns | 향후 문자열 패턴 확장 가능 |
+| v3.0 | Leading PIPE required | F# 스타일 match 문법 |
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 - Phase 2 plan 2 executed
-**What happened:** Executed plan 02-02 (List Evaluation). Added list evaluation logic (EmptyList, List, Cons cases) to Eval.fs, list formatting for REPL ([1, 2, 3]), and structural equality. Created 12 comprehensive fslit integration tests in tests/lists/. All 122 fslit + 175 Expecto tests pass. All 5 success criteria met.
-**What's next:** Execute plan 02-03 (List Pattern Matching)
-**Stopped at:** 02-02 complete - List evaluation and testing complete
-**Resume command:** `/gsd:execute-phase` with 02-03-PLAN.md
+**Last session:** 2026-02-01 - Phase 3 plan 1 executed
+**What happened:** Executed plan 03-01 (Match Expression Syntax). Extended AST with Match expression and new pattern types (ConsPat, EmptyListPat, ConstPat). Added MATCH, WITH, PIPE tokens to Lexer. Added match expression grammar to Parser. All 122 fslit + 175 Expecto tests pass.
+**What's next:** Execute plan 03-02 (Pattern Matching Evaluation)
+**Stopped at:** 03-01 complete - Match expression syntax complete
+**Resume command:** `/gsd:execute-phase` with 03-02-PLAN.md
 
 ---
 
 *Last updated: 2026-02-01*
-*Status: Phase 2 plan 2 complete*
+*Status: Phase 3 plan 1 complete*
