@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 5 of 6 (Integration)
-Plan: Ready to plan
-Status: Phase 4 complete, ready for Phase 5
-Last activity: 2026-02-01 - Completed Phase 4 Inference (verified)
+Plan: 1 of 1 in phase
+Status: Phase 5 Plan 1 complete
+Last activity: 2026-02-01 - Completed 05-01-PLAN.md
 
-Progress: [███████░░░] 67%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 1.56 min
-- Total execution time: 0.21 hours
+- Total plans completed: 9
+- Average duration: 1.63 min
+- Total execution time: 0.24 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [███████░░░] 67%
 | 02-substitution | 1 | 1 min | 1 min |
 | 03-unification | 1 | 1.5 min | 1.5 min |
 | 04-inference | 5 | 8.7 min | 1.74 min |
+| 05-integration | 1 | 3.4 min | 3.4 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (1.7 min), 04-03 (1 min), 04-04 (2 min), 04-05 (2 min)
-- Trend: Stable velocity
+- Last 5 plans: 04-03 (1 min), 04-04 (2 min), 04-05 (2 min), 05-01 (3.4 min)
+- Trend: Slight increase (integration tasks)
 
 ## Accumulated Context
 
@@ -68,6 +69,9 @@ Recent decisions affecting current work:
 - 04-05: Match uses fold over clauses accumulating substitutions
 - 04-05: LetPat generalizes each pattern binding separately
 - 04-05: ConsPat returns TList of head type (tail unification in Match)
+- 05-01: Type variables 0-9 reserved for Prelude schemes (freshVar starts at 1000)
+- 05-01: Type checking runs before evaluation by default (catch errors early)
+- 05-01: --emit-type displays inferred types without evaluation
 
 ### Pending Todos
 
@@ -79,7 +83,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-01T12:00:00Z
-Stopped at: Completed Phase 4 Inference (all 15 requirements verified)
+Last session: 2026-02-01T12:02:40Z
+Stopped at: Completed 05-01-PLAN.md (CLI Type Inference Integration)
 Resume file: None
-Next: Run `/gsd:plan-phase 5` to plan Phase 5 (Integration), or `/gsd:discuss-phase 5` to clarify approach first
+Next: Phase 5 complete - ready for Phase 6 (Documentation) or project completion verification
