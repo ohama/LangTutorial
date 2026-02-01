@@ -121,7 +121,9 @@ LangTutorial/
 │   ├── chapter-08-pattern-matching.md
 │   ├── chapter-09-prelude.md
 │   └── appendix-01-testing.md
-└── docs/howto/           # 개발 지식 문서 (17개)
+├── docs/
+│   ├── grammar.md        # 언어 문법 명세 (BNF)
+│   └── howto/            # 개발 지식 문서 (17개)
 ```
 
 ## 기술 스택
@@ -147,6 +149,7 @@ git checkout tutorial-v3.0  # v3.0: Tuples, Lists, Pattern Matching, Prelude
 
 ## 문서
 
+- **[docs/grammar.md](docs/grammar.md)** — FunLang 문법 명세 (BNF)
 - **tutorial/** — 단계별 튜토리얼 (9 chapters + 1 appendix)
 - **docs/howto/** — 개발 지식 문서 (17개)
   - fsyacc 파서 작성, 연산자 우선순위
