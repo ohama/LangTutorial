@@ -115,10 +115,12 @@ Plans:
   5. TypeCheck integration tests verify end-to-end type checking
   6. fslit CLI tests verify --emit-type flag output
   7. Type error tests verify clear error messages for common mistakes
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- TBD
+- [ ] 06-01-PLAN.md — Type and Unify module unit tests (TEST-01, TEST-02, TEST-03)
+- [ ] 06-02-PLAN.md — Infer and TypeCheck unit tests (TEST-04, TEST-05)
+- [ ] 06-03-PLAN.md — fslit CLI tests for --emit-type and type errors (TEST-06, TEST-07)
 
 ## Progress
 
@@ -132,7 +134,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Unification | 1/1 | Complete | 2026-02-01 |
 | 4. Inference | 5/5 | Complete | 2026-02-01 |
 | 5. Integration | 1/1 | Complete | 2026-02-01 |
-| 6. Testing | 0/TBD | Not started | - |
+| 6. Testing | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-01*
