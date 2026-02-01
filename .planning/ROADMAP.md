@@ -97,6 +97,12 @@ Plans:
 
 **Dependencies:** Phase 1 (튜플 패턴), Phase 2 (리스트/cons 패턴)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — AST, Lexer, Parser for match expression and pattern types
+- [ ] 03-02-PLAN.md — Evaluation, integration tests, verification
+
 ---
 
 ### Phase 4: Prelude (표준 라이브러리)
