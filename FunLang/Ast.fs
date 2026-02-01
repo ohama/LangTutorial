@@ -38,6 +38,10 @@ type Expr =
     // Phase 1 (v3.0): Tuples
     | Tuple of Expr list               // Tuple expression: (e1, e2, ...)
     | LetPat of Pattern * Expr * Expr  // Let with pattern binding: let pat = expr in body
+    // Phase 2 (v3.0): Lists
+    | EmptyList                        // Empty list: []
+    | List of Expr list                // List literal: [e1, e2, ...]
+    | Cons of Expr * Expr              // Cons operator: h :: t
 
 /// Pattern for destructuring bindings
 /// Phase 1 (v3.0): Tuple patterns
@@ -55,6 +59,7 @@ and Value =
     | FunctionValue of param: string * body: Expr * closure: Env
     | StringValue of string   // v2.0: String values
     | TupleValue of Value list  // v3.0: Tuple values
+    | ListValue of Value list  // v3.0: List values
 
 /// Environment mapping variable names to values
 /// Phase 5: Defined here for mutual recursion with Value
