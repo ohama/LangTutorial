@@ -1,5 +1,32 @@
 # Project Milestones: LangTutorial
 
+## v3.0 데이터 구조 (Shipped: 2026-02-01)
+
+**Delivered:** 튜플, 리스트, 패턴 매칭, 자체 호스팅 표준 라이브러리를 추가하여 FunLang을 실용적인 함수형 언어로 발전
+
+**Phases completed:** 1-4 (8 plans total)
+
+**Key accomplishments:**
+
+- Tuples — 고정 크기 이종 데이터 컬렉션, 패턴 분해 `let (x, y) = pair`
+- Lists — 가변 길이 컬렉션, cons 연산자 `::`, syntactic sugar `[1, 2, 3]`
+- Pattern Matching — match 표현식, 7가지 패턴 타입, first-match 의미론
+- Self-hosted Prelude — FunLang으로 작성된 11개 표준 라이브러리 함수 (map, filter, fold 등)
+- 333 total tests — 158 fslit + 175 Expecto
+
+**Stats:**
+
+- 2,325 lines of F#
+- 4 phases, 8 plans, 25 requirements
+- 2 days (2026-01-31 → 2026-02-01)
+- ~62 commits
+
+**Git range:** `4ad83d7` → `aa05225`
+
+**What's next:** v4.0 (ADT, TCO, 예외 처리) 또는 프로젝트 완료
+
+---
+
 ## v2.0 실용성 강화 (Shipped: 2026-02-01)
 
 **Delivered:** 주석, 문자열 타입, 대화형 REPL을 추가하여 FunLang의 실용성 강화
