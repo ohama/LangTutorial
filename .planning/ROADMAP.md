@@ -129,6 +129,12 @@ Plans:
 
 **Dependencies:** Phase 2 (리스트), Phase 3 (패턴 매칭)
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Prelude infrastructure and standard library source
+- [ ] 04-02-PLAN.md — Integration into REPL/CLI and tests
+
 ---
 
 ## Dependency Graph
