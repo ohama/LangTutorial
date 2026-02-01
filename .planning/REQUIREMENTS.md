@@ -99,10 +99,10 @@ Requirements for v4.0 타입 시스템. Each maps to roadmap phases.
 | INFER-13 | Phase 4 | Complete |
 | INFER-14 | Phase 4 | Complete |
 | INFER-15 | Phase 4 | Complete |
-| INTEG-01 | Phase 5 | Pending |
-| INTEG-02 | Phase 5 | Pending |
-| INTEG-03 | Phase 5 | Pending |
-| INTEG-04 | Phase 5 | Pending |
+| INTEG-01 | Phase 5 | Complete |
+| INTEG-02 | Phase 5 | Complete |
+| INTEG-03 | Phase 5 | Complete |
+| INTEG-04 | Phase 5 | Complete |
 | TEST-01 | Phase 6 | Pending |
 | TEST-02 | Phase 6 | Pending |
 | TEST-03 | Phase 6 | Pending |
