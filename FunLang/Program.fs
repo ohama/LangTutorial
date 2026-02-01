@@ -6,6 +6,7 @@ open Cli
 open Ast
 open Eval
 open Format
+open TypeCheck
 
 /// Parse a string input and return the AST
 let parse (input: string) : Expr =
@@ -53,10 +54,41 @@ let main argv =
             with ex ->
                 eprintfn "Error: %s" ex.Message
                 1
-        // --emit-type (reserved)
-        elif results.Contains Emit_Type then
-            eprintfn "Error: Type checking not yet implemented. Reserved for future phase."
-            1
+        // --emit-type with --expr
+        elif results.Contains Emit_Type && results.Contains Expr then
+            let expr = results.GetResult Expr
+            try
+                let ast = parse expr
+                match typecheck ast with
+                | Ok ty ->
+                    printfn "%s" (Type.formatType ty)
+                    0
+                | Error msg ->
+                    eprintfn "TypeError: %s" msg
+                    1
+            with ex ->
+                eprintfn "Error: %s" ex.Message
+                1
+        // --emit-type with file
+        elif results.Contains Emit_Type && results.Contains File then
+            let filename = results.GetResult File
+            if File.Exists filename then
+                try
+                    let input = File.ReadAllText filename
+                    let ast = parse input
+                    match typecheck ast with
+                    | Ok ty ->
+                        printfn "%s" (Type.formatType ty)
+                        0
+                    | Error msg ->
+                        eprintfn "TypeError: %s" msg
+                        1
+                with ex ->
+                    eprintfn "Error: %s" ex.Message
+                    1
+            else
+                eprintfn "File not found: %s" filename
+                1
         // --emit-tokens with file
         elif results.Contains Emit_Tokens && results.Contains File then
             let filename = results.GetResult File
@@ -91,9 +123,17 @@ let main argv =
         elif results.Contains Expr then
             let expr = results.GetResult Expr
             try
-                let result = eval initialEnv (parse expr)
-                printfn "%s" (formatValue result)
-                0
+                let ast = parse expr
+                // Type check first
+                match typecheck ast with
+                | Error msg ->
+                    eprintfn "TypeError: %s" msg
+                    1
+                | Ok _ ->
+                    // Type check passed, evaluate
+                    let result = eval initialEnv ast
+                    printfn "%s" (formatValue result)
+                    0
             with ex ->
                 eprintfn "Error: %s" ex.Message
                 1
@@ -103,9 +143,17 @@ let main argv =
             if File.Exists filename then
                 try
                     let input = File.ReadAllText filename
-                    let result = eval initialEnv (parse input)
-                    printfn "%s" (formatValue result)
-                    0
+                    let ast = parse input
+                    // Type check first
+                    match typecheck ast with
+                    | Error msg ->
+                        eprintfn "TypeError: %s" msg
+                        1
+                    | Ok _ ->
+                        // Type check passed, evaluate
+                        let result = eval initialEnv ast
+                        printfn "%s" (formatValue result)
+                        0
                 with ex ->
                     eprintfn "Error: %s" ex.Message
                     1

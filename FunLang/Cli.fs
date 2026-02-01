@@ -17,6 +17,6 @@ with
             | Expr _ -> "evaluate expression"
             | Emit_Tokens -> "show lexer tokens"
             | Emit_Ast -> "show parsed AST"
-            | Emit_Type -> "show inferred types (reserved)"
+            | Emit_Type -> "show inferred type"
             | Repl -> "start interactive REPL"
             | File _ -> "evaluate program from file"
