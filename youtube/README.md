@@ -4,35 +4,39 @@ F#으로 프로그래밍 언어 만들기 튜토리얼 유튜브 대본.
 
 ## 시리즈 개요
 
-| 에피소드 | 제목 | 예상 길이 | 주요 내용 |
-|----------|------|-----------|-----------|
-| 1 | 프로젝트 설정 | 12-15분 | fslex/fsyacc 설정, 빌드 순서 |
-| 2 | 사칙연산 계산기 | 15-18분 | Expr/Term/Factor 패턴, Evaluator |
-| 3 | 변수와 스코프 | 15-18분 | Environment, 섀도잉 |
-| 4 | 조건문과 Boolean | 18-20분 | Value 타입, 타입 검사, 단락 평가 |
-| 5 | 함수와 클로저 | 20-25분 | Lambda, 재귀, Turing-complete |
+### 본편 (Chapters)
 
-**총 예상 길이:** 80-96분 (약 1시간 30분)
+| EP | 제목 | 파일 | 예상 길이 |
+|----|------|------|-----------|
+| 01 | Foundation & Pipeline | [01-foundation.md](01-foundation.md) | 12-15분 |
+| 02 | 사칙연산 계산기 | [02-arithmetic.md](02-arithmetic.md) | 15-18분 |
+| 03 | 변수와 스코프 | [03-variables.md](03-variables.md) | 15-18분 |
+| 04 | 조건문과 Boolean | [04-conditionals.md](04-conditionals.md) | 18-20분 |
+| 05 | 함수와 클로저 | [05-functions.md](05-functions.md) | 20-25분 |
+| 06 | 튜플 | [06-tuples.md](06-tuples.md) | 15-18분 |
+| 07 | 리스트 | [07-lists.md](07-lists.md) | 18-20분 |
+| 08 | 패턴 매칭 | [08-pattern-matching.md](08-pattern-matching.md) | 18-20분 |
+| 09 | Prelude | [09-prelude.md](09-prelude.md) | 18-20분 |
+| 10 | Hindley-Milner 타입 시스템 | [10-type-system.md](10-type-system.md) | 20-22분 |
 
-## 대본 파일
+### 부록 (Appendix)
 
-- [episode-01-foundation.md](episode-01-foundation.md) - 프로젝트 설정
-- [episode-02-arithmetic.md](episode-02-arithmetic.md) - 사칙연산 계산기
-- [episode-03-variables.md](episode-03-variables.md) - 변수와 스코프
-- [episode-04-conditionals.md](episode-04-conditionals.md) - 조건문과 Boolean
-- [episode-05-functions.md](episode-05-functions.md) - 함수와 클로저
+| EP | 제목 | 파일 | 예상 길이 |
+|----|------|------|-----------|
+| A1 | 테스트 전략 | [appendix-01-testing.md](appendix-01-testing.md) | 15-18분 |
+
+**총 예상 길이:** 약 3시간
 
 ## 대본 형식
 
 각 대본에는 다음이 포함됩니다:
 
-- **썸네일 텍스트** - 영상 썸네일용
+- **영상 정보** - 예상 길이, 난이도, 사전 지식
 - **타임스탬프 구간** - 예상 시간대
 - **화면 지시** - [화면: 설명] 형식
 - **나레이션** - 실제 말할 내용
 - **코드 블록** - 화면에 보여줄 코드
-- **B-roll 제안** - 화면 전환/효과 아이디어
-- **태그** - 유튜브 태그
+- **핵심 키워드** - SEO용 태그
 
 ## 촬영 팁
 
@@ -59,12 +63,14 @@ F#으로 프로그래밍 언어 만들기 튜토리얼 유튜브 대본.
 ```
 F#과 fslex/fsyacc로 프로그래밍 언어를 직접 만들어 봅니다.
 
-5개 에피소드에 걸쳐:
+10개 에피소드에 걸쳐:
 - 숫자만 인식하는 파서에서 시작
 - 사칙연산 계산기로 발전
-- 변수와 조건문 추가
-- 함수와 재귀까지 구현
-- 최종적으로 Turing-complete 언어 완성!
+- 변수, 조건문, 함수, 재귀 추가
+- 튜플, 리스트, 패턴 매칭 구현
+- Self-hosted Prelude 표준 라이브러리
+- Hindley-Milner 타입 추론 시스템
+- 최종적으로 정적 타입의 Turing-complete 언어 완성!
 
 컴파일러 이론 수업 없이도, 실습 중심으로 언어 구현의 핵심을 배울 수 있습니다.
 

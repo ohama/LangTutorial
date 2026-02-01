@@ -2,7 +2,7 @@
 
 F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼.
 
-fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다. 사칙연산부터 시작해 변수, 조건문, 함수, 데이터 구조까지 확장하며, 각 챕터는 독립적으로 실행 가능한 완전한 예제를 제공합니다.
+fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다. 사칙연산부터 시작해 변수, 조건문, 함수, 데이터 구조, 타입 시스템까지 확장하며, 각 챕터는 독립적으로 실행 가능한 완전한 예제를 제공합니다.
 
 ## 진행 상태
 
@@ -17,8 +17,9 @@ fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다.
 | 7 | Lists | ✓ 완료 |
 | 8 | Pattern Matching | ✓ 완료 |
 | 9 | Prelude (Standard Library) | ✓ 완료 |
+| 10 | Type System (Hindley-Milner) | ✓ 완료 |
 
-**현재:** v3.0 데이터 구조 마일스톤 완료 — 튜플, 리스트, 패턴 매칭, 표준 라이브러리 구현
+**현재:** v4.0 타입 시스템 마일스톤 완료 — Hindley-Milner 타입 추론, Let-polymorphism, 정적 타입 검사
 
 ## 빠른 시작
 
@@ -65,12 +66,22 @@ dotnet run --project FunLang -- --expr "map (fun x -> x * 2) [1, 2, 3]"
 dotnet run --project FunLang -- --expr "fold (fun a -> fun b -> a + b) 0 [1, 2, 3, 4, 5]"
 15
 
+# 타입 추론
+dotnet run --project FunLang -- --emit-type --expr "fun x -> x"
+'m -> 'm
+
+dotnet run --project FunLang -- --emit-type --expr "map"
+('m -> 'n) -> 'm list -> 'n list
+
+dotnet run --project FunLang -- --emit-type --expr "let id = fun x -> x in (id 5, id true)"
+int * bool
+
 # REPL 모드
 dotnet run --project FunLang -- -i
 
 # 테스트
-make -C tests              # fslit CLI 테스트 (158개)
-dotnet run --project FunLang.Tests  # Expecto 테스트 (175개)
+make -C tests              # fslit CLI 테스트 (190개)
+dotnet run --project FunLang.Tests  # Expecto 테스트 (362개)
 ```
 
 ## 튜토리얼 구성
@@ -86,6 +97,7 @@ dotnet run --project FunLang.Tests  # Expecto 테스트 (175개)
 | 7 | Lists | 빈 리스트, 리스트 리터럴, cons 연산자 |
 | 8 | Pattern Matching | match 표현식, 패턴 타입, first-match 의미론 |
 | 9 | Prelude | 자체 호스팅 표준 라이브러리, map/filter/fold 등 |
+| 10 | Type System | Hindley-Milner 타입 추론, Let-polymorphism |
 
 ## 디렉토리 구조
 
@@ -97,10 +109,14 @@ LangTutorial/
 │   ├── Lexer.fsl         # fslex 렉서
 │   ├── Eval.fs           # 평가기 (타입 검사, 클로저, 재귀, 패턴 매칭)
 │   ├── Prelude.fs        # 표준 라이브러리 로더
+│   ├── Type.fs           # 타입 AST, Substitution, Scheme
+│   ├── Unify.fs          # 단일화 알고리즘, Occurs Check
+│   ├── Infer.fs          # Algorithm W 타입 추론
+│   ├── TypeCheck.fs      # Prelude 타입, typecheck 함수
 │   └── Program.fs        # CLI
 ├── Prelude.fun           # 표준 라이브러리 (FunLang 소스)
-├── FunLang.Tests/        # Expecto 단위 테스트 (175개)
-├── tests/                # fslit CLI 테스트 (158개)
+├── FunLang.Tests/        # Expecto 단위 테스트 (362개)
+├── tests/                # fslit CLI 테스트 (190개)
 │   ├── cli/              # 기본 CLI 테스트
 │   ├── variables/        # 변수 바인딩 테스트
 │   ├── control/          # 제어 흐름 테스트
@@ -109,6 +125,8 @@ LangTutorial/
 │   ├── lists/            # 리스트 테스트
 │   ├── pattern/          # 패턴 매칭 테스트
 │   ├── prelude/          # 표준 라이브러리 테스트
+│   ├── type-inference/   # 타입 추론 테스트
+│   ├── type-errors/      # 타입 에러 테스트
 │   └── ...
 ├── tutorial/             # 튜토리얼 문서
 │   ├── chapter-01-foundation.md
@@ -120,10 +138,12 @@ LangTutorial/
 │   ├── chapter-07-lists.md
 │   ├── chapter-08-pattern-matching.md
 │   ├── chapter-09-prelude.md
+│   ├── chapter-10-type-system.md
 │   └── appendix-01-testing.md
+├── youtube/              # YouTube 대본 (10 episodes + 1 appendix)
 ├── docs/
 │   ├── grammar.md        # 언어 문법 명세 (BNF)
-│   └── howto/            # 개발 지식 문서 (17개)
+│   └── howto/            # 개발 지식 문서 (19개)
 ```
 
 ## 기술 스택
@@ -144,20 +164,24 @@ git checkout tutorial-v2.0  # Chapter 2: Arithmetic
 git checkout tutorial-v3    # Chapter 3: Variables
 git checkout tutorial-v4.0  # Chapter 4: Control Flow
 git checkout tutorial-v5.0  # Chapter 5: Functions
-git checkout tutorial-v3.0  # v3.0: Tuples, Lists, Pattern Matching, Prelude
+git checkout milestone-v3.0 # v3.0: Tuples, Lists, Pattern Matching, Prelude
+git checkout milestone-v4.0 # v4.0: Type System (Hindley-Milner)
 ```
 
 ## 문서
 
 - **[docs/grammar.md](docs/grammar.md)** — FunLang 문법 명세 (BNF)
-- **tutorial/** — 단계별 튜토리얼 (9 chapters + 1 appendix)
-- **docs/howto/** — 개발 지식 문서 (17개)
+- **tutorial/** — 단계별 튜토리얼 (10 chapters + 1 appendix)
+- **youtube/** — YouTube 대본 (10 episodes + 1 appendix)
+- **docs/howto/** — 개발 지식 문서 (19개)
   - fsyacc 파서 작성, 연산자 우선순위
   - fslex 렉서 작성, 키워드 우선순위
   - 단항 마이너스 구현
   - 함수 적용 vs 뺄셈 파서 해결
   - 패턴 매칭 구현
   - 자체 호스팅 표준 라이브러리
+  - Hindley-Milner 타입 추론
+  - Let-polymorphism 구현
   - Expecto/FsCheck 테스트 설정
   - 등
 
