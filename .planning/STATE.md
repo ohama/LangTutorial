@@ -2,9 +2,9 @@
 
 ## Current Status
 
-**Milestone:** v3.0 데이터 구조 — **SHIPPED**
-**Status:** Milestone complete and archived
-**Shipped:** 2026-02-01
+**Milestone:** v4.0 타입 시스템
+**Status:** Defining requirements
+**Started:** 2026-02-01
 
 ---
 
@@ -14,7 +14,7 @@
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-**Current focus:** Planning next milestone or project complete
+**Current focus:** Hindley-Milner 타입 추론 구현
 
 **Tech stack:**
 - F# (.NET 10)
@@ -52,12 +52,12 @@ Key decisions from previous milestones (see PROJECT.md for full table):
 
 ## Session Continuity
 
-**Last session:** 2026-02-01 - v3.0 milestone archived
-**What happened:** Completed and archived v3.0 milestone. All phase artifacts moved to milestones/v3.0-phases/. ROADMAP.md and REQUIREMENTS.md deleted (fresh for next milestone).
-**What's next:** `/gsd:new-milestone` to start next milestone or project complete
-**Resume command:** `/gsd:new-milestone`
+**Last session:** 2026-02-01 - v4.0 milestone started
+**What happened:** Started v4.0 타입 시스템 milestone. Updated PROJECT.md with target features.
+**What's next:** Define requirements, create roadmap
+**Resume command:** Continue with `/gsd:new-milestone`
 
 ---
 
 *Last updated: 2026-02-01*
-*Status: Ready for next milestone*
+*Status: Defining requirements*

@@ -8,7 +8,23 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-## Current State (v3.0 Shipped)
+## Current Milestone: v4.0 타입 시스템
+
+**Goal:** Hindley-Milner 타입 추론으로 정적 타입 검사 지원
+
+**Target features:**
+- Type AST (TInt, TBool, TString, TArrow, TTuple, TList, TVar)
+- 대체(Substitution) 연산과 단일화(Unification)
+- Algorithm W 타입 추론
+- Let-polymorphism (다형성)
+- Prelude 함수 타입 정의
+- CLI 통합 (--emit-type, --no-typecheck)
+
+**Reference:** `docs/todo.md` — 상세 구현 계획
+
+---
+
+## Previous State (v3.0 Shipped)
 
 **v3.0 Shipped:** 2026-02-01
 
@@ -55,19 +71,31 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ PAT-01~08: 패턴 매칭 (match, 변수, 와일드카드, 상수, cons, 튜플, 빈 리스트, 완전성)
 - ✓ PRE-01~09: Prelude (map, filter, fold, length, reverse, append, id, const, compose, hd, tl, 자동 로드)
 
-### On Hold (v4.0+)
+### Active (v4.0)
+
+- [ ] **TYPE-01**: Type AST 정의 (TInt, TBool, TString, TArrow, TTuple, TList, TVar)
+- [ ] **TYPE-02**: Scheme 타입 (다형성 지원)
+- [ ] **TYPE-03**: 대체(Substitution) 연산
+- [ ] **TYPE-04**: 단일화(Unification) 알고리즘
+- [ ] **TYPE-05**: Algorithm W 타입 추론
+- [ ] **TYPE-06**: 패턴 타입 추론
+- [ ] **TYPE-07**: Prelude 함수 타입 정의
+- [ ] **TYPE-08**: CLI 통합 (--emit-type)
+- [ ] **TYPE-09**: 타입 오류 메시지
+
+### On Hold (v5.0+)
 
 - **ADT-01**: 대수적 데이터 타입 (Sum types)
 - **ADT-02**: 사용자 정의 타입 생성자
 - **TCO-01**: 꼬리 호출 최적화
 - **EXC-01**: 예외 처리
+- **MOD-01**: 모듈 시스템
 
 ### Out of Scope
 
 - 실수 (float/double) — 정수만 지원, 파싱/연산 단순화
 - 컴파일러 (바이트코드/네이티브 코드 생성) — 인터프리터에 집중
-- 타입 시스템 — v5.0 범위, 복잡도 높음
-- 모듈 시스템 — v5.0 범위
+- 타입 주석 구문 — 타입 추론만 지원, 명시적 주석 불필요
 
 ## Context
 
@@ -109,4 +137,4 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | Right-associative cons | `1 :: 2 :: []` = `1 :: (2 :: [])` | Good |
 
 ---
-*Last updated: 2026-02-01 after v3.0 milestone*
+*Last updated: 2026-02-01 after v4.0 milestone start*
