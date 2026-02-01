@@ -81,9 +81,9 @@ Requirements for v4.0 타입 시스템. Each maps to roadmap phases.
 | SUBST-01 | Phase 2 | Complete |
 | SUBST-02 | Phase 2 | Complete |
 | SUBST-03 | Phase 2 | Complete |
-| UNIFY-01 | Phase 3 | Pending |
-| UNIFY-02 | Phase 3 | Pending |
-| UNIFY-03 | Phase 3 | Pending |
+| UNIFY-01 | Phase 3 | Complete |
+| UNIFY-02 | Phase 3 | Complete |
+| UNIFY-03 | Phase 3 | Complete |
 | INFER-01 | Phase 4 | Pending |
 | INFER-02 | Phase 4 | Pending |
 | INFER-03 | Phase 4 | Pending |
