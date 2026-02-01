@@ -31,9 +31,45 @@ let generalize (env: TypeEnv) (ty: Type): Scheme =
 
 open Ast
 
+/// Infer pattern type and extract bindings (INFER-15)
+/// Returns (environment with bindings, pattern type)
+let rec inferPattern (pat: Pattern): TypeEnv * Type =
+    match pat with
+    | VarPat name ->
+        let ty = freshVar()
+        (Map.ofList [(name, Scheme ([], ty))], ty)
+
+    | WildcardPat ->
+        (Map.empty, freshVar())
+
+    | TuplePat pats ->
+        let envTys = List.map inferPattern pats
+        let env = envTys
+                  |> List.map fst
+                  |> List.fold (fun acc m -> Map.fold (fun a k v -> Map.add k v a) acc m) Map.empty
+        let tys = envTys |> List.map snd
+        (env, TTuple tys)
+
+    | EmptyListPat ->
+        (Map.empty, TList (freshVar()))
+
+    | ConsPat (headPat, tailPat) ->
+        let headEnv, headTy = inferPattern headPat
+        let tailEnv, tailTy = inferPattern tailPat
+        // Note: tailTy should be TList headTy, but actual unification happens in Match
+        // We return TList headTy as the pattern type
+        let env = Map.fold (fun acc k v -> Map.add k v acc) headEnv tailEnv
+        (env, TList headTy)
+
+    | ConstPat (IntConst _) ->
+        (Map.empty, TInt)
+
+    | ConstPat (BoolConst _) ->
+        (Map.empty, TBool)
+
 /// Infer type for expression (Algorithm W)
 /// Returns (substitution, inferred type)
-let rec infer (env: TypeEnv) (expr: Expr): Subst * Type =
+and infer (env: TypeEnv) (expr: Expr): Subst * Type =
     match expr with
     // === Literals (INFER-04) ===
     | Number _ -> (empty, TInt)
