@@ -899,8 +899,12 @@ let phase5Tests =
 [<EntryPoint>]
 let main argv =
     runTestsWithCLIArgs [] argv <| testList "FunLang Tests" [
+        TypeTests.typeTests
+        UnifyTests.unifyTests
         ReplTests.replEvalTests
         ReplTests.cliTests
+        InferTests.inferTests
+        TypeCheckTests.typeCheckTests
         commentTests
         stringTests
         phase2Tests
