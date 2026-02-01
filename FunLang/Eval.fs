@@ -51,6 +51,18 @@ let rec matchPattern (pat: Pattern) (value: Value) : (string * Value) list optio
         | None -> None
     | _ -> None  // Type mismatch (e.g., TuplePat vs IntValue)
 
+/// Evaluate match clauses sequentially, returning first match
+and evalMatchClauses (env: Env) (scrutinee: Value) (clauses: MatchClause list) : Value =
+    match clauses with
+    | [] -> failwith "Match failure: no pattern matched"
+    | (pattern, resultExpr) :: rest ->
+        match matchPattern pattern scrutinee with
+        | Some bindings ->
+            let extendedEnv = List.fold (fun e (n, v) -> Map.add n v e) env bindings
+            eval extendedEnv resultExpr
+        | None ->
+            evalMatchClauses env scrutinee rest
+
 /// Evaluate an expression in an environment
 /// Returns Value (IntValue, BoolValue, or FunctionValue)
 /// Raises exception for type errors and undefined variables
@@ -90,6 +102,11 @@ and eval (env: Env) (expr: Expr) : Value =
                 failwith "Pattern match failed: expected tuple value"
             | _ ->
                 failwith "Pattern match failed"
+
+    // Phase 3 (v3.0): Pattern Matching
+    | Match (scrutinee, clauses) ->
+        let value = eval env scrutinee
+        evalMatchClauses env value clauses
 
     // Phase 2 (v3.0): Lists
     | EmptyList ->
