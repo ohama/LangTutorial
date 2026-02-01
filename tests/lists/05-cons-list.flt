@@ -1,0 +1,6 @@
+// LIST-03: Cons to existing list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+0 :: [1, 2]
+// --- Output:
+[0, 1, 2]

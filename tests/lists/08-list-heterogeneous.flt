@@ -1,0 +1,6 @@
+// LIST-04: Heterogeneous list (dynamically typed)
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[1, true, "hello"]
+// --- Output:
+[1, true, "hello"]

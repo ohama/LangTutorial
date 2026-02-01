@@ -1,0 +1,6 @@
+// LIST-04: List inequality
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[1, 2] = [1, 3]
+// --- Output:
+false

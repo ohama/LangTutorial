@@ -1,0 +1,6 @@
+// LIST-03: Basic cons operator
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+1 :: []
+// --- Output:
+[1]

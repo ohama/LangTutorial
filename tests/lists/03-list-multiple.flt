@@ -1,0 +1,6 @@
+// LIST-02: Multiple element list literal
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[1, 2, 3]
+// --- Output:
+[1, 2, 3]

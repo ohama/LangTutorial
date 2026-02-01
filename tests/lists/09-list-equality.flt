@@ -1,0 +1,6 @@
+// LIST-04: List structural equality
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[1, 2] = [1, 2]
+// --- Output:
+true

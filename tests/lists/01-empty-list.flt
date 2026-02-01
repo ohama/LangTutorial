@@ -1,0 +1,6 @@
+// LIST-01: Empty list literal
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[]
+// --- Output:
+[]

@@ -1,0 +1,7 @@
+// LIST-03: Cons requires list as second argument
+// --- Command: dotnet run --project FunLang -- %input
+// --- Exit: 1
+// --- Input:
+1 :: 2
+// --- Error:
+Type error: cons (::) requires list as second argument

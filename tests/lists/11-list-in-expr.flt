@@ -1,0 +1,6 @@
+// LIST-02: Lists in expressions
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+let xs = [1, 2, 3] in xs
+// --- Output:
+[1, 2, 3]

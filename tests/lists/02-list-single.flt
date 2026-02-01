@@ -1,0 +1,6 @@
+// LIST-02: Single element list
+// --- Command: dotnet run --project FunLang -- %input
+// --- Input:
+[1]
+// --- Output:
+[1]
