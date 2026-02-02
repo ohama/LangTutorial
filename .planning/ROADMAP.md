@@ -123,10 +123,11 @@ Transform v4.0's basic type errors into precise diagnostics with location tracki
   2. Lexer generates position data for every token
   3. Parser propagates spans from tokens to AST nodes
   4. Span type can represent unknown locations for built-in definitions
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md — Span type definition + Lexer position tracking
+- [ ] 01-02-PLAN.md — AST span integration + Parser propagation
 
 #### Phase 2: Error Representation
 **Goal**: Rich diagnostic types with context stacks and unification traces
@@ -180,10 +181,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Span Infrastructure | v5.0 | 0/? | Not started | - |
+| 1. Span Infrastructure | v5.0 | 0/2 | Planned | - |
 | 2. Error Representation | v5.0 | 0/? | Not started | - |
 | 3. Blame Assignment | v5.0 | 0/? | Not started | - |
 | 4. Output & Testing | v5.0 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-02-02 - v5.0 roadmap created*
+*Last updated: 2026-02-02 - Phase 1 planned (2 plans)*
