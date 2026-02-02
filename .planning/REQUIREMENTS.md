@@ -75,39 +75,39 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPAN-01 | TBD | Pending |
-| SPAN-02 | TBD | Pending |
-| SPAN-03 | TBD | Pending |
-| SPAN-04 | TBD | Pending |
-| DIAG-01 | TBD | Pending |
-| DIAG-02 | TBD | Pending |
-| DIAG-03 | TBD | Pending |
-| DIAG-04 | TBD | Pending |
-| CTX-01 | TBD | Pending |
-| CTX-02 | TBD | Pending |
-| CTX-03 | TBD | Pending |
-| TRACE-01 | TBD | Pending |
-| TRACE-02 | TBD | Pending |
-| TRACE-03 | TBD | Pending |
-| BLAME-01 | TBD | Pending |
-| BLAME-02 | TBD | Pending |
-| BLAME-03 | TBD | Pending |
-| OUT-01 | TBD | Pending |
-| OUT-02 | TBD | Pending |
-| OUT-03 | TBD | Pending |
-| OUT-04 | TBD | Pending |
-| TEST-01 | TBD | Pending |
-| TEST-02 | TBD | Pending |
-| TEST-03 | TBD | Pending |
-| TEST-04 | TBD | Pending |
-| TEST-05 | TBD | Pending |
-| TEST-06 | TBD | Pending |
+| SPAN-01 | Phase 1 | Pending |
+| SPAN-02 | Phase 1 | Pending |
+| SPAN-03 | Phase 1 | Pending |
+| SPAN-04 | Phase 1 | Pending |
+| DIAG-01 | Phase 2 | Pending |
+| DIAG-02 | Phase 2 | Pending |
+| DIAG-03 | Phase 2 | Pending |
+| DIAG-04 | Phase 2 | Pending |
+| CTX-01 | Phase 2 | Pending |
+| CTX-02 | Phase 2 | Pending |
+| CTX-03 | Phase 2 | Pending |
+| TRACE-01 | Phase 2 | Pending |
+| TRACE-02 | Phase 2 | Pending |
+| TRACE-03 | Phase 2 | Pending |
+| BLAME-01 | Phase 3 | Pending |
+| BLAME-02 | Phase 3 | Pending |
+| BLAME-03 | Phase 3 | Pending |
+| OUT-01 | Phase 4 | Pending |
+| OUT-02 | Phase 4 | Pending |
+| OUT-03 | Phase 4 | Pending |
+| OUT-04 | Phase 4 | Pending |
+| TEST-01 | Phase 4 | Pending |
+| TEST-02 | Phase 4 | Pending |
+| TEST-03 | Phase 4 | Pending |
+| TEST-04 | Phase 4 | Pending |
+| TEST-05 | Phase 4 | Pending |
+| TEST-06 | Phase 4 | Pending |
 
 **Coverage:**
 - v5.0 requirements: 27 total
-- Mapped to phases: 0
-- Unmapped: 27 ⚠️
+- Mapped to phases: 27 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after initial definition*
+*Last updated: 2026-02-02 after roadmap creation*
