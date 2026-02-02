@@ -45,57 +45,59 @@ let formatSpan (span: Span) : string =
 /// Phase 3: Variables and let binding
 /// Phase 4: Control flow, comparisons, and logical operators
 /// Phase 5: Functions (Lambda, App, LetRec)
+/// v5.0: Every variant carries span as last parameter for error diagnostics
 type Expr =
-    | Number of int
-    | Add of Expr * Expr
-    | Subtract of Expr * Expr
-    | Multiply of Expr * Expr
-    | Divide of Expr * Expr
-    | Negate of Expr  // Unary minus
+    | Number of int * span: Span
+    | Add of Expr * Expr * span: Span
+    | Subtract of Expr * Expr * span: Span
+    | Multiply of Expr * Expr * span: Span
+    | Divide of Expr * Expr * span: Span
+    | Negate of Expr * span: Span  // Unary minus
     // Phase 3: Variables
-    | Var of string           // Variable reference
-    | Let of string * Expr * Expr  // let name = expr1 in expr2
+    | Var of string * span: Span           // Variable reference
+    | Let of string * Expr * Expr * span: Span  // let name = expr1 in expr2
     // Phase 4: Control flow
-    | Bool of bool            // Boolean literal (true, false)
-    | If of Expr * Expr * Expr  // if condition then expr1 else expr2
+    | Bool of bool * span: Span            // Boolean literal (true, false)
+    | If of Expr * Expr * Expr * span: Span  // if condition then expr1 else expr2
     // Phase 2 (v2.0): Strings
-    | String of string        // String literal
+    | String of string * span: Span        // String literal
     // Phase 4: Comparison operators (return BoolValue)
-    | Equal of Expr * Expr       // =
-    | NotEqual of Expr * Expr    // <>
-    | LessThan of Expr * Expr    // <
-    | GreaterThan of Expr * Expr // >
-    | LessEqual of Expr * Expr   // <=
-    | GreaterEqual of Expr * Expr // >=
+    | Equal of Expr * Expr * span: Span       // =
+    | NotEqual of Expr * Expr * span: Span    // <>
+    | LessThan of Expr * Expr * span: Span    // <
+    | GreaterThan of Expr * Expr * span: Span // >
+    | LessEqual of Expr * Expr * span: Span   // <=
+    | GreaterEqual of Expr * Expr * span: Span // >=
     // Phase 4: Logical operators (short-circuit evaluation)
-    | And of Expr * Expr  // &&
-    | Or of Expr * Expr   // ||
+    | And of Expr * Expr * span: Span  // &&
+    | Or of Expr * Expr * span: Span   // ||
     // Phase 5: Functions
-    | Lambda of param: string * body: Expr      // fun param -> body
-    | App of func: Expr * arg: Expr             // func arg (function application)
-    | LetRec of name: string * param: string * body: Expr * inExpr: Expr
+    | Lambda of param: string * body: Expr * span: Span      // fun param -> body
+    | App of func: Expr * arg: Expr * span: Span             // func arg (function application)
+    | LetRec of name: string * param: string * body: Expr * inExpr: Expr * span: Span
     // let rec name param = body in inExpr
     // Phase 1 (v3.0): Tuples
-    | Tuple of Expr list               // Tuple expression: (e1, e2, ...)
-    | LetPat of Pattern * Expr * Expr  // Let with pattern binding: let pat = expr in body
+    | Tuple of Expr list * span: Span               // Tuple expression: (e1, e2, ...)
+    | LetPat of Pattern * Expr * Expr * span: Span  // Let with pattern binding: let pat = expr in body
     // Phase 2 (v3.0): Lists
-    | EmptyList                        // Empty list: []
-    | List of Expr list                // List literal: [e1, e2, ...]
-    | Cons of Expr * Expr              // Cons operator: h :: t
+    | EmptyList of span: Span                       // Empty list: []
+    | List of Expr list * span: Span                // List literal: [e1, e2, ...]
+    | Cons of Expr * Expr * span: Span              // Cons operator: h :: t
     // Phase 3 (v3.0): Pattern Matching
-    | Match of scrutinee: Expr * clauses: MatchClause list
+    | Match of scrutinee: Expr * clauses: MatchClause list * span: Span
 
 /// Pattern for destructuring bindings
 /// Phase 1 (v3.0): Tuple patterns
 /// Phase 3 (v3.0): Extended with ConsPat, EmptyListPat, ConstPat
+/// v5.0: Every variant carries span as last parameter for error diagnostics
 and Pattern =
-    | VarPat of string           // Variable pattern: x
-    | TuplePat of Pattern list   // Tuple pattern: (p1, p2, ...)
-    | WildcardPat                // Wildcard pattern: _
+    | VarPat of string * span: Span           // Variable pattern: x
+    | TuplePat of Pattern list * span: Span   // Tuple pattern: (p1, p2, ...)
+    | WildcardPat of span: Span               // Wildcard pattern: _
     // Phase 3 (v3.0): New pattern types for match expressions
-    | ConsPat of Pattern * Pattern     // Cons pattern: h :: t
-    | EmptyListPat                     // Empty list pattern: []
-    | ConstPat of Constant             // Constant pattern: 1, true, false
+    | ConsPat of Pattern * Pattern * span: Span     // Cons pattern: h :: t
+    | EmptyListPat of span: Span                    // Empty list pattern: []
+    | ConstPat of Constant * span: Span             // Constant pattern: 1, true, false
 
 /// Match clause: pattern -> expression
 /// Phase 3 (v3.0)
@@ -121,3 +123,24 @@ and Value =
 /// Environment mapping variable names to values
 /// Phase 5: Defined here for mutual recursion with Value
 and Env = Map<string, Value>
+
+/// Extract span from any Expr
+let spanOf (expr: Expr) : Span =
+    match expr with
+    | Number(_, s) | Bool(_, s) | String(_, s) | Var(_, s) -> s
+    | Add(_, _, s) | Subtract(_, _, s) | Multiply(_, _, s) | Divide(_, _, s) -> s
+    | Negate(_, s) -> s
+    | Let(_, _, _, s) | LetPat(_, _, _, s) | LetRec(_, _, _, _, s) -> s
+    | If(_, _, _, s) -> s
+    | Equal(_, _, s) | NotEqual(_, _, s) -> s
+    | LessThan(_, _, s) | GreaterThan(_, _, s) | LessEqual(_, _, s) | GreaterEqual(_, _, s) -> s
+    | And(_, _, s) | Or(_, _, s) -> s
+    | Lambda(_, _, s) | App(_, _, s) -> s
+    | Tuple(_, s) | EmptyList s | List(_, s) | Cons(_, _, s) -> s
+    | Match(_, _, s) -> s
+
+/// Extract span from any Pattern
+let patternSpanOf (pat: Pattern) : Span =
+    match pat with
+    | VarPat(_, s) | WildcardPat s | TuplePat(_, s) -> s
+    | ConsPat(_, _, s) | EmptyListPat s | ConstPat(_, s) -> s
