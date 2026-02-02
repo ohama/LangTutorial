@@ -67,9 +67,19 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ INTEG-01~04: 통합 (Prelude 타입, typecheck, --emit-type, 오류 처리)
 - ✓ TEST-01~07: 테스트 (Type, Subst, Unify, Infer, TypeCheck, fslit)
 
-### Active (v5.0+)
+### Active (v5.0)
 
-(No active requirements — project complete or awaiting next milestone)
+## Current Milestone: v5.0 타입 에러 진단
+
+**Goal:** Algorithm W의 에러 위치/원인을 정확히 표현하는 Diagnostic 인프라 구축
+
+**Target features:**
+- Span/Range 기반 위치 추적
+- Diagnostic 타입 시스템 (에러 코드, 위치, 기대/실제 타입)
+- Context Stack (추론 경로 추적)
+- Unification Trace (단일화 실패 경로)
+- 정확한 에러 메시지 포맷
+- Bidirectional Typing 확장 준비
 
 ### On Hold (v5.0+)
 
@@ -127,4 +137,4 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | Hindley-Milner 타입 추론 | 타입 클래스 없이 완전한 추론, 교육 목적에 적합 | Good |
 
 ---
-*Last updated: 2026-02-01 after v4.0 milestone complete*
+*Last updated: 2026-02-02 after v5.0 milestone start*
