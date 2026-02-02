@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
 **Phase:** 1 of 4 (Span Infrastructure)
-**Plan:** None yet
-**Status:** Ready to plan
-**Last activity:** 2026-02-02 — Roadmap created for v5.0
+**Plan:** 01 of 1 in phase
+**Status:** In progress
+**Last activity:** 2026-02-02 — Completed 01-01-PLAN.md
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 25% (1/4 phases)
 
 ## Milestone Summary
 
@@ -35,7 +35,11 @@ See: .planning/MILESTONES.md for full history
 
 ### Decisions
 
-All decisions archived in PROJECT.md Key Decisions table.
+| Phase | Decision | Rationale | Impact |
+|-------|----------|-----------|--------|
+| 01-01 | Use NextLine property instead of AsNewLinePos() | AsNewLinePos() deprecated, NextLine is modern API | Cleaner code, no deprecation warnings |
+| 01-01 | Track position in all three newline contexts | Comments can span multiple lines, need accurate tracking | Complete position accuracy for error messages |
+| 01-01 | Use 1-based indexing for line/column | Matches FsLexYacc Position API convention | Consistent with F# compiler error format |
 
 ### Pending Todos
 
@@ -47,7 +51,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02
-Stopped at: Roadmap creation complete
+Last session: 2026-02-02 08:46
+Stopped at: Completed 01-01-PLAN.md (Span Infrastructure)
 Resume file: None
-Next: /gsd:plan-phase 1 (Span Infrastructure)
+Next: /gsd:plan-phase 2 (AST Spans)
