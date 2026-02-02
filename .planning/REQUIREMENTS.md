@@ -9,10 +9,10 @@
 
 ### Span/Range
 
-- [ ] **SPAN-01**: Span 타입 정의 (파일, 시작/끝 라인·컬럼)
-- [ ] **SPAN-02**: Expr 노드에 span 필드 추가
-- [ ] **SPAN-03**: Lexer에서 위치 정보 생성
-- [ ] **SPAN-04**: Parser에서 AST에 span 전달
+- [x] **SPAN-01**: Span 타입 정의 (파일, 시작/끝 라인·컬럼)
+- [x] **SPAN-02**: Expr 노드에 span 필드 추가
+- [x] **SPAN-03**: Lexer에서 위치 정보 생성
+- [x] **SPAN-04**: Parser에서 AST에 span 전달
 
 ### Diagnostic
 
@@ -75,10 +75,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPAN-01 | Phase 1 | Pending |
-| SPAN-02 | Phase 1 | Pending |
-| SPAN-03 | Phase 1 | Pending |
-| SPAN-04 | Phase 1 | Pending |
+| SPAN-01 | Phase 1 | Done |
+| SPAN-02 | Phase 1 | Done |
+| SPAN-03 | Phase 1 | Done |
+| SPAN-04 | Phase 1 | Done |
 | DIAG-01 | Phase 2 | Pending |
 | DIAG-02 | Phase 2 | Pending |
 | DIAG-03 | Phase 2 | Pending |
