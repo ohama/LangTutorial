@@ -1,5 +1,45 @@
 module Ast
 
+open FSharp.Text.Lexing
+
+/// Source location span for error messages
+type Span = {
+    FileName: string
+    StartLine: int
+    StartColumn: int
+    EndLine: int
+    EndColumn: int
+}
+
+/// Create span from FsLexYacc Position records
+let mkSpan (startPos: Position) (endPos: Position) : Span =
+    {
+        FileName = startPos.FileName
+        StartLine = startPos.Line
+        StartColumn = startPos.Column
+        EndLine = endPos.Line
+        EndColumn = endPos.Column
+    }
+
+/// Sentinel span for built-in/synthetic definitions (like F# compiler's range0)
+let unknownSpan : Span =
+    {
+        FileName = "<unknown>"
+        StartLine = 0
+        StartColumn = 0
+        EndLine = 0
+        EndColumn = 0
+    }
+
+/// Format span for error messages
+let formatSpan (span: Span) : string =
+    if span = unknownSpan then
+        "<unknown location>"
+    elif span.StartLine = span.EndLine then
+        sprintf "%s:%d:%d-%d" span.FileName span.StartLine span.StartColumn span.EndColumn
+    else
+        sprintf "%s:%d:%d-%d:%d" span.FileName span.StartLine span.StartColumn span.EndLine span.EndColumn
+
 /// Expression AST for arithmetic operations
 /// Phase 2: Arithmetic expressions with precedence
 /// Phase 3: Variables and let binding
