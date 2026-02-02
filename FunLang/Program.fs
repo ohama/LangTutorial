@@ -9,8 +9,9 @@ open Format
 open TypeCheck
 
 /// Parse a string input and return the AST
-let parse (input: string) : Expr =
+let parse (input: string) (filename: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
+    Lexer.setInitialPos lexbuf filename
     Parser.start Lexer.tokenize lexbuf
 
 [<EntryPoint>]
@@ -48,7 +49,7 @@ let main argv =
         elif results.Contains Emit_Ast && results.Contains Expr then
             let expr = results.GetResult Expr
             try
-                let ast = parse expr
+                let ast = parse expr "<expr>"
                 printfn "%A" ast
                 0
             with ex ->
@@ -58,7 +59,7 @@ let main argv =
         elif results.Contains Emit_Type && results.Contains Expr then
             let expr = results.GetResult Expr
             try
-                let ast = parse expr
+                let ast = parse expr "<expr>"
                 match typecheck ast with
                 | Ok ty ->
                     printfn "%s" (Type.formatType ty)
@@ -75,7 +76,7 @@ let main argv =
             if File.Exists filename then
                 try
                     let input = File.ReadAllText filename
-                    let ast = parse input
+                    let ast = parse input filename
                     match typecheck ast with
                     | Ok ty ->
                         printfn "%s" (Type.formatType ty)
@@ -110,7 +111,7 @@ let main argv =
             if File.Exists filename then
                 try
                     let input = File.ReadAllText filename
-                    let ast = parse input
+                    let ast = parse input filename
                     printfn "%A" ast
                     0
                 with ex ->
@@ -123,7 +124,7 @@ let main argv =
         elif results.Contains Expr then
             let expr = results.GetResult Expr
             try
-                let ast = parse expr
+                let ast = parse expr "<expr>"
                 // Type check first
                 match typecheck ast with
                 | Error msg ->
@@ -143,7 +144,7 @@ let main argv =
             if File.Exists filename then
                 try
                     let input = File.ReadAllText filename
-                    let ast = parse input
+                    let ast = parse input filename
                     // Type check first
                     match typecheck ast with
                     | Error msg ->

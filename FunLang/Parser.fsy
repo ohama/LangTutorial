@@ -1,6 +1,7 @@
 %{
 open Ast
 open FSharp.Text.Lexing
+open FSharp.Text.Parsing
 
 /// Create span from first symbol's start to last symbol's end
 let ruleSpan (parseState: IParseState) (firstSym: int) (lastSym: int) : Span =

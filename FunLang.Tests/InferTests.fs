@@ -9,6 +9,7 @@ open FSharp.Text.Lexing
 /// Parse a string input and return the AST
 let parse (input: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
+    Lexer.setInitialPos lexbuf "<test>"
     Parser.start Lexer.tokenize lexbuf
 
 /// Infer type in empty environment (for pure inference tests)
@@ -64,22 +65,22 @@ let inferTests = testList "Type Inference" [
 
     testList "Literal inference (INFER-04)" [
         test "Number infers to int" {
-            let result = inferEmpty (Number 42)
+            let result = inferEmpty (Number (42, unknownSpan))
             Expect.equal result TInt "Number should infer to int"
         }
 
         test "Bool true infers to bool" {
-            let result = inferEmpty (Bool true)
+            let result = inferEmpty (Bool (true, unknownSpan))
             Expect.equal result TBool "Bool true should infer to bool"
         }
 
         test "Bool false infers to bool" {
-            let result = inferEmpty (Bool false)
+            let result = inferEmpty (Bool (false, unknownSpan))
             Expect.equal result TBool "Bool false should infer to bool"
         }
 
         test "String infers to string" {
-            let result = inferEmpty (String "hello")
+            let result = inferEmpty (String ("hello", unknownSpan))
             Expect.equal result TString "String should infer to string"
         }
     ]
@@ -87,13 +88,13 @@ let inferTests = testList "Type Inference" [
     testList "Variable inference (INFER-06)" [
         test "Variable lookup returns monomorphic type" {
             let env = Map.ofList [("x", Scheme([], TInt))]
-            let s, ty = infer env (Var "x")
+            let s, ty = infer env (Var ("x", unknownSpan))
             Expect.equal (apply s ty) TInt "variable lookup should return type"
         }
 
         test "Polymorphic instantiation creates fresh vars" {
             let env = Map.ofList [("id", Scheme([0], TArrow(TVar 0, TVar 0)))]
-            let s, ty = infer env (Var "id")
+            let s, ty = infer env (Var ("id", unknownSpan))
             match apply s ty with
             | TArrow(TVar a, TVar b) ->
                 Expect.equal a b "instantiated vars should be same"
@@ -103,81 +104,81 @@ let inferTests = testList "Type Inference" [
 
         test "Unbound variable raises TypeError" {
             Expect.throws
-                (fun () -> infer Map.empty (Var "x") |> ignore)
+                (fun () -> infer Map.empty (Var ("x", unknownSpan)) |> ignore)
                 "unbound variable should raise error"
         }
     ]
 
     testList "Arithmetic operators (INFER-05)" [
         test "Add infers int -> int -> int" {
-            let result = inferEmpty (Add(Number 1, Number 2))
+            let result = inferEmpty (Add(Number (1, unknownSpan), Number (2, unknownSpan), unknownSpan))
             Expect.equal result TInt "Add should infer to int"
         }
 
         test "Subtract infers int -> int -> int" {
-            let result = inferEmpty (Subtract(Number 10, Number 4))
+            let result = inferEmpty (Subtract(Number (10, unknownSpan), Number (4, unknownSpan), unknownSpan))
             Expect.equal result TInt "Subtract should infer to int"
         }
 
         test "Multiply infers int -> int -> int" {
-            let result = inferEmpty (Multiply(Number 3, Number 4))
+            let result = inferEmpty (Multiply(Number (3, unknownSpan), Number (4, unknownSpan), unknownSpan))
             Expect.equal result TInt "Multiply should infer to int"
         }
 
         test "Divide infers int -> int -> int" {
-            let result = inferEmpty (Divide(Number 20, Number 4))
+            let result = inferEmpty (Divide(Number (20, unknownSpan), Number (4, unknownSpan), unknownSpan))
             Expect.equal result TInt "Divide should infer to int"
         }
 
         test "Negate infers int -> int" {
-            let result = inferEmpty (Negate(Number 5))
+            let result = inferEmpty (Negate(Number (5, unknownSpan), unknownSpan))
             Expect.equal result TInt "Negate should infer to int"
         }
 
         test "Add with non-int raises TypeError" {
             Expect.throws
-                (fun () -> inferEmpty (Add(Bool true, Number 1)) |> ignore)
+                (fun () -> inferEmpty (Add(Bool (true, unknownSpan), Number (1, unknownSpan), unknownSpan)) |> ignore)
                 "Add with bool should raise error"
         }
     ]
 
     testList "Comparison operators (INFER-05)" [
         test "LessThan infers int -> int -> bool" {
-            let result = inferEmpty (LessThan(Number 3, Number 5))
+            let result = inferEmpty (LessThan(Number (3, unknownSpan), Number (5, unknownSpan), unknownSpan))
             Expect.equal result TBool "LessThan should infer to bool"
         }
 
         test "Equal infers int -> int -> bool" {
-            let result = inferEmpty (Equal(Number 5, Number 5))
+            let result = inferEmpty (Equal(Number (5, unknownSpan), Number (5, unknownSpan), unknownSpan))
             Expect.equal result TBool "Equal should infer to bool"
         }
 
         test "GreaterThan infers int -> int -> bool" {
-            let result = inferEmpty (GreaterThan(Number 5, Number 3))
+            let result = inferEmpty (GreaterThan(Number (5, unknownSpan), Number (3, unknownSpan), unknownSpan))
             Expect.equal result TBool "GreaterThan should infer to bool"
         }
 
         test "Comparison with non-int raises TypeError" {
             Expect.throws
-                (fun () -> inferEmpty (LessThan(Bool true, Number 1)) |> ignore)
+                (fun () -> inferEmpty (LessThan(Bool (true, unknownSpan), Number (1, unknownSpan), unknownSpan)) |> ignore)
                 "Comparison with bool should raise error"
         }
     ]
 
     testList "Logical operators (INFER-05)" [
         test "And infers bool -> bool -> bool" {
-            let result = inferEmpty (And(Bool true, Bool false))
+            let result = inferEmpty (And(Bool (true, unknownSpan), Bool (false, unknownSpan), unknownSpan))
             Expect.equal result TBool "And should infer to bool"
         }
 
         test "Or infers bool -> bool -> bool" {
-            let result = inferEmpty (Or(Bool true, Bool false))
+            let result = inferEmpty (Or(Bool (true, unknownSpan), Bool (false, unknownSpan), unknownSpan))
             Expect.equal result TBool "Or should infer to bool"
         }
 
         test "And with non-bool raises TypeError" {
             Expect.throws
-                (fun () -> inferEmpty (And(Number 1, Bool true)) |> ignore)
+                (fun () -> inferEmpty (And(Number (1, unknownSpan), Bool (true, unknownSpan), unknownSpan)) |> ignore)
                 "And with int should raise error"
         }
     ]

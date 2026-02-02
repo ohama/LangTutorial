@@ -36,14 +36,14 @@ open Ast
 /// Returns (environment with bindings, pattern type)
 let rec inferPattern (pat: Pattern): TypeEnv * Type =
     match pat with
-    | VarPat name ->
+    | VarPat (name, _) ->
         let ty = freshVar()
         (Map.ofList [(name, Scheme ([], ty))], ty)
 
-    | WildcardPat ->
+    | WildcardPat _ ->
         (Map.empty, freshVar())
 
-    | TuplePat pats ->
+    | TuplePat (pats, _) ->
         let envTys = List.map inferPattern pats
         let env = envTys
                   |> List.map fst
@@ -51,10 +51,10 @@ let rec inferPattern (pat: Pattern): TypeEnv * Type =
         let tys = envTys |> List.map snd
         (env, TTuple tys)
 
-    | EmptyListPat ->
+    | EmptyListPat _ ->
         (Map.empty, TList (freshVar()))
 
-    | ConsPat (headPat, tailPat) ->
+    | ConsPat (headPat, tailPat, _) ->
         let headEnv, headTy = inferPattern headPat
         let tailEnv, tailTy = inferPattern tailPat
         // Note: tailTy should be TList headTy, but actual unification happens in Match
@@ -62,10 +62,10 @@ let rec inferPattern (pat: Pattern): TypeEnv * Type =
         let env = Map.fold (fun acc k v -> Map.add k v acc) headEnv tailEnv
         (env, TList headTy)
 
-    | ConstPat (IntConst _) ->
+    | ConstPat (IntConst _, _) ->
         (Map.empty, TInt)
 
-    | ConstPat (BoolConst _) ->
+    | ConstPat (BoolConst _, _) ->
         (Map.empty, TBool)
 
 /// Infer type for expression (Algorithm W)
@@ -73,48 +73,48 @@ let rec inferPattern (pat: Pattern): TypeEnv * Type =
 and infer (env: TypeEnv) (expr: Expr): Subst * Type =
     match expr with
     // === Literals (INFER-04) ===
-    | Number _ -> (empty, TInt)
-    | Bool _ -> (empty, TBool)
-    | String _ -> (empty, TString)
+    | Number (_, _) -> (empty, TInt)
+    | Bool (_, _) -> (empty, TBool)
+    | String (_, _) -> (empty, TString)
 
     // === Variable reference (INFER-06) ===
-    | Var name ->
+    | Var (name, _) ->
         match Map.tryFind name env with
         | Some scheme -> (empty, instantiate scheme)
         | None -> raise (TypeError (sprintf "Unbound variable: %s" name))
 
     // === Arithmetic operators (INFER-05) ===
     // All arithmetic: int -> int -> int
-    | Add (e1, e2) | Subtract (e1, e2) | Multiply (e1, e2) | Divide (e1, e2) ->
+    | Add (e1, e2, _) | Subtract (e1, e2, _) | Multiply (e1, e2, _) | Divide (e1, e2, _) ->
         inferBinaryOp env e1 e2 TInt TInt TInt
 
     // Unary minus: int -> int
-    | Negate e ->
+    | Negate (e, _) ->
         let s, t = infer env e
         let s' = unify (apply s t) TInt
         (compose s' s, TInt)
 
     // === Comparison operators (INFER-05) ===
     // Comparison: int -> int -> bool
-    | Equal (e1, e2) | NotEqual (e1, e2)
-    | LessThan (e1, e2) | GreaterThan (e1, e2)
-    | LessEqual (e1, e2) | GreaterEqual (e1, e2) ->
+    | Equal (e1, e2, _) | NotEqual (e1, e2, _)
+    | LessThan (e1, e2, _) | GreaterThan (e1, e2, _)
+    | LessEqual (e1, e2, _) | GreaterEqual (e1, e2, _) ->
         inferBinaryOp env e1 e2 TInt TInt TBool
 
     // === Logical operators (INFER-05) ===
     // Logical: bool -> bool -> bool
-    | And (e1, e2) | Or (e1, e2) ->
+    | And (e1, e2, _) | Or (e1, e2, _) ->
         inferBinaryOp env e1 e2 TBool TBool TBool
 
     // === Lambda (INFER-08) ===
-    | Lambda (param, body) ->
+    | Lambda (param, body, _) ->
         let paramTy = freshVar()
         let bodyEnv = Map.add param (Scheme ([], paramTy)) env
         let s, bodyTy = infer bodyEnv body
         (s, TArrow (apply s paramTy, bodyTy))
 
     // === Application (INFER-08) ===
-    | App (func, arg) ->
+    | App (func, arg, _) ->
         let s1, funcTy = infer env func
         let s2, argTy = infer (applyEnv s1 env) arg
         let resultTy = freshVar()
@@ -122,7 +122,7 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (compose s3 (compose s2 s1), apply s3 resultTy)
 
     // === If expression (INFER-10) ===
-    | If (cond, thenExpr, elseExpr) ->
+    | If (cond, thenExpr, elseExpr, _) ->
         let s1, condTy = infer env cond
         let s2, thenTy = infer (applyEnv s1 env) thenExpr
         let s3, elseTy = infer (applyEnv (compose s2 s1) env) elseExpr
@@ -134,7 +134,7 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (finalSubst, apply s5 thenTy)
 
     // === Let with polymorphism (INFER-07) ===
-    | Let (name, value, body) ->
+    | Let (name, value, body, _) ->
         let s1, valueTy = infer env value
         let env' = applyEnv s1 env
         let scheme = generalize env' (apply s1 valueTy)
@@ -143,7 +143,7 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (compose s2 s1, bodyTy)
 
     // === LetRec (INFER-09) ===
-    | LetRec (name, param, body, expr) ->
+    | LetRec (name, param, body, expr, _) ->
         // Pre-bind function with fresh type for recursive calls
         let funcTy = freshVar()
         let paramTy = freshVar()
@@ -162,7 +162,7 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (compose s3 s, exprTy)
 
     // === Tuple (INFER-11) ===
-    | Tuple exprs ->
+    | Tuple (exprs, _) ->
         let folder (s, tys) e =
             let s', ty = infer (applyEnv s env) e
             (compose s' s, ty :: tys)
@@ -170,12 +170,12 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (finalS, TTuple (List.rev revTys))
 
     // === EmptyList (INFER-12) ===
-    | EmptyList ->
+    | EmptyList _ ->
         let elemTy = freshVar()
         (empty, TList elemTy)
 
     // === List literal (INFER-12) ===
-    | List exprs ->
+    | List (exprs, _) ->
         match exprs with
         | [] ->
             let elemTy = freshVar()
@@ -190,14 +190,14 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
             (finalS, TList elemTy')
 
     // === Cons (INFER-12) ===
-    | Cons (head, tail) ->
+    | Cons (head, tail, _) ->
         let s1, headTy = infer env head
         let s2, tailTy = infer (applyEnv s1 env) tail
         let s3 = unify tailTy (TList (apply s2 headTy))
         (compose s3 (compose s2 s1), apply s3 tailTy)
 
     // === Match expression (INFER-13) ===
-    | Match (scrutinee, clauses) ->
+    | Match (scrutinee, clauses, _) ->
         let s1, scrutTy = infer env scrutinee
         let resultTy = freshVar()
         let folder s (pat, expr) =
@@ -216,7 +216,7 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (finalS, apply finalS resultTy)
 
     // === LetPat (INFER-14) ===
-    | LetPat (pat, value, body) ->
+    | LetPat (pat, value, body, _) ->
         // Infer value type
         let s1, valueTy = infer env value
         // Get pattern bindings and type

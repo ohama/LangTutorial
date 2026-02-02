@@ -9,6 +9,7 @@ open Eval
 /// Parse a string input and return the AST
 let parse (input: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
+    Lexer.setInitialPos lexbuf "<test>"
     Parser.start Lexer.tokenize lexbuf
 
 /// Parse and evaluate a string expression, returning Value
@@ -22,6 +23,8 @@ let evaluate (input: string) : int =
     | BoolValue _ -> failwith "Expected int but got bool"
     | FunctionValue _ -> failwith "Expected int but got function"
     | StringValue _ -> failwith "Expected int but got string"
+    | TupleValue _ -> failwith "Expected int but got tuple"
+    | ListValue _ -> failwith "Expected int but got list"
 
 /// Parse and evaluate a string expression, extracting bool
 let evaluateToBool (input: string) : bool =
@@ -30,6 +33,8 @@ let evaluateToBool (input: string) : bool =
     | IntValue _ -> failwith "Expected bool but got int"
     | FunctionValue _ -> failwith "Expected bool but got function"
     | StringValue _ -> failwith "Expected bool but got string"
+    | TupleValue _ -> failwith "Expected bool but got tuple"
+    | ListValue _ -> failwith "Expected bool but got list"
 
 /// Check if value is a function
 let isFunction (input: string) : bool =
@@ -44,6 +49,8 @@ let evaluateToString (input: string) : string =
     | IntValue _ -> failwith "Expected string but got int"
     | BoolValue _ -> failwith "Expected string but got bool"
     | FunctionValue _ -> failwith "Expected string but got function"
+    | TupleValue _ -> failwith "Expected string but got tuple"
+    | ListValue _ -> failwith "Expected string but got list"
 
 // ============================================================
 // Phase 1: Comments (v2.0)
@@ -263,11 +270,17 @@ let stringTests =
         testList "AST" [
             test "parse string literal" {
                 let ast = parse "\"hello\""
-                Expect.equal ast (String "hello") ""
+                // Compare ignoring span
+                match ast with
+                | String ("hello", _) -> ()
+                | _ -> failtest "Expected String(\"hello\", _)"
             }
             test "parse string concat" {
                 let ast = parse "\"a\" + \"b\""
-                Expect.equal ast (Add(String "a", String "b")) ""
+                // Compare ignoring span
+                match ast with
+                | Add (String ("a", _), String ("b", _), _) -> ()
+                | _ -> failtest "Expected Add(String \"a\", String \"b\", _)"
             }
         ]
     ]
@@ -431,17 +444,21 @@ let phase3Tests =
         testList "AST Construction" [
             test "parse let-in correctly" {
                 let ast = parse "let x = 5 in x"
-                Expect.equal ast (Let("x", Number 5, Var "x")) "AST should be Let(x, 5, Var x)"
+                match ast with
+                | Let ("x", Number (5, _), Var ("x", _), _) -> ()
+                | _ -> failtest "AST should be Let(x, Number 5, Var x)"
             }
             test "parse nested let-in" {
                 let ast = parse "let x = 1 in let y = 2 in x + y"
-                let expected = Let("x", Number 1, Let("y", Number 2, Add(Var "x", Var "y")))
-                Expect.equal ast expected "nested let AST structure"
+                match ast with
+                | Let ("x", Number (1, _), Let ("y", Number (2, _), Add (Var ("x", _), Var ("y", _), _), _), _) -> ()
+                | _ -> failtest "nested let AST structure"
             }
             test "parse variable reference" {
                 let ast = parse "let x = 5 in x + 1"
-                let expected = Let("x", Number 5, Add(Var "x", Number 1))
-                Expect.equal ast expected "let with expression body AST"
+                match ast with
+                | Let ("x", Number (5, _), Add (Var ("x", _), Number (1, _), _), _) -> ()
+                | _ -> failtest "let with expression body AST"
             }
         ]
     ]
@@ -456,54 +473,57 @@ let asInt (v: Value) : int =
     | IntValue n -> n
     | BoolValue _ -> failwith "Expected int"
     | FunctionValue _ -> failwith "Expected int"
+    | StringValue _ -> failwith "Expected int"
+    | TupleValue _ -> failwith "Expected int"
+    | ListValue _ -> failwith "Expected int"
 
 [<Tests>]
 let propertyTests =
     testList "Property-Based Tests" [
         testList "Number Properties" [
             testProperty "number evaluates to itself" <| fun (n: int) ->
-                asInt (evalExpr (Number n)) = n
+                asInt (evalExpr (Number (n, unknownSpan))) = n
 
             testProperty "double negation is identity" <| fun (n: int) ->
-                asInt (evalExpr (Negate(Negate(Number n)))) = n
+                asInt (evalExpr (Negate(Negate(Number (n, unknownSpan), unknownSpan), unknownSpan))) = n
         ]
 
         testList "Arithmetic Properties" [
             testProperty "addition is commutative" <| fun (a: int) (b: int) ->
-                let left = asInt (evalExpr (Add(Number a, Number b)))
-                let right = asInt (evalExpr (Add(Number b, Number a)))
+                let left = asInt (evalExpr (Add(Number (a, unknownSpan), Number (b, unknownSpan), unknownSpan)))
+                let right = asInt (evalExpr (Add(Number (b, unknownSpan), Number (a, unknownSpan), unknownSpan)))
                 left = right
 
             testProperty "multiplication is commutative" <| fun (a: int) (b: int) ->
-                let left = asInt (evalExpr (Multiply(Number a, Number b)))
-                let right = asInt (evalExpr (Multiply(Number b, Number a)))
+                let left = asInt (evalExpr (Multiply(Number (a, unknownSpan), Number (b, unknownSpan), unknownSpan)))
+                let right = asInt (evalExpr (Multiply(Number (b, unknownSpan), Number (a, unknownSpan), unknownSpan)))
                 left = right
 
             testProperty "zero is additive identity" <| fun (n: int) ->
-                asInt (evalExpr (Add(Number n, Number 0))) = n
+                asInt (evalExpr (Add(Number (n, unknownSpan), Number (0, unknownSpan), unknownSpan))) = n
 
             testProperty "one is multiplicative identity" <| fun (n: int) ->
-                asInt (evalExpr (Multiply(Number n, Number 1))) = n
+                asInt (evalExpr (Multiply(Number (n, unknownSpan), Number (1, unknownSpan), unknownSpan))) = n
 
             testProperty "subtraction of same number is zero" <| fun (n: int) ->
-                asInt (evalExpr (Subtract(Number n, Number n))) = 0
+                asInt (evalExpr (Subtract(Number (n, unknownSpan), Number (n, unknownSpan), unknownSpan))) = 0
         ]
 
         testList "Variable Properties" [
             testProperty "let binding returns bound value" <| fun (n: int) ->
-                asInt (evalExpr (Let("x", Number n, Var "x"))) = n
+                asInt (evalExpr (Let("x", Number (n, unknownSpan), Var ("x", unknownSpan), unknownSpan))) = n
 
             testProperty "let preserves expression value" <| fun (a: int) (b: int) ->
                 let direct = a + b
-                let viaLet = asInt (evalExpr (Let("x", Number a, Add(Var "x", Number b))))
+                let viaLet = asInt (evalExpr (Let("x", Number (a, unknownSpan), Add(Var ("x", unknownSpan), Number (b, unknownSpan), unknownSpan), unknownSpan)))
                 direct = viaLet
 
             testProperty "shadowing uses inner value" <| fun (outer: int) (inner: int) ->
-                let expr = Let("x", Number outer, Let("x", Number inner, Var "x"))
+                let expr = Let("x", Number (outer, unknownSpan), Let("x", Number (inner, unknownSpan), Var ("x", unknownSpan), unknownSpan), unknownSpan)
                 asInt (evalExpr expr) = inner
 
             testProperty "nested let uses correct scope" <| fun (a: int) (b: int) ->
-                let expr = Let("x", Number a, Let("y", Number b, Add(Var "x", Var "y")))
+                let expr = Let("x", Number (a, unknownSpan), Let("y", Number (b, unknownSpan), Add(Var ("x", unknownSpan), Var ("y", unknownSpan), unknownSpan), unknownSpan), unknownSpan)
                 asInt (evalExpr expr) = a + b
         ]
     ]
@@ -696,19 +716,27 @@ let phase4Tests =
         testList "AST Construction" [
             test "parse if-then-else" {
                 let ast = parse "if true then 1 else 2"
-                Expect.equal ast (If(Bool true, Number 1, Number 2)) "if AST"
+                match ast with
+                | If (Bool (true, _), Number (1, _), Number (2, _), _) -> ()
+                | _ -> failtest "if AST"
             }
             test "parse comparison" {
                 let ast = parse "5 > 3"
-                Expect.equal ast (GreaterThan(Number 5, Number 3)) "comparison AST"
+                match ast with
+                | GreaterThan (Number (5, _), Number (3, _), _) -> ()
+                | _ -> failtest "comparison AST"
             }
             test "parse logical and" {
                 let ast = parse "true && false"
-                Expect.equal ast (And(Bool true, Bool false)) "and AST"
+                match ast with
+                | And (Bool (true, _), Bool (false, _), _) -> ()
+                | _ -> failtest "and AST"
             }
             test "parse logical or" {
                 let ast = parse "true || false"
-                Expect.equal ast (Or(Bool true, Bool false)) "or AST"
+                match ast with
+                | Or (Bool (true, _), Bool (false, _), _) -> ()
+                | _ -> failtest "or AST"
             }
         ]
     ]
@@ -847,27 +875,39 @@ let phase5Tests =
         testList "AST Construction" [
             test "parse lambda" {
                 let ast = parse "fun x -> x"
-                Expect.equal ast (Lambda("x", Var "x")) "lambda AST"
+                match ast with
+                | Lambda ("x", Var ("x", _), _) -> ()
+                | _ -> failtest "lambda AST"
             }
             test "parse lambda with expression body" {
                 let ast = parse "fun x -> x + 1"
-                Expect.equal ast (Lambda("x", Add(Var "x", Number 1))) "lambda with expression body"
+                match ast with
+                | Lambda ("x", Add (Var ("x", _), Number (1, _), _), _) -> ()
+                | _ -> failtest "lambda with expression body"
             }
             test "parse nested lambda" {
                 let ast = parse "fun x -> fun y -> x + y"
-                Expect.equal ast (Lambda("x", Lambda("y", Add(Var "x", Var "y")))) "nested lambda"
+                match ast with
+                | Lambda ("x", Lambda ("y", Add (Var ("x", _), Var ("y", _), _), _), _) -> ()
+                | _ -> failtest "nested lambda"
             }
             test "parse application" {
                 let ast = parse "f 5"
-                Expect.equal ast (App(Var "f", Number 5)) "application AST"
+                match ast with
+                | App (Var ("f", _), Number (5, _), _) -> ()
+                | _ -> failtest "application AST"
             }
             test "parse chained application" {
                 let ast = parse "f 1 2"
-                Expect.equal ast (App(App(Var "f", Number 1), Number 2)) "chained application is left-associative"
+                match ast with
+                | App (App (Var ("f", _), Number (1, _), _), Number (2, _), _) -> ()
+                | _ -> failtest "chained application is left-associative"
             }
             test "parse let rec" {
                 let ast = parse "let rec f x = x in f 1"
-                Expect.equal ast (LetRec("f", "x", Var "x", App(Var "f", Number 1))) "let rec AST"
+                match ast with
+                | LetRec ("f", "x", Var ("x", _), App (Var ("f", _), Number (1, _), _), _) -> ()
+                | _ -> failtest "let rec AST"
             }
         ]
 

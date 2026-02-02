@@ -8,6 +8,7 @@ open Eval
 /// Parse a string input and return the AST
 let private parse (input: string) : Expr =
     let lexbuf = LexBuffer<char>.FromString input
+    Lexer.setInitialPos lexbuf "<repl>"
     Parser.start Lexer.tokenize lexbuf
 
 /// REPL loop with environment threading
