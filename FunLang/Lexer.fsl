@@ -6,6 +6,16 @@ open Parser  // Import token types from generated Parser module
 // Helper to get lexeme as string
 let lexeme (lexbuf: LexBuffer<_>) =
     LexBuffer<_>.LexemeString lexbuf
+
+/// Initialize position tracking for the lexbuf
+let setInitialPos (lexbuf: LexBuffer<_>) (filename: string) =
+    lexbuf.EndPos <- {
+        pos_fname = filename
+        pos_lnum = 1
+        pos_bol = 0
+        pos_cnum = 0
+        pos_orig_lnum = 1
+    }
 }
 
 // Character class definitions
@@ -19,7 +29,8 @@ let ident_char = letter | digit | '_'
 // Lexer rules
 rule tokenize = parse
     | whitespace+   { tokenize lexbuf }           // Skip whitespace
-    | newline       { tokenize lexbuf }           // Skip newlines
+    | newline       { lexbuf.EndPos <- lexbuf.EndPos.NextLine
+                      tokenize lexbuf }           // Skip newlines, update position
     | digit+        { NUMBER (Int32.Parse(lexeme lexbuf)) }  // Integer literal
     // Keywords MUST come before identifier pattern
     | "true"        { TRUE }
@@ -52,7 +63,9 @@ rule tokenize = parse
     // Phase 5: Arrow for lambda expressions
     | "->"          { ARROW }
     // Comments (MUST come before operators to match first)
-    | "//" [^ '\n' '\r']*  { tokenize lexbuf }   // Skip single-line comment
+    | "//" [^ '\n' '\r']* newline  { lexbuf.EndPos <- lexbuf.EndPos.NextLine;
+                                      tokenize lexbuf }   // Single-line comment with newline
+    | "//" [^ '\n' '\r']*          { tokenize lexbuf }   // Single-line comment at EOF
     | "(*"          { block_comment 1 lexbuf }   // Start block comment, depth=1
     // Single-char operators
     | '+'           { PLUS }
@@ -77,7 +90,8 @@ and block_comment depth = parse
     | "(*"    { block_comment (depth + 1) lexbuf }     // Nested open: increase depth
     | "*)"    { if depth = 1 then tokenize lexbuf     // Close: if depth=1, return to tokenize
                 else block_comment (depth - 1) lexbuf } // else decrease depth
-    | newline { block_comment depth lexbuf }           // Continue on newline
+    | newline { lexbuf.EndPos <- lexbuf.EndPos.NextLine
+                block_comment depth lexbuf }           // Continue on newline, update position
     | eof     { failwith "Unterminated comment" }      // Error on EOF
     | _       { block_comment depth lexbuf }           // Skip any other char
 
