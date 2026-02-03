@@ -165,3 +165,40 @@ let typeErrorToDiagnostic (err: TypeError) : Diagnostic =
         Notes = notes
         Hint = hint
     }
+
+// ============================================================================
+// Diagnostic Formatting
+// ============================================================================
+
+/// Format diagnostic for display (Rust-inspired multi-line format)
+/// Output format:
+/// error[E0301]: Type mismatch: expected int but got bool
+///  --> test.fun:3:10-14
+///    = in if condition: test.fun:3:4-20
+///    = note: in if then-branch at test.fun:3:4
+///    = hint: Check that all branches of your expression return the same type
+let formatDiagnostic (diag: Diagnostic) : string =
+    let sb = System.Text.StringBuilder()
+
+    // Error header: error[E0301]: Type mismatch
+    match diag.Code with
+    | Some code -> sb.AppendLine(sprintf "error[%s]: %s" code diag.Message) |> ignore
+    | None -> sb.AppendLine(sprintf "error: %s" diag.Message) |> ignore
+
+    // Primary location: --> file.fun:2:5
+    sb.AppendLine(sprintf " --> %s" (formatSpan diag.PrimarySpan)) |> ignore
+
+    // Secondary spans (related locations)
+    for (span, label) in diag.SecondarySpans do
+        sb.AppendLine(sprintf "   = %s: %s" label (formatSpan span)) |> ignore
+
+    // Notes (context stack, trace)
+    for note in diag.Notes do
+        sb.AppendLine(sprintf "   = note: %s" note) |> ignore
+
+    // Hint
+    match diag.Hint with
+    | Some hint -> sb.AppendLine(sprintf "   = hint: %s" hint) |> ignore
+    | None -> ()
+
+    sb.ToString().TrimEnd()
