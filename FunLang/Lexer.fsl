@@ -25,6 +25,7 @@ let newline = ('\n' | '\r' '\n')
 let letter = ['a'-'z' 'A'-'Z']
 let ident_start = letter | '_'
 let ident_char = letter | digit | '_'
+let type_var = '\'' letter (letter | digit | '_')*
 
 // Lexer rules
 rule tokenize = parse
@@ -46,8 +47,15 @@ rule tokenize = parse
     // Phase 3 (v3.0): Pattern matching keywords
     | "match"       { MATCH }
     | "with"        { WITH }
+    // v6.0: Type keywords for type annotations
+    | "int"         { TYPE_INT }
+    | "bool"        { TYPE_BOOL }
+    | "string"      { TYPE_STRING }
+    | "list"        { TYPE_LIST }
     // Phase 1 (v3.0): Wildcard pattern (must come before identifier)
     | '_'           { UNDERSCORE }
+    // v6.0: Type variables ('a, 'b, etc.)
+    | type_var      { TYPE_VAR (lexeme lexbuf) }
     // Identifier: starts with letter or underscore (but _ alone is UNDERSCORE)
     | ident_start ident_char* { IDENT (lexeme lexbuf) }
     // String literals (before multi-char operators)
@@ -60,6 +68,7 @@ rule tokenize = parse
     | "||"          { OR }
     // Phase 2 (v3.0): Cons operator
     | "::"          { CONS }
+    | ':'           { COLON }      // v6.0: Type annotation
     // Phase 5: Arrow for lambda expressions
     | "->"          { ARROW }
     // Comments (MUST come before operators to match first)
