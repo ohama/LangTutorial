@@ -159,7 +159,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Secondary span extraction from context stack
 
-#### Phase 4: Output & Testing
+#### Phase 4: Output & Testing ✅
 **Goal**: User-friendly error messages and comprehensive diagnostic tests
 **Depends on**: Phase 3 (needs blame assignment)
 **Requirements**: OUT-01, OUT-02, OUT-03, OUT-04, TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06
@@ -170,11 +170,11 @@ Plans:
   4. CLI displays new error format when type checking fails
   5. Tests cover if-condition type errors, non-function calls, argument mismatches, let RHS errors, and occurs check
   6. Golden test framework validates diagnostic output format
-**Plans**: 2 plans
+**Plans**: 2 plans — COMPLETE
 
 Plans:
-- [ ] 04-01-PLAN.md — Formatting functions (formatTypeNormalized, formatDiagnostic)
-- [ ] 04-02-PLAN.md — CLI integration and golden tests
+- [x] 04-01-PLAN.md — Formatting functions (formatTypeNormalized, formatDiagnostic)
+- [x] 04-02-PLAN.md — CLI integration and golden tests (12 test files)
 
 ## Progress
 
@@ -186,7 +186,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Span Infrastructure | v5.0 | 2/2 | Complete | 2026-02-02 |
 | 2. Error Representation | v5.0 | 2/2 | Complete | 2026-02-03 |
 | 3. Blame Assignment | v5.0 | 1/1 | Complete | 2026-02-03 |
-| 4. Output & Testing | v5.0 | 0/2 | Planned | - |
+| 4. Output & Testing | v5.0 | 2/2 | Complete | 2026-02-03 |
 
 ---
-*Last updated: 2026-02-03 - Phase 4 planned*
+*Last updated: 2026-02-03 - v5.0 Type Error Diagnostics COMPLETE*
