@@ -940,6 +940,7 @@ let phase5Tests =
 let main argv =
     runTestsWithCLIArgs [] argv <| testList "FunLang Tests" [
         TypeTests.typeTests
+        ElaborateTests.elaborateTests
         UnifyTests.unifyTests
         ReplTests.replEvalTests
         ReplTests.cliTests
