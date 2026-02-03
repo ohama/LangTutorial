@@ -234,7 +234,7 @@ let typeCheckTests = testList "TypeCheck Integration" [
             let result = check "1 + true"
             match result with
             | Error msg ->
-                Expect.stringContains msg "Cannot unify" "should report type mismatch"
+                Expect.stringContains msg "Type mismatch" "should report type mismatch"
             | Ok _ -> failtest "type mismatch should fail type check"
         }
 
@@ -242,7 +242,7 @@ let typeCheckTests = testList "TypeCheck Integration" [
             let result = check "if true then 1 else false"
             match result with
             | Error msg ->
-                Expect.stringContains msg "Cannot unify" "should report branch mismatch"
+                Expect.stringContains msg "Type mismatch" "should report branch mismatch"
             | Ok _ -> failtest "branch mismatch should fail type check"
         }
 
@@ -250,7 +250,7 @@ let typeCheckTests = testList "TypeCheck Integration" [
             let result = check "let x = 5 in x 3"
             match result with
             | Error msg ->
-                Expect.stringContains msg "Cannot unify" "should report application error"
+                Expect.stringContains msg "Type mismatch" "should report application error"
             | Ok _ -> failtest "applying non-function should fail type check"
         }
 
@@ -258,7 +258,7 @@ let typeCheckTests = testList "TypeCheck Integration" [
             let result = check "[1, true]"
             match result with
             | Error msg ->
-                Expect.stringContains msg "Cannot unify" "should report element type mismatch"
+                Expect.stringContains msg "Type mismatch" "should report element type mismatch"
             | Ok _ -> failtest "mixed list should fail type check"
         }
     ]

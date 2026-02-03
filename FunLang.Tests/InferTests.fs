@@ -4,6 +4,7 @@ open Expecto
 open Type
 open Infer
 open Ast
+open Diagnostic
 open FSharp.Text.Lexing
 
 /// Parse a string input and return the AST
@@ -106,6 +107,15 @@ let inferTests = testList "Type Inference" [
             Expect.throws
                 (fun () -> infer Map.empty (Var ("x", unknownSpan)) |> ignore)
                 "unbound variable should raise error"
+        }
+
+        test "Unbound variable has correct error kind" {
+            try
+                infer Map.empty (Var ("x", unknownSpan)) |> ignore
+                failtest "Expected TypeException"
+            with
+            | TypeException err ->
+                Expect.equal err.Kind (UnboundVar "x") "Should be UnboundVar with variable name"
         }
     ]
 

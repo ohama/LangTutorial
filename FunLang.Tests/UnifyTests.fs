@@ -3,6 +3,7 @@ module UnifyTests
 open Expecto
 open Type
 open Unify
+open Diagnostic
 
 /// Tests for Unify module functions (Phase 6: Testing - TEST-02, TEST-03)
 [<Tests>]
@@ -56,6 +57,14 @@ let unifyTests =
                 Expect.throws
                     (fun () -> unify TBool TString |> ignore)
                     "bool cannot unify with string"
+
+            testCase "type mismatch has correct error kind" <| fun _ ->
+                try
+                    unify TInt TBool |> ignore
+                    failtest "Expected TypeException"
+                with
+                | TypeException err ->
+                    Expect.equal err.Kind (UnifyMismatch (TInt, TBool)) "Should be UnifyMismatch"
         ]
 
         testList "Unify - Type Variables" [
@@ -84,6 +93,16 @@ let unifyTests =
                 Expect.throws
                     (fun () -> unify (TVar 0) (TArrow(TVar 0, TInt)) |> ignore)
                     "TVar 0 = TVar 0 -> int is infinite"
+
+            testCase "occurs check has correct error kind" <| fun _ ->
+                try
+                    unify (TVar 0) (TArrow(TVar 0, TInt)) |> ignore
+                    failtest "Expected TypeException"
+                with
+                | TypeException err ->
+                    match err.Kind with
+                    | OccursCheck (0, TArrow(TVar 0, TInt)) -> ()
+                    | _ -> failtest "Should be OccursCheck with correct var and type"
         ]
 
         testList "Unify - Arrow Types" [
