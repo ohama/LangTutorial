@@ -61,16 +61,17 @@ Plans:
 3. Polymorphic annotations work correctly
 4. Unit tests validate elaboration logic
 
-### Phase 3: Bidirectional Core
+### Phase 3: Bidirectional Core ✓
 
 **Goal**: Implement synthesis and checking modes with hybrid approach
 **Depends on**: Phase 2 (needs type elaboration)
 **Requirements**: BIDIR-01, BIDIR-02, BIDIR-03, BIDIR-04, BIDIR-05, BIDIR-06, BIDIR-07
+**Status:** COMPLETE (2026-02-03)
 **Plans:** 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Create Bidir.fs with synth/check functions
-- [ ] 03-02-PLAN.md — Build integration and unit tests
+- [x] 03-01-PLAN.md — Create Bidir.fs with synth/check functions
+- [x] 03-02-PLAN.md — Build integration and unit tests
 
 **Success Criteria**:
 1. `synth` function infers types for synthesizing expressions

@@ -17,21 +17,21 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 - [x] **PARSE-06**: LambdaAnnot AST 노드 추가 (파라미터 어노테이션: `fun (x: int) -> e`)
 - [x] **PARSE-07**: 커리 스타일 다중 파라미터 지원 (`fun (x: int) (y: int) -> e`)
 
-### Type Expression Elaboration
+### Type Expression Elaboration ✓
 
-- [ ] **ELAB-01**: TypeExpr → Type 변환 함수 (elaborateTypeExpr)
-- [ ] **ELAB-02**: 타입 변수 스코핑 (같은 바인딩 내 'a는 같은 타입)
-- [ ] **ELAB-03**: 다형 어노테이션 지원 (`let id (x: 'a) : 'a = x`)
+- [x] **ELAB-01**: TypeExpr → Type 변환 함수 (elaborateTypeExpr)
+- [x] **ELAB-02**: 타입 변수 스코핑 (같은 바인딩 내 'a는 같은 타입)
+- [x] **ELAB-03**: 다형 어노테이션 지원 (`let id (x: 'a) : 'a = x`)
 
-### Bidirectional Core
+### Bidirectional Core ✓
 
-- [ ] **BIDIR-01**: synth 함수 구현 (synthesis mode: expr → type)
-- [ ] **BIDIR-02**: check 함수 구현 (checking mode: expr × type → ())
-- [ ] **BIDIR-03**: 리터럴/변수/어플리케이션 synthesis 규칙
-- [ ] **BIDIR-04**: 람다 checking 규칙 (화살표 타입 분해)
-- [ ] **BIDIR-05**: 어노테이션 없는 람다 hybrid 처리 (fresh var로 synthesis)
-- [ ] **BIDIR-06**: subsumption 규칙 (synthesis → checking 전환)
-- [ ] **BIDIR-07**: Let-polymorphism 유지 (generalize at let)
+- [x] **BIDIR-01**: synth 함수 구현 (synthesis mode: expr → type)
+- [x] **BIDIR-02**: check 함수 구현 (checking mode: expr × type → ())
+- [x] **BIDIR-03**: 리터럴/변수/어플리케이션 synthesis 규칙
+- [x] **BIDIR-04**: 람다 checking 규칙 (화살표 타입 분해)
+- [x] **BIDIR-05**: 어노테이션 없는 람다 hybrid 처리 (fresh var로 synthesis)
+- [x] **BIDIR-06**: subsumption 규칙 (synthesis → checking 전환)
+- [x] **BIDIR-07**: Let-polymorphism 유지 (generalize at let)
 
 ### Annotation Checking
 
@@ -81,13 +81,13 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 | ELAB-01 | Phase 2 | Complete |
 | ELAB-02 | Phase 2 | Complete |
 | ELAB-03 | Phase 2 | Complete |
-| BIDIR-01 | Phase 3 | Pending |
-| BIDIR-02 | Phase 3 | Pending |
-| BIDIR-03 | Phase 3 | Pending |
-| BIDIR-04 | Phase 3 | Pending |
-| BIDIR-05 | Phase 3 | Pending |
-| BIDIR-06 | Phase 3 | Pending |
-| BIDIR-07 | Phase 3 | Pending |
+| BIDIR-01 | Phase 3 | Complete |
+| BIDIR-02 | Phase 3 | Complete |
+| BIDIR-03 | Phase 3 | Complete |
+| BIDIR-04 | Phase 3 | Complete |
+| BIDIR-05 | Phase 3 | Complete |
+| BIDIR-06 | Phase 3 | Complete |
+| BIDIR-07 | Phase 3 | Complete |
 | ANNOT-01 | Phase 4 | Pending |
 | ANNOT-02 | Phase 4 | Pending |
 | ANNOT-03 | Phase 4 | Pending |
@@ -101,5 +101,5 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Complete: 10 (37%)
-- Pending: 17
+- Complete: 17 (63%)
+- Pending: 10
