@@ -154,10 +154,10 @@ Plans:
   2. Secondary spans highlight related expressions contributing to the error
   3. Innermost expressions are prioritized for blame assignment
   4. Type inference functions maintain context stack during recursion
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Secondary span extraction from context stack
 
 #### Phase 4: Output & Testing
 **Goal**: User-friendly error messages and comprehensive diagnostic tests
@@ -184,8 +184,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|-----------|----------------|--------|-----------|
 | 1. Span Infrastructure | v5.0 | 2/2 | Complete | 2026-02-02 |
 | 2. Error Representation | v5.0 | 2/2 | Complete | 2026-02-03 |
-| 3. Blame Assignment | v5.0 | 0/? | Not started | - |
+| 3. Blame Assignment | v5.0 | 0/1 | Planned | - |
 | 4. Output & Testing | v5.0 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-02-03 - Phase 2 complete*
+*Last updated: 2026-02-03 - Phase 3 planned*
