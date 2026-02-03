@@ -148,3 +148,33 @@ Pattern:
 MatchClauses:
     | PIPE Pattern ARROW Expr                { [($2, $4)] }
     | PIPE Pattern ARROW Expr MatchClauses   { ($2, $4) :: $5 }
+
+// v6.0: Type expression grammar
+// Precedence via grammar structure (not %left/%right):
+//   Arrow (lowest) -> Tuple -> Atomic (highest)
+
+TypeExpr:
+    | ArrowType                     { $1 }
+
+// Arrow is right-associative: int -> int -> int = int -> (int -> int)
+ArrowType:
+    | TupleType ARROW ArrowType     { TEArrow($1, $3) }
+    | TupleType                     { $1 }
+
+// Tuple types: int * bool * string (at least 2 elements)
+TupleType:
+    | AtomicType STAR TupleTypeList { TETuple($1 :: $3) }
+    | AtomicType                    { $1 }
+
+TupleTypeList:
+    | AtomicType STAR TupleTypeList { $1 :: $3 }
+    | AtomicType                    { [$1] }
+
+// Atomic types: base types, type variables, list types, parenthesized
+AtomicType:
+    | TYPE_INT                      { TEInt }
+    | TYPE_BOOL                     { TEBool }
+    | TYPE_STRING                   { TEString }
+    | TYPE_VAR                      { TEVar($1) }
+    | AtomicType TYPE_LIST          { TEList($1) }
+    | LPAREN TypeExpr RPAREN        { $2 }

@@ -101,6 +101,11 @@ type nonTerminalId =
     | NONTERM_PatternList
     | NONTERM_Pattern
     | NONTERM_MatchClauses
+    | NONTERM_TypeExpr
+    | NONTERM_ArrowType
+    | NONTERM_TupleType
+    | NONTERM_TupleTypeList
+    | NONTERM_AtomicType
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int
 
