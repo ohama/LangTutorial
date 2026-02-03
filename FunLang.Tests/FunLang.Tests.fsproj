@@ -11,6 +11,7 @@
     <Compile Include="UnifyTests.fs" />
     <Compile Include="ReplTests.fs" />
     <Compile Include="InferTests.fs" />
+    <Compile Include="BidirTests.fs" />
     <Compile Include="TypeCheckTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
