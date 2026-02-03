@@ -10,14 +10,15 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 2 complete, ready for Phase 3
-**Plan:** All Phase 2 plans complete
-**Status:** Phase 2 verified ✓
-**Last activity:** 2026-02-03 — Phase 2 Type Expression Elaboration complete
+**Phase:** Phase 3 - Bidirectional Core (in progress)
+**Plan:** 01 of 02 complete
+**Status:** Phase 3 in progress
+**Last activity:** 2026-02-03 — Completed 03-01-PLAN.md (Bidirectional Core Implementation)
 
-Progress: ████████████░░░░░░░░░░░░░░░░ 2/6 phases (33%)
+Progress: ██████████████░░░░░░░░░░░░░░ 2.5/6 phases (42%)
 Phase 1: ✓ Complete (3/3 plans, 7/7 requirements)
 Phase 2: ✓ Complete (2/2 plans, 3/3 requirements)
+Phase 3: In progress (1/2 plans complete)
 
 ## Milestone Summary
 
@@ -40,6 +41,8 @@ See: .planning/ROADMAP.md for phase details
 | Curried multi-parameter | `fun (x: int) (y: int) -> e` matches FunLang's curried style |
 | Hybrid approach | Fresh vars for unannotated lambdas preserves backward compatibility |
 | Keep let-polymorphism | Orthogonal to bidirectional structure, maintains expressiveness |
+| Subsumption as fallback | Check mode falls back to synthesis + unification for flexible typing (03-01) |
+| Reuse Infer module functions | freshVar, instantiate, generalize from Infer for consistency (03-01) |
 | Type var includes apostrophe | TYPE_VAR lexeme captures full `'a` string for simpler parser handling (01-01) |
 | COLON after CONS | Ensures "::" lexes as single token, not two colons (01-01) |
 | TypeExpr without Span | Type expressions don't cause runtime errors; Span kept on enclosing expression (01-01) |
@@ -62,7 +65,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03
-Stopped at: Phase 2 verified
+Last session: 2026-02-03 13:56:12 UTC
+Stopped at: Completed 03-01-PLAN.md (Bidirectional Core Implementation)
 Resume file: None
-Next: Run /gsd:plan-phase 3 to plan Bidirectional Core
+Next: Execute 03-02-PLAN.md (Test Suite for Bidir Module)
