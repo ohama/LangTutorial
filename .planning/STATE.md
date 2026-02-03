@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
-**Current focus:** v5.0 타입 에러 진단 - Phase 4 (Output & Testing)
+**Current focus:** v5.0 타입 에러 진단 - COMPLETE
 
 ## Current Position
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
 **Phase:** 4 of 4 (Output & Testing)
-**Plan:** 01 of 02 in phase (completed)
-**Status:** Plan 01 complete, ready for Plan 02
-**Last activity:** 2026-02-03 — Completed 04-01-PLAN.md
+**Plan:** 02 of 02 in phase (completed)
+**Status:** Milestone complete
+**Last activity:** 2026-02-03 — Completed 04-02-PLAN.md
 
-Progress: [████████░░] 87.5% (3.5/4 phases in milestone complete)
+Progress: [██████████] 100% (4/4 phases in milestone complete)
 
 ## Milestone Summary
 
@@ -25,13 +25,13 @@ Progress: [████████░░] 87.5% (3.5/4 phases in milestone comp
 - 460 total tests (362 Expecto + 98 fslit)
 - 4,805 lines F#
 
-**v5.0 타입 에러 진단** started 2026-02-02:
+**v5.0 타입 에러 진단** shipped 2026-02-03:
 - 4 phases, 27 requirements
 - Goal: Precise diagnostics with location tracking, context awareness, helpful messages
 - Phase 1: Span Infrastructure — COMPLETE
-- Phase 2: Error Representation — COMPLETE (2026-02-03)
-- Phase 3: Blame Assignment — COMPLETE (2026-02-03)
-- Phase 4: Output & Testing — IN PROGRESS (Plan 01 complete)
+- Phase 2: Error Representation — COMPLETE
+- Phase 3: Blame Assignment — COMPLETE
+- Phase 4: Output & Testing — COMPLETE
 
 See: .planning/MILESTONES.md for full history
 
@@ -58,6 +58,8 @@ See: .planning/MILESTONES.md for full history
 | 03-01 | Secondary spans limited to 3 | Research pattern: avoid clutter while showing relevant context | Focused, actionable diagnostics |
 | 04-01 | Normalized variables use first-appearance order | Consistent 'a, 'b, 'c naming regardless of internal TVar indices | User-friendly type display |
 | 04-01 | Diagnostic format follows Rust-style | error[CODE]: message -> location = context | Modern, familiar format |
+| 04-02 | NotAFunction detection in App case | Detect non-function types before unification for clearer E0304 messages | Better error messaging for function application |
+| 04-02 | Tests use --expr for predictable filename | File input produces temp paths in diagnostics | Stable golden test output |
 
 ### Pending Todos
 
@@ -69,7 +71,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03 13:30
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-02-03 14:15
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
-Next: Phase 4 Plan 02 - Integration (execute with /gsd:execute-phase 4)
+Next: v5.0 milestone complete. Ready for v6.0 planning or verification.
