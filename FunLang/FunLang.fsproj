@@ -41,6 +41,9 @@
     <!-- 2. Type system definitions (manually written) -->
     <Compile Include="Type.fs" />
 
+    <!-- 2.5. Elaboration module (converts TypeExpr to Type) -->
+    <Compile Include="Elaborate.fs" />
+
     <!-- 3. Diagnostic types (manually written, depends on Type.fs and Ast.fs) -->
     <Compile Include="Diagnostic.fs" />
 
