@@ -170,10 +170,11 @@ Plans:
   4. CLI displays new error format when type checking fails
   5. Tests cover if-condition type errors, non-function calls, argument mismatches, let RHS errors, and occurs check
   6. Golden test framework validates diagnostic output format
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Formatting functions (formatTypeNormalized, formatDiagnostic)
+- [ ] 04-02-PLAN.md — CLI integration and golden tests
 
 ## Progress
 
@@ -185,7 +186,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Span Infrastructure | v5.0 | 2/2 | Complete | 2026-02-02 |
 | 2. Error Representation | v5.0 | 2/2 | Complete | 2026-02-03 |
 | 3. Blame Assignment | v5.0 | 1/1 | Complete | 2026-02-03 |
-| 4. Output & Testing | v5.0 | 0/? | Not started | - |
+| 4. Output & Testing | v5.0 | 0/2 | Planned | - |
 
 ---
-*Last updated: 2026-02-03 - Phase 3 complete*
+*Last updated: 2026-02-03 - Phase 4 planned*
