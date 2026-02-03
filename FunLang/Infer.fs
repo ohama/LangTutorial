@@ -3,6 +3,7 @@ module Infer
 open Type
 open Unify
 open Diagnostic
+open Elaborate
 
 /// Generate fresh type variable (unique ID via mutable counter)
 /// Start at 1000 to avoid collision with scheme bound variable indices
@@ -119,6 +120,20 @@ let rec inferWithContext (ctx: InferContext list) (env: TypeEnv) (expr: Expr): S
         let bodyEnv = Map.add param (Scheme ([], paramTy)) env
         let s, bodyTy = inferWithContext ctx bodyEnv body
         (s, TArrow (apply s paramTy, bodyTy))
+
+    // === LambdaAnnot (annotated lambda) ===
+    | LambdaAnnot (param, paramTyExpr, body, _) ->
+        let paramTy = elaborateTypeExpr paramTyExpr
+        let bodyEnv = Map.add param (Scheme ([], paramTy)) env
+        let s, bodyTy = inferWithContext ctx bodyEnv body
+        (s, TArrow (apply s paramTy, bodyTy))
+
+    // === Annot (type annotation) ===
+    | Annot (e, tyExpr, span) ->
+        let expectedTy = elaborateTypeExpr tyExpr
+        let s, inferredTy = inferWithContext ctx env e
+        let s' = unifyWithContext ctx [] span (apply s inferredTy) expectedTy
+        (compose s' s, apply s' expectedTy)
 
     // === Application (INFER-08) ===
     | App (func, arg, span) ->
