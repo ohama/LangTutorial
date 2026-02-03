@@ -10,12 +10,12 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
-**Phase:** 2 of 4 (Error Representation) — COMPLETE
-**Plan:** 02 of 02 in phase (completed)
-**Status:** Phase 2 verified, ready for Phase 3
-**Last activity:** 2026-02-03 — Phase 2 complete
+**Phase:** 3 of 4 (Blame Assignment) — IN PROGRESS
+**Plan:** 01 of 01 in phase (completed)
+**Status:** Phase 3 Plan 1 complete
+**Last activity:** 2026-02-03 — Completed 03-01-PLAN.md
 
-Progress: [█████░░░░░] 50% (2/4 phases in milestone complete)
+Progress: [███████░░░] 75% (3/4 phases in milestone complete)
 
 ## Milestone Summary
 
@@ -30,7 +30,7 @@ Progress: [█████░░░░░] 50% (2/4 phases in milestone complete
 - Goal: Precise diagnostics with location tracking, context awareness, helpful messages
 - Phase 1: Span Infrastructure — COMPLETE
 - Phase 2: Error Representation — COMPLETE (2026-02-03)
-- Phase 3: Blame Assignment — NOT STARTED
+- Phase 3: Blame Assignment — COMPLETE (2026-02-03)
 - Phase 4: Output & Testing — NOT STARTED
 
 See: .planning/MILESTONES.md for full history
@@ -53,6 +53,9 @@ See: .planning/MILESTONES.md for full history
 | 02-02 | inferWithContext maintains context stack | Push InferContext before recursing for all expression types requiring recursion | Provides inference path showing where in code type checking occurred |
 | 02-02 | Backward-compatible wrapper functions | unify and infer call new functions with empty context | Existing code continues to work without changes |
 | 02-02 | TypeCheck dual API | typecheck (string-based) and typecheckWithDiagnostic (Diagnostic-based) | Backward compatibility + rich error access for future phases |
+| 03-01 | Secondary spans processed outer-to-inner | Matches formatContextStack display order, more intuitive for users | Consistent context navigation |
+| 03-01 | Primary span excluded from secondary spans | Avoid duplication in diagnostic display | Cleaner error output |
+| 03-01 | Secondary spans limited to 3 | Research pattern: avoid clutter while showing relevant context | Focused, actionable diagnostics |
 
 ### Pending Todos
 
@@ -64,7 +67,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03 10:15
-Stopped at: Phase 2 complete, verified
+Last session: 2026-02-03 11:40
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None
-Next: Phase 3 - Blame Assignment (plan with /gsd:discuss-phase 3 or /gsd:plan-phase 3)
+Next: Phase 4 - Output & Testing (plan with /gsd:discuss-phase 4 or /gsd:plan-phase 4)
