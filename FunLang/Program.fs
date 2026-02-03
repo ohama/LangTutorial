@@ -7,6 +7,7 @@ open Ast
 open Eval
 open Format
 open TypeCheck
+open Diagnostic
 
 /// Parse a string input and return the AST
 let parse (input: string) (filename: string) : Expr =
@@ -60,12 +61,12 @@ let main argv =
             let expr = results.GetResult Expr
             try
                 let ast = parse expr "<expr>"
-                match typecheck ast with
+                match typecheckWithDiagnostic ast with
                 | Ok ty ->
-                    printfn "%s" (Type.formatType ty)
+                    printfn "%s" (Type.formatTypeNormalized ty)
                     0
-                | Error msg ->
-                    eprintfn "TypeError: %s" msg
+                | Error diag ->
+                    eprintfn "%s" (formatDiagnostic diag)
                     1
             with ex ->
                 eprintfn "Error: %s" ex.Message
@@ -77,12 +78,12 @@ let main argv =
                 try
                     let input = File.ReadAllText filename
                     let ast = parse input filename
-                    match typecheck ast with
+                    match typecheckWithDiagnostic ast with
                     | Ok ty ->
-                        printfn "%s" (Type.formatType ty)
+                        printfn "%s" (Type.formatTypeNormalized ty)
                         0
-                    | Error msg ->
-                        eprintfn "TypeError: %s" msg
+                    | Error diag ->
+                        eprintfn "%s" (formatDiagnostic diag)
                         1
                 with ex ->
                     eprintfn "Error: %s" ex.Message
@@ -126,9 +127,9 @@ let main argv =
             try
                 let ast = parse expr "<expr>"
                 // Type check first
-                match typecheck ast with
-                | Error msg ->
-                    eprintfn "TypeError: %s" msg
+                match typecheckWithDiagnostic ast with
+                | Error diag ->
+                    eprintfn "%s" (formatDiagnostic diag)
                     1
                 | Ok _ ->
                     // Type check passed, evaluate
@@ -146,9 +147,9 @@ let main argv =
                     let input = File.ReadAllText filename
                     let ast = parse input filename
                     // Type check first
-                    match typecheck ast with
-                    | Error msg ->
-                        eprintfn "TypeError: %s" msg
+                    match typecheckWithDiagnostic ast with
+                    | Error diag ->
+                        eprintfn "%s" (formatDiagnostic diag)
                         1
                     | Ok _ ->
                         // Type check passed, evaluate
