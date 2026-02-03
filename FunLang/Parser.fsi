@@ -2,6 +2,12 @@
 module Parser
 type token = 
   | EOF
+  | TYPE_VAR of (string)
+  | TYPE_INT
+  | TYPE_BOOL
+  | TYPE_STRING
+  | TYPE_LIST
+  | COLON
   | MATCH
   | WITH
   | PIPE
@@ -39,6 +45,12 @@ type token =
   | NUMBER of (int)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_TYPE_VAR
+    | TOKEN_TYPE_INT
+    | TOKEN_TYPE_BOOL
+    | TOKEN_TYPE_STRING
+    | TOKEN_TYPE_LIST
+    | TOKEN_COLON
     | TOKEN_MATCH
     | TOKEN_WITH
     | TOKEN_PIPE

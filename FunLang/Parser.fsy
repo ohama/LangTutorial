@@ -31,6 +31,10 @@ let symSpan (parseState: IParseState) (n: int) : Span =
 %token LBRACKET RBRACKET CONS
 // Phase 3 (v3.0): Pattern matching tokens
 %token MATCH WITH PIPE
+// v6.0: Type annotation tokens
+%token COLON
+%token TYPE_INT TYPE_BOOL TYPE_STRING TYPE_LIST
+%token <string> TYPE_VAR
 %token EOF
 
 // Precedence declarations (lowest to highest)
