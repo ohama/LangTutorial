@@ -11,12 +11,12 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Milestone:** v6.0 Bidirectional Type System
 **Phase:** 01-parser-extensions (Phase 1 of 6)
-**Plan:** 01-02 complete, 01-03 next
-**Status:** In progress
-**Last activity:** 2026-02-03 — Completed 01-02-PLAN.md
+**Plan:** 01-03 complete, Phase 1 complete
+**Status:** Phase 1 complete, ready for Phase 2
+**Last activity:** 2026-02-03 — Completed 01-03-PLAN.md
 
-Progress: ███░░░░░░░░░░░░░░░░░░░░░░░░░ 2/3 plans (67%)
-Phase 1: ████████░░ 2/3 plans complete
+Progress: ████░░░░░░░░░░░░░░░░░░░░░░░░ 3/3 plans (100%)
+Phase 1: ██████████ 3/3 plans complete ✓
 
 ## Milestone Summary
 
@@ -44,6 +44,9 @@ See: .planning/ROADMAP.md for phase details
 | TypeExpr without Span | Type expressions don't cause runtime errors; Span kept on enclosing expression (01-01) |
 | Grammar structure for precedence | Three-level hierarchy (Arrow > Tuple > Atomic) avoids shift/reduce conflicts (01-02) |
 | Right-associative arrow via recursion | ArrowType rule recursive at same level makes int -> int -> int = int -> (int -> int) (01-02) |
+| Annotated expression rule ordering | Placed AFTER plain parens but BEFORE tuple to disambiguate via COLON token (01-03) |
+| Dual annotated lambda rules | Single-parameter and curried rules coexist; fsyacc prefers more specific (01-03) |
+| Curried parameter desugaring | fun (x: T) (y: U) -> e desugars to nested LambdaAnnot nodes via desugarAnnotParams (01-03) |
 
 ### Pending Todos
 
@@ -56,6 +59,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 01-02-PLAN.md
+Stopped at: Completed 01-03-PLAN.md (Phase 1 complete)
 Resume file: None
-Next: Execute 01-03-PLAN.md (Annotation syntax integration)
+Next: Phase 2 - Bidirectional type synthesis
