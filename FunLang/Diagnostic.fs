@@ -94,6 +94,31 @@ let formatTrace (trace: UnifyPath list) : string list =
         | AtListElement ty -> sprintf "at list element (expected %s)" (formatType ty)
     )
 
+/// Extract secondary spans from context stack for related expression locations
+/// Primary span is excluded to avoid duplication. Limited to 3 most relevant spans.
+let contextToSecondarySpans (primarySpan: Span) (contexts: InferContext list) : (Span * string) list =
+    contexts
+    |> List.rev  // Stored inner-first, display outer-first (same as formatContextStack)
+    |> List.map (function
+        | InIfCond span -> (span, "in if condition")
+        | InIfThen span -> (span, "in then branch")
+        | InIfElse span -> (span, "in else branch")
+        | InAppFun span -> (span, "in function position")
+        | InAppArg span -> (span, "in argument position")
+        | InLetRhs (name, span) -> (span, sprintf "in binding '%s'" name)
+        | InLetBody (name, span) -> (span, sprintf "in body of '%s'" name)
+        | InLetRecBody (name, span) -> (span, sprintf "in recursive body of '%s'" name)
+        | InMatch span -> (span, "in match subject")
+        | InMatchClause (idx, span) -> (span, sprintf "in clause %d" idx)
+        | InTupleElement (idx, span) -> (span, sprintf "in tuple element %d" idx)
+        | InListElement (idx, span) -> (span, sprintf "in list element %d" idx)
+        | InConsHead span -> (span, "in cons head")
+        | InConsTail span -> (span, "in cons tail")
+    )
+    |> List.filter (fun (span, _) -> span <> primarySpan)  // Exclude primary span (avoid duplication)
+    |> List.distinctBy fst  // Remove duplicate spans
+    |> List.truncate 3  // Limit to 3 most relevant spans
+
 // ============================================================================
 // Conversion to Diagnostic
 // ============================================================================
