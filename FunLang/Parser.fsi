@@ -101,6 +101,8 @@ type nonTerminalId =
     | NONTERM_PatternList
     | NONTERM_Pattern
     | NONTERM_MatchClauses
+    | NONTERM_AnnotParamList
+    | NONTERM_AnnotParam
     | NONTERM_TypeExpr
     | NONTERM_ArrowType
     | NONTERM_TupleType
