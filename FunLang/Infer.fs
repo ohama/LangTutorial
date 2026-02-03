@@ -2,6 +2,7 @@ module Infer
 
 open Type
 open Unify
+open Diagnostic
 
 /// Generate fresh type variable (unique ID via mutable counter)
 /// Start at 1000 to avoid collision with scheme bound variable indices
@@ -68,9 +69,8 @@ let rec inferPattern (pat: Pattern): TypeEnv * Type =
     | ConstPat (BoolConst _, _) ->
         (Map.empty, TBool)
 
-/// Infer type for expression (Algorithm W)
-/// Returns (substitution, inferred type)
-and infer (env: TypeEnv) (expr: Expr): Subst * Type =
+/// Infer type with context stack tracking for rich error messages
+let rec inferWithContext (ctx: InferContext list) (env: TypeEnv) (expr: Expr): Subst * Type =
     match expr with
     // === Literals (INFER-04) ===
     | Number (_, _) -> (empty, TInt)
@@ -78,20 +78,27 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
     | String (_, _) -> (empty, TString)
 
     // === Variable reference (INFER-06) ===
-    | Var (name, _) ->
+    | Var (name, span) ->
         match Map.tryFind name env with
         | Some scheme -> (empty, instantiate scheme)
-        | None -> raise (TypeError (sprintf "Unbound variable: %s" name))
+        | None ->
+            raise (TypeException {
+                Kind = UnboundVar name
+                Span = span
+                Term = Some expr
+                ContextStack = ctx
+                Trace = []
+            })
 
     // === Arithmetic operators (INFER-05) ===
     // All arithmetic: int -> int -> int
     | Add (e1, e2, _) | Subtract (e1, e2, _) | Multiply (e1, e2, _) | Divide (e1, e2, _) ->
-        inferBinaryOp env e1 e2 TInt TInt TInt
+        inferBinaryOpWithContext ctx env e1 e2 TInt TInt TInt
 
     // Unary minus: int -> int
     | Negate (e, _) ->
-        let s, t = infer env e
-        let s' = unify (apply s t) TInt
+        let s, t = inferWithContext ctx env e
+        let s' = unifyWithContext ctx [] (spanOf e) (apply s t) TInt
         (compose s' s, TInt)
 
     // === Comparison operators (INFER-05) ===
@@ -99,74 +106,74 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
     | Equal (e1, e2, _) | NotEqual (e1, e2, _)
     | LessThan (e1, e2, _) | GreaterThan (e1, e2, _)
     | LessEqual (e1, e2, _) | GreaterEqual (e1, e2, _) ->
-        inferBinaryOp env e1 e2 TInt TInt TBool
+        inferBinaryOpWithContext ctx env e1 e2 TInt TInt TBool
 
     // === Logical operators (INFER-05) ===
     // Logical: bool -> bool -> bool
     | And (e1, e2, _) | Or (e1, e2, _) ->
-        inferBinaryOp env e1 e2 TBool TBool TBool
+        inferBinaryOpWithContext ctx env e1 e2 TBool TBool TBool
 
     // === Lambda (INFER-08) ===
     | Lambda (param, body, _) ->
         let paramTy = freshVar()
         let bodyEnv = Map.add param (Scheme ([], paramTy)) env
-        let s, bodyTy = infer bodyEnv body
+        let s, bodyTy = inferWithContext ctx bodyEnv body
         (s, TArrow (apply s paramTy, bodyTy))
 
     // === Application (INFER-08) ===
-    | App (func, arg, _) ->
-        let s1, funcTy = infer env func
-        let s2, argTy = infer (applyEnv s1 env) arg
+    | App (func, arg, span) ->
+        let s1, funcTy = inferWithContext (InAppFun span :: ctx) env func
+        let s2, argTy = inferWithContext (InAppArg span :: ctx) (applyEnv s1 env) arg
         let resultTy = freshVar()
-        let s3 = unify (apply s2 funcTy) (TArrow (argTy, resultTy))
+        let s3 = unifyWithContext ctx [] span (apply s2 funcTy) (TArrow (argTy, resultTy))
         (compose s3 (compose s2 s1), apply s3 resultTy)
 
     // === If expression (INFER-10) ===
-    | If (cond, thenExpr, elseExpr, _) ->
-        let s1, condTy = infer env cond
-        let s2, thenTy = infer (applyEnv s1 env) thenExpr
-        let s3, elseTy = infer (applyEnv (compose s2 s1) env) elseExpr
+    | If (cond, thenExpr, elseExpr, span) ->
+        let s1, condTy = inferWithContext (InIfCond span :: ctx) env cond
+        let s2, thenTy = inferWithContext (InIfThen span :: ctx) (applyEnv s1 env) thenExpr
+        let s3, elseTy = inferWithContext (InIfElse span :: ctx) (applyEnv (compose s2 s1) env) elseExpr
         // Condition must be bool
-        let s4 = unify (apply (compose s3 (compose s2 s1)) condTy) TBool
+        let s4 = unifyWithContext ctx [] span (apply (compose s3 (compose s2 s1)) condTy) TBool
         // Branches must have same type
-        let s5 = unify (apply s4 thenTy) (apply s4 elseTy)
+        let s5 = unifyWithContext ctx [] span (apply s4 thenTy) (apply s4 elseTy)
         let finalSubst = compose s5 (compose s4 (compose s3 (compose s2 s1)))
         (finalSubst, apply s5 thenTy)
 
     // === Let with polymorphism (INFER-07) ===
-    | Let (name, value, body, _) ->
-        let s1, valueTy = infer env value
+    | Let (name, value, body, span) ->
+        let s1, valueTy = inferWithContext (InLetRhs (name, span) :: ctx) env value
         let env' = applyEnv s1 env
         let scheme = generalize env' (apply s1 valueTy)
         let bodyEnv = Map.add name scheme env'
-        let s2, bodyTy = infer bodyEnv body
+        let s2, bodyTy = inferWithContext (InLetBody (name, span) :: ctx) bodyEnv body
         (compose s2 s1, bodyTy)
 
     // === LetRec (INFER-09) ===
-    | LetRec (name, param, body, expr, _) ->
+    | LetRec (name, param, body, expr, span) ->
         // Pre-bind function with fresh type for recursive calls
         let funcTy = freshVar()
         let paramTy = freshVar()
         let recEnv = Map.add name (Scheme ([], funcTy)) env
         let bodyEnv = Map.add param (Scheme ([], paramTy)) recEnv
         // Infer body type
-        let s1, bodyTy = infer bodyEnv body
+        let s1, bodyTy = inferWithContext (InLetRecBody (name, span) :: ctx) bodyEnv body
         // Unify function type with inferred arrow
-        let s2 = unify (apply s1 funcTy) (TArrow (apply s1 paramTy, bodyTy))
+        let s2 = unifyWithContext ctx [] span (apply s1 funcTy) (TArrow (apply s1 paramTy, bodyTy))
         let s = compose s2 s1
         // Generalize and add to env for expression
         let env' = applyEnv s env
         let scheme = generalize env' (apply s funcTy)
         let exprEnv = Map.add name scheme env'
-        let s3, exprTy = infer exprEnv expr
+        let s3, exprTy = inferWithContext ctx exprEnv expr
         (compose s3 s, exprTy)
 
     // === Tuple (INFER-11) ===
-    | Tuple (exprs, _) ->
-        let folder (s, tys) e =
-            let s', ty = infer (applyEnv s env) e
-            (compose s' s, ty :: tys)
-        let finalS, revTys = List.fold folder (empty, []) exprs
+    | Tuple (exprs, span) ->
+        let folder (s, tys, idx) e =
+            let s', ty = inferWithContext (InTupleElement (idx, span) :: ctx) (applyEnv s env) e
+            (compose s' s, ty :: tys, idx + 1)
+        let finalS, revTys, _ = List.fold folder (empty, [], 0) exprs
         (finalS, TTuple (List.rev revTys))
 
     // === EmptyList (INFER-12) ===
@@ -175,54 +182,54 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
         (empty, TList elemTy)
 
     // === List literal (INFER-12) ===
-    | List (exprs, _) ->
+    | List (exprs, span) ->
         match exprs with
         | [] ->
             let elemTy = freshVar()
             (empty, TList elemTy)
         | first :: rest ->
-            let s1, elemTy = infer env first
-            let folder (s, ty) e =
-                let s', eTy = infer (applyEnv s env) e
-                let s'' = unify (apply s' ty) eTy
-                (compose s'' (compose s' s), apply s'' eTy)
-            let finalS, elemTy' = List.fold folder (s1, elemTy) rest
+            let s1, elemTy = inferWithContext (InListElement (0, span) :: ctx) env first
+            let folder (s, ty, idx) e =
+                let s', eTy = inferWithContext (InListElement (idx, span) :: ctx) (applyEnv s env) e
+                let s'' = unifyWithContext ctx [] span (apply s' ty) eTy
+                (compose s'' (compose s' s), apply s'' eTy, idx + 1)
+            let finalS, elemTy', _ = List.fold folder (s1, elemTy, 1) rest
             (finalS, TList elemTy')
 
     // === Cons (INFER-12) ===
-    | Cons (head, tail, _) ->
-        let s1, headTy = infer env head
-        let s2, tailTy = infer (applyEnv s1 env) tail
-        let s3 = unify tailTy (TList (apply s2 headTy))
+    | Cons (head, tail, span) ->
+        let s1, headTy = inferWithContext (InConsHead span :: ctx) env head
+        let s2, tailTy = inferWithContext (InConsTail span :: ctx) (applyEnv s1 env) tail
+        let s3 = unifyWithContext ctx [] span tailTy (TList (apply s2 headTy))
         (compose s3 (compose s2 s1), apply s3 tailTy)
 
     // === Match expression (INFER-13) ===
-    | Match (scrutinee, clauses, _) ->
-        let s1, scrutTy = infer env scrutinee
+    | Match (scrutinee, clauses, span) ->
+        let s1, scrutTy = inferWithContext (InMatch span :: ctx) env scrutinee
         let resultTy = freshVar()
-        let folder s (pat, expr) =
+        let folder (s, idx) (pat, expr) =
             let patEnv, patTy = inferPattern pat
             // Unify scrutinee with pattern type
-            let s' = unify (apply s scrutTy) patTy
+            let s' = unifyWithContext ctx [] span (apply s scrutTy) patTy
             // Merge pattern env with current env (after applying substitution)
             let clauseEnv = Map.fold (fun acc k v -> Map.add k v acc)
                                      (applyEnv s' (applyEnv s env)) patEnv
             // Infer clause body
-            let s'', exprTy = infer clauseEnv expr
+            let s'', exprTy = inferWithContext (InMatchClause (idx, span) :: ctx) clauseEnv expr
             // Unify with result type
-            let s''' = unify (apply s'' resultTy) exprTy
-            compose s''' (compose s'' (compose s' s))
-        let finalS = List.fold folder s1 clauses
+            let s''' = unifyWithContext ctx [] span (apply s'' resultTy) exprTy
+            (compose s''' (compose s'' (compose s' s)), idx + 1)
+        let finalS, _ = List.fold folder (s1, 0) clauses
         (finalS, apply finalS resultTy)
 
     // === LetPat (INFER-14) ===
-    | LetPat (pat, value, body, _) ->
+    | LetPat (pat, value, body, span) ->
         // Infer value type
-        let s1, valueTy = infer env value
+        let s1, valueTy = inferWithContext ctx env value
         // Get pattern bindings and type
         let patEnv, patTy = inferPattern pat
         // Unify value type with pattern type
-        let s2 = unify (apply s1 valueTy) patTy
+        let s2 = unifyWithContext ctx [] span (apply s1 valueTy) patTy
         let s = compose s2 s1
         // Apply substitution and generalize each binding
         let env' = applyEnv s env
@@ -233,13 +240,17 @@ and infer (env: TypeEnv) (expr: Expr): Subst * Type =
                 generalize env' ty')
         // Merge into environment
         let bodyEnv = Map.fold (fun acc k v -> Map.add k v acc) env' generalizedPatEnv
-        let s3, bodyTy = infer bodyEnv body
+        let s3, bodyTy = inferWithContext ctx bodyEnv body
         (compose s3 s, bodyTy)
 
-/// Helper: infer binary operator with expected operand and result types
-and inferBinaryOp env e1 e2 leftTy rightTy resultTy =
-    let s1, t1 = infer env e1
-    let s2, t2 = infer (applyEnv s1 env) e2
-    let s3 = unify (apply s2 t1) leftTy
-    let s4 = unify (apply s3 t2) rightTy
+/// Helper: infer binary operator with context tracking
+and inferBinaryOpWithContext ctx env e1 e2 leftTy rightTy resultTy =
+    let s1, t1 = inferWithContext ctx env e1
+    let s2, t2 = inferWithContext ctx (applyEnv s1 env) e2
+    let s3 = unifyWithContext ctx [] (spanOf e1) (apply s2 t1) leftTy
+    let s4 = unifyWithContext ctx [] (spanOf e2) (apply s3 t2) rightTy
     (compose s4 (compose s3 (compose s2 s1)), resultTy)
+
+/// Infer type for expression (Algorithm W) - backward compatible
+and infer (env: TypeEnv) (expr: Expr): Subst * Type =
+    inferWithContext [] env expr
