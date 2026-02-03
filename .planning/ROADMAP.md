@@ -21,17 +21,18 @@ See: `.planning/research/bidirectional-typing.md`
 
 ## Phases
 
-### Phase 1: Parser Extensions
+### Phase 1: Parser Extensions ✓
 
 **Goal**: Add type annotation syntax to lexer and parser
 **Depends on**: Nothing (extends existing parser)
 **Requirements**: PARSE-01, PARSE-02, PARSE-03, PARSE-04, PARSE-05, PARSE-06, PARSE-07
+**Status:** COMPLETE (2026-02-03)
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Lexer tokens and AST types
-- [ ] 01-02-PLAN.md - Parser token declarations and TypeExpr grammar
-- [ ] 01-03-PLAN.md - Annotation syntax rules
+- [x] 01-01-PLAN.md - Lexer tokens and AST types
+- [x] 01-02-PLAN.md - Parser token declarations and TypeExpr grammar
+- [x] 01-03-PLAN.md - Annotation syntax rules
 
 **Success Criteria**:
 1. COLON token recognized in lexer

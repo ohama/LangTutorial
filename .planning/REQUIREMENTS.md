@@ -7,15 +7,15 @@
 
 Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking 모드로 대체하고 ML 스타일 타입 어노테이션 지원.
 
-### Parser Extensions
+### Parser Extensions ✓
 
-- [ ] **PARSE-01**: COLON 토큰 추가 (타입 어노테이션용)
-- [ ] **PARSE-02**: 타입 키워드 토큰 추가 (TYPE_INT, TYPE_BOOL, TYPE_STRING, TYPE_LIST)
-- [ ] **PARSE-03**: TYPE_VAR 토큰 추가 ('a, 'b 등)
-- [ ] **PARSE-04**: TypeExpr 비터미널 정의 (TEInt, TEBool, TEString, TEArrow, TETuple, TEList, TEVar)
-- [ ] **PARSE-05**: Annot AST 노드 추가 (표현식 어노테이션: `(e : T)`)
-- [ ] **PARSE-06**: LambdaAnnot AST 노드 추가 (파라미터 어노테이션: `fun (x: int) -> e`)
-- [ ] **PARSE-07**: 커리 스타일 다중 파라미터 지원 (`fun (x: int) (y: int) -> e`)
+- [x] **PARSE-01**: COLON 토큰 추가 (타입 어노테이션용)
+- [x] **PARSE-02**: 타입 키워드 토큰 추가 (TYPE_INT, TYPE_BOOL, TYPE_STRING, TYPE_LIST)
+- [x] **PARSE-03**: TYPE_VAR 토큰 추가 ('a, 'b 등)
+- [x] **PARSE-04**: TypeExpr 비터미널 정의 (TEInt, TEBool, TEString, TEArrow, TETuple, TEList, TEVar)
+- [x] **PARSE-05**: Annot AST 노드 추가 (표현식 어노테이션: `(e : T)`)
+- [x] **PARSE-06**: LambdaAnnot AST 노드 추가 (파라미터 어노테이션: `fun (x: int) -> e`)
+- [x] **PARSE-07**: 커리 스타일 다중 파라미터 지원 (`fun (x: int) (y: int) -> e`)
 
 ### Type Expression Elaboration
 
@@ -71,13 +71,13 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PARSE-01 | Phase 1 | Pending |
-| PARSE-02 | Phase 1 | Pending |
-| PARSE-03 | Phase 1 | Pending |
-| PARSE-04 | Phase 1 | Pending |
-| PARSE-05 | Phase 1 | Pending |
-| PARSE-06 | Phase 1 | Pending |
-| PARSE-07 | Phase 1 | Pending |
+| PARSE-01 | Phase 1 | Complete |
+| PARSE-02 | Phase 1 | Complete |
+| PARSE-03 | Phase 1 | Complete |
+| PARSE-04 | Phase 1 | Complete |
+| PARSE-05 | Phase 1 | Complete |
+| PARSE-06 | Phase 1 | Complete |
+| PARSE-07 | Phase 1 | Complete |
 | ELAB-01 | Phase 2 | Pending |
 | ELAB-02 | Phase 2 | Pending |
 | ELAB-03 | Phase 2 | Pending |
@@ -101,4 +101,5 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Pending: 27 (0% complete)
+- Complete: 7 (26%)
+- Pending: 20
