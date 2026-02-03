@@ -4,6 +4,7 @@ open Type
 open Unify
 open Infer
 open Ast
+open Diagnostic
 
 /// Initial type environment with Prelude function type schemes
 /// All Prelude functions have polymorphic types using type variables 0-9
@@ -50,4 +51,17 @@ let typecheck (expr: Expr): Result<Type, string> =
         let subst, ty = infer initialTypeEnv expr
         Ok(apply subst ty)
     with
-    | TypeError msg -> Error(msg)
+    | TypeException err ->
+        // Convert to Diagnostic, then extract message for backward compatibility
+        let diag = typeErrorToDiagnostic err
+        Error(diag.Message)
+
+/// Type check an expression and return full diagnostic on error
+/// Returns Ok(type) on success, Error(Diagnostic) on type error
+let typecheckWithDiagnostic (expr: Expr): Result<Type, Diagnostic> =
+    try
+        let subst, ty = infer initialTypeEnv expr
+        Ok(apply subst ty)
+    with
+    | TypeException err ->
+        Error(typeErrorToDiagnostic err)
