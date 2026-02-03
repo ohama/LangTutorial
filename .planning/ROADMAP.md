@@ -139,10 +139,11 @@ Plans:
   3. InferContext tracks inference path (InIfCond, InAppFun, InLetRhs, etc.)
   4. UnifyPath records structural failure location (AtFunctionReturn, AtTupleIndex, etc.)
   5. TypeError includes context stack and unification trace
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — Diagnostic types definition (Diagnostic, TypeError, InferContext, UnifyPath)
+- [ ] 02-02-PLAN.md — Integration into Unify.fs and Infer.fs with context/trace threading
 
 #### Phase 3: Blame Assignment
 **Goal**: Accurate error location selection integrated with Algorithm W
@@ -182,9 +183,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1. Span Infrastructure | v5.0 | 2/2 | Complete | 2026-02-02 |
-| 2. Error Representation | v5.0 | 0/? | Not started | - |
+| 2. Error Representation | v5.0 | 0/2 | In progress | - |
 | 3. Blame Assignment | v5.0 | 0/? | Not started | - |
 | 4. Output & Testing | v5.0 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-02-02 - Phase 1 complete, ready for Phase 2*
+*Last updated: 2026-02-03 - Phase 2 planned, ready for execution*
