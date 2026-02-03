@@ -2,6 +2,7 @@ module TypeTests
 
 open Expecto
 open Type
+open Diagnostic
 
 /// Tests for Type module functions (Phase 6: Testing - TEST-01)
 [<Tests>]
@@ -240,5 +241,85 @@ let typeTests =
                     ("z", Scheme([2], TArrow(TVar 2, TVar 3)))
                 ]
                 Expect.equal (freeVarsEnv env) (Set.ofList [1; 3]) "free vars from all schemes"
+        ]
+
+        testList "formatTypeNormalized (OUT-03)" [
+            testCase "normalizes TVar 1000 to 'a" <| fun _ ->
+                let ty = TVar 1000
+                let result = formatTypeNormalized ty
+                Expect.equal result "'a" "TVar 1000 should format as 'a"
+
+            testCase "normalizes two variables to 'a -> 'b" <| fun _ ->
+                let ty = TArrow(TVar 1000, TVar 1001)
+                let result = formatTypeNormalized ty
+                Expect.equal result "'a -> 'b" "should use sequential variable names"
+
+            testCase "reuses same variable name for same var" <| fun _ ->
+                let ty = TArrow(TVar 1000, TArrow(TVar 1001, TVar 1000))
+                let result = formatTypeNormalized ty
+                Expect.equal result "'a -> 'b -> 'a" "same var should have same name"
+
+            testCase "normalizes complex polymorphic type" <| fun _ ->
+                // ('a -> 'b) -> 'a list -> 'b list (map signature)
+                let ty = TArrow(TArrow(TVar 1000, TVar 1001), TArrow(TList(TVar 1000), TList(TVar 1001)))
+                let result = formatTypeNormalized ty
+                Expect.equal result "('a -> 'b) -> 'a list -> 'b list" "map type should be readable"
+
+            testCase "handles tuple types" <| fun _ ->
+                let ty = TTuple [TVar 1000; TVar 1001; TVar 1000]
+                let result = formatTypeNormalized ty
+                Expect.equal result "'a * 'b * 'a" "tuple vars should be normalized"
+
+            testCase "handles concrete types unchanged" <| fun _ ->
+                let ty = TArrow(TInt, TBool)
+                let result = formatTypeNormalized ty
+                Expect.equal result "int -> bool" "concrete types need no normalization"
+        ]
+
+        testList "formatDiagnostic (OUT-01, OUT-02)" [
+            testCase "formats diagnostic with all fields" <| fun _ ->
+                let diag = {
+                    Code = Some "E0301"
+                    Message = "Type mismatch: expected int but got bool"
+                    PrimarySpan = { FileName = "test.fun"; StartLine = 1; StartColumn = 5; EndLine = 1; EndColumn = 9 }
+                    SecondarySpans = [
+                        ({ FileName = "test.fun"; StartLine = 1; StartColumn = 1; EndLine = 1; EndColumn = 20 }, "in if condition")
+                    ]
+                    Notes = ["in if condition at test.fun:1:1-20"]
+                    Hint = Some "Check that all branches return the same type"
+                }
+                let result = Diagnostic.formatDiagnostic diag
+                Expect.stringContains result "error[E0301]" "should include error code"
+                Expect.stringContains result "Type mismatch" "should include message"
+                Expect.stringContains result " --> test.fun:1:5-9" "should include primary span"
+                Expect.stringContains result "= in if condition:" "should include secondary span"
+                Expect.stringContains result "= note:" "should include notes"
+                Expect.stringContains result "= hint:" "should include hint"
+
+            testCase "formats diagnostic without code" <| fun _ ->
+                let diag = {
+                    Code = None
+                    Message = "Unknown error"
+                    PrimarySpan = Ast.unknownSpan
+                    SecondarySpans = []
+                    Notes = []
+                    Hint = None
+                }
+                let result = Diagnostic.formatDiagnostic diag
+                Expect.stringContains result "error:" "should have error prefix without code"
+                Expect.isFalse (result.Contains "[") "should not have brackets without code"
+
+            testCase "formats diagnostic with multiple notes" <| fun _ ->
+                let diag = {
+                    Code = Some "E0301"
+                    Message = "Type mismatch"
+                    PrimarySpan = { FileName = "test.fun"; StartLine = 2; StartColumn = 1; EndLine = 2; EndColumn = 5 }
+                    SecondarySpans = []
+                    Notes = ["in function position"; "in let binding"]
+                    Hint = None
+                }
+                let result = Diagnostic.formatDiagnostic diag
+                let noteCount = result.Split("= note:").Length - 1
+                Expect.equal noteCount 2 "should have two note lines"
         ]
     ]
