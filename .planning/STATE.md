@@ -11,12 +11,12 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 
 **Milestone:** v6.0 Bidirectional Type System
 **Phase:** 01-parser-extensions (Phase 1 of 6)
-**Plan:** 01-01 complete, 01-02 next
+**Plan:** 01-02 complete, 01-03 next
 **Status:** In progress
-**Last activity:** 2026-02-03 — Completed 01-01-PLAN.md
+**Last activity:** 2026-02-03 — Completed 01-02-PLAN.md
 
-Progress: ██░░░░░░░░░░░░░░░░░░░░░░░░░░ 1/3 plans (33%)
-Phase 1: ██░░░░░░░░ 1/3 plans complete
+Progress: ███░░░░░░░░░░░░░░░░░░░░░░░░░ 2/3 plans (67%)
+Phase 1: ████████░░ 2/3 plans complete
 
 ## Milestone Summary
 
@@ -42,6 +42,8 @@ See: .planning/ROADMAP.md for phase details
 | Type var includes apostrophe | TYPE_VAR lexeme captures full `'a` string for simpler parser handling (01-01) |
 | COLON after CONS | Ensures "::" lexes as single token, not two colons (01-01) |
 | TypeExpr without Span | Type expressions don't cause runtime errors; Span kept on enclosing expression (01-01) |
+| Grammar structure for precedence | Three-level hierarchy (Arrow > Tuple > Atomic) avoids shift/reduce conflicts (01-02) |
+| Right-associative arrow via recursion | ArrowType rule recursive at same level makes int -> int -> int = int -> (int -> int) (01-02) |
 
 ### Pending Todos
 
@@ -54,6 +56,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 01-01-PLAN.md
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
-Next: Execute 01-02-PLAN.md (Parser grammar rules)
+Next: Execute 01-03-PLAN.md (Annotation syntax integration)
