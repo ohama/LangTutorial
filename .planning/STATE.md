@@ -10,12 +10,13 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Not started
-**Plan:** Not started
-**Status:** Roadmap defined, ready for Phase 1
-**Last activity:** 2026-02-03 — v6.0 milestone initialized
+**Phase:** 01-parser-extensions (Phase 1 of 6)
+**Plan:** 01-01 complete, 01-02 next
+**Status:** In progress
+**Last activity:** 2026-02-03 — Completed 01-01-PLAN.md
 
-Progress: Run /gsd:plan-phase to start Phase 1
+Progress: ██░░░░░░░░░░░░░░░░░░░░░░░░░░ 1/3 plans (33%)
+Phase 1: ██░░░░░░░░ 1/3 plans complete
 
 ## Milestone Summary
 
@@ -38,6 +39,9 @@ See: .planning/ROADMAP.md for phase details
 | Curried multi-parameter | `fun (x: int) (y: int) -> e` matches FunLang's curried style |
 | Hybrid approach | Fresh vars for unannotated lambdas preserves backward compatibility |
 | Keep let-polymorphism | Orthogonal to bidirectional structure, maintains expressiveness |
+| Type var includes apostrophe | TYPE_VAR lexeme captures full `'a` string for simpler parser handling (01-01) |
+| COLON after CONS | Ensures "::" lexes as single token, not two colons (01-01) |
+| TypeExpr without Span | Type expressions don't cause runtime errors; Span kept on enclosing expression (01-01) |
 
 ### Pending Todos
 
@@ -50,6 +54,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: v6.0 milestone initialized
+Stopped at: Completed 01-01-PLAN.md
 Resume file: None
-Next: Run /gsd:plan-phase 1 to plan Parser Extensions
+Next: Execute 01-02-PLAN.md (Parser grammar rules)
