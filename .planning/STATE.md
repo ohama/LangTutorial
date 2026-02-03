@@ -10,12 +10,12 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
-**Phase:** 1 of 4 (Span Infrastructure) — COMPLETE
-**Plan:** 02 of 02 in phase (completed)
-**Status:** Phase 1 verified, ready for Phase 2
-**Last activity:** 2026-02-02 — Phase 1 verified
+**Phase:** 2 of 4 (Error Representation) — IN PROGRESS
+**Plan:** 01 of 03 in phase (completed)
+**Status:** Diagnostic types defined, ready for Unify/Infer integration
+**Last activity:** 2026-02-03 — Completed 02-01-PLAN.md
 
-Progress: [██████████] 100% (2/2 plans in Phase 1 complete)
+Progress: [███░░░░░░░] 33% (1/3 plans in Phase 2 complete)
 
 ## Milestone Summary
 
@@ -42,6 +42,9 @@ See: .planning/MILESTONES.md for full history
 | 01-01 | Use 1-based indexing for line/column | Matches FsLexYacc Position API convention | Consistent with F# compiler error format |
 | 01-02 | Span as LAST named parameter | F# DU convention, enables pattern matching with _ | Clean pattern matching in all consumers |
 | 01-02 | Use parseState.InputStartPosition/InputEndPosition | FsYacc standard API for position tracking | Accurate span from parser rules |
+| 02-01 | SecondarySpans initialized empty | Phase 3 (Blame Assignment) will populate with related expression locations | typeErrorToDiagnostic returns empty SecondarySpans list |
+| 02-01 | Error codes E0301-E0304 | Unique codes for UnifyMismatch, OccursCheck, UnboundVar, NotAFunction | Users can reference specific error types in documentation |
+| 02-01 | Context stack and trace stored inner-first | Natural for pushing during inference, reversed for display | formatContextStack and formatTrace reverse before formatting |
 
 ### Pending Todos
 
@@ -53,7 +56,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02 09:17
-Stopped at: Phase 1 complete, verified
+Last session: 2026-02-03 09:56
+Stopped at: Completed 02-01-PLAN.md (Diagnostic Types)
 Resume file: None
-Next: Phase 2 - Error Representation (plan with /gsd:plan-phase 2)
+Next: Plan 02-02 (Unify Integration) - throw TypeException from unification failures
