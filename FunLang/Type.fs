@@ -33,6 +33,36 @@ let rec formatType = function
     | TTuple ts -> ts |> List.map formatType |> String.concat " * "
     | TList t -> sprintf "%s list" (formatType t)
 
+/// Format type with normalized type variables ('a, 'b, 'c instead of raw indices)
+/// TVar 1000, TVar 1001 -> 'a, 'b (based on order of first appearance)
+let formatTypeNormalized (ty: Type) : string =
+    // Collect all type variables in order of first appearance
+    let rec collectVars acc = function
+        | TVar n -> if List.contains n acc then acc else acc @ [n]
+        | TArrow(t1, t2) -> collectVars (collectVars acc t1) t2
+        | TTuple ts -> List.fold collectVars acc ts
+        | TList t -> collectVars acc t
+        | TInt | TBool | TString -> acc
+
+    let vars = collectVars [] ty
+    let varMap = vars |> List.mapi (fun i v -> (v, i)) |> Map.ofList
+
+    let rec format = function
+        | TInt -> "int"
+        | TBool -> "bool"
+        | TString -> "string"
+        | TVar n ->
+            match Map.tryFind n varMap with
+            | Some idx -> sprintf "'%c" (char (97 + idx % 26))
+            | None -> sprintf "'%c" (char (97 + n % 26))
+        | TArrow(t1, t2) ->
+            let left = match t1 with TArrow _ -> sprintf "(%s)" (format t1) | _ -> format t1
+            sprintf "%s -> %s" left (format t2)
+        | TTuple ts -> ts |> List.map format |> String.concat " * "
+        | TList t -> sprintf "%s list" (format t)
+
+    format ty
+
 // ============================================================================
 // Substitution Operations
 // ============================================================================
