@@ -10,13 +10,14 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 1 complete, ready for Phase 2
-**Plan:** All Phase 1 plans complete
-**Status:** Phase 1 verified ✓
-**Last activity:** 2026-02-03 — Phase 1 Parser Extensions complete
+**Phase:** Phase 2 in progress (Type Expression Elaboration)
+**Plan:** 02-01 complete
+**Status:** In progress
+**Last activity:** 2026-02-03 — Completed 02-01-PLAN.md (Type Expression Elaboration)
 
-Progress: ██████░░░░░░░░░░░░░░░░░░░░░░ 1/6 phases (17%)
+Progress: █████████░░░░░░░░░░░░░░░░░░░ 2/6 phases (33%)
 Phase 1: ✓ Complete (3/3 plans, 7/7 requirements)
+Phase 2: ▶ In progress (1/3 plans)
 
 ## Milestone Summary
 
@@ -47,6 +48,9 @@ See: .planning/ROADMAP.md for phase details
 | Annotated expression rule ordering | Placed AFTER plain parens but BEFORE tuple to disambiguate via COLON token (01-03) |
 | Dual annotated lambda rules | Single-parameter and curried rules coexist; fsyacc prefers more specific (01-03) |
 | Curried parameter desugaring | fun (x: T) (y: U) -> e desugars to nested LambdaAnnot nodes via desugarAnnotParams (01-03) |
+| Separate type var index ranges | User type vars (elaboration) start at 0, inference type vars start at 1000+ to avoid collision (02-01) |
+| Environment threading in elaboration | Thread Map<string, int> through elaboration to ensure 'a in same scope maps to same TVar index (02-01) |
+| Two elaboration APIs | elaborateTypeExpr (fresh scope) vs elaborateScoped (shared scope for curried params) (02-01) |
 
 ### Pending Todos
 
@@ -58,7 +62,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03
-Stopped at: Phase 1 verified
+Last session: 2026-02-03 10:56:17 UTC
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
-Next: Run /gsd:plan-phase 2 to plan Type Expression Elaboration
+Next: Plan 02-02 (Bidirectional Type Checker) or continue with existing plans
