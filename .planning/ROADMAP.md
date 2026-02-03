@@ -9,8 +9,8 @@
 Transform FunLang's type system from Algorithm W to bidirectional type checking. Add ML-style type annotations with synthesis/checking modes. Maintain backward compatibility for unannotated code while enabling explicit type annotations for better error messages and documentation.
 
 **Key Features:**
-- Synthesis mode (↑): infer type from expression
-- Checking mode (↓): verify expression against expected type
+- Synthesis mode (up): infer type from expression
+- Checking mode (down): verify expression against expected type
 - ML-style annotations: `fun (x: int) -> x + 1`, `let f (x: int) : int = x`
 - Curried multi-parameter: `fun (x: int) (y: int) -> x + y`
 - Polymorphic annotations: `let id (x: 'a) : 'a = x`
@@ -26,6 +26,12 @@ See: `.planning/research/bidirectional-typing.md`
 **Goal**: Add type annotation syntax to lexer and parser
 **Depends on**: Nothing (extends existing parser)
 **Requirements**: PARSE-01, PARSE-02, PARSE-03, PARSE-04, PARSE-05, PARSE-06, PARSE-07
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md - Lexer tokens and AST types
+- [ ] 01-02-PLAN.md - Parser token declarations and TypeExpr grammar
+- [ ] 01-03-PLAN.md - Annotation syntax rules
 
 **Success Criteria**:
 1. COLON token recognized in lexer
@@ -43,7 +49,7 @@ See: `.planning/research/bidirectional-typing.md`
 **Requirements**: ELAB-01, ELAB-02, ELAB-03
 
 **Success Criteria**:
-1. elaborateTypeExpr converts TypeExpr → Type
+1. elaborateTypeExpr converts TypeExpr -> Type
 2. Type variables in same binding scope map to same TVar index
 3. Polymorphic annotations work correctly
 4. Unit tests validate elaboration logic
@@ -128,12 +134,12 @@ See: `.planning/research/bidirectional-typing.md`
 ## Dependencies
 
 ```
-Phase 1 (Parser) → Phase 2 (Elaboration) → Phase 3 (Bidir Core)
-                                                    ↓
+Phase 1 (Parser) -> Phase 2 (Elaboration) -> Phase 3 (Bidir Core)
+                                                    |
                                           Phase 4 (Annotation)
-                                                    ↓
+                                                    |
                                           Phase 5 (Errors)
-                                                    ↓
+                                                    |
                                           Phase 6 (Migration)
 ```
 
