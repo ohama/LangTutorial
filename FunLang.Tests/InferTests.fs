@@ -23,6 +23,14 @@ let inferWithPrelude expr =
     let s, ty = infer TypeCheck.initialTypeEnv expr
     apply s ty
 
+/// Get diagnostic from type error for a string expression
+let getDiagnostic input =
+    try
+        parse input |> inferEmpty |> ignore
+        None
+    with
+    | TypeException err -> Some (typeErrorToDiagnostic err)
+
 [<Tests>]
 let inferTests = testList "Type Inference" [
     testList "Core functions" [
@@ -440,6 +448,49 @@ let inferTests = testList "Type Inference" [
             let result = parse "let rec length xs = match xs with | [] -> 0 | h :: t -> 1 + length t in length [1,2,3]"
                          |> inferEmpty
             Expect.equal result TInt "list length should infer to int"
+        }
+    ]
+
+    testList "Secondary span extraction (Phase 3)" [
+        test "nested if-expression error includes context spans" {
+            // Inner if has non-bool condition (1)
+            match getDiagnostic "if true then (if 1 then 2 else 3) else 4" with
+            | Some diag ->
+                Expect.isNonEmpty diag.SecondarySpans "Should have secondary spans for nested context"
+                let labels = diag.SecondarySpans |> List.map snd
+                Expect.isTrue (labels |> List.exists (fun l -> l.Contains("then")))
+                    "Should have label containing 'then' for nested if in then branch"
+            | None -> failtest "Expected type error for non-bool condition"
+        }
+
+        test "function application error includes context spans" {
+            // f expects int but receives true
+            match getDiagnostic "let f = fun x -> x + 1 in f true" with
+            | Some diag ->
+                Expect.isNonEmpty diag.SecondarySpans "Should have secondary spans for app context"
+            | None -> failtest "Expected type error for argument type mismatch"
+        }
+
+        test "primary span not duplicated in secondary spans" {
+            // Any error-producing expression
+            match getDiagnostic "if 1 then 2 else 3" with
+            | Some diag ->
+                let primarySpan = diag.PrimarySpan
+                let secondaryOnlySpans = diag.SecondarySpans |> List.map fst
+                Expect.isFalse (List.contains primarySpan secondaryOnlySpans)
+                    "Primary span should not appear in secondary spans"
+            | None -> failtest "Expected type error for non-bool condition"
+        }
+
+        test "secondary spans limited to 3" {
+            // Deeply nested expression that produces error with many context entries
+            // Nested let bindings: 5 levels deep, error at innermost level
+            let deeplyNested = "let a = 1 in let b = a in let c = b in let d = c in let e = d in e + true"
+            match getDiagnostic deeplyNested with
+            | Some diag ->
+                Expect.isLessThanOrEqual diag.SecondarySpans.Length 3
+                    "Secondary spans should be limited to 3"
+            | None -> failtest "Expected type error for adding int and bool"
         }
     ]
 ]
