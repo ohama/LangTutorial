@@ -250,7 +250,7 @@ let typeCheckTests = testList "TypeCheck Integration" [
             let result = check "let x = 5 in x 3"
             match result with
             | Error msg ->
-                Expect.stringContains msg "Type mismatch" "should report application error"
+                Expect.stringContains msg "is not a function" "should report non-function error"
             | Ok _ -> failtest "applying non-function should fail type check"
         }
 

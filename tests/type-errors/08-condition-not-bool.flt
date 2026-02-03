@@ -1,7 +1,7 @@
 // If condition must be bool
-// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "if 1 then 2 else 3" 2>&1
 // --- ExitCode: 1
-// --- Input:
-if 1 then 2 else 3
 // --- Output:
-TypeError: Cannot unify int with bool
+error[E0301]: Type mismatch: expected int but got bool
+ --> <expr>:1:0-18
+   = hint: Check that all branches of your expression return the same type

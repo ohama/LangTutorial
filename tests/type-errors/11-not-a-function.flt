@@ -1,0 +1,7 @@
+// Non-function application (E0304)
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "1 2" 2>&1
+// --- ExitCode: 1
+// --- Output:
+error[E0304]: Type int is not a function and cannot be applied
+ --> <expr>:1:0-1
+   = hint: Check that you're calling a function, not a value

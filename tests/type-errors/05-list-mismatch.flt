@@ -1,7 +1,7 @@
 // List element type mismatch
-// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "[1, true]" 2>&1
 // --- ExitCode: 1
-// --- Input:
-[1, true]
 // --- Output:
-TypeError: Cannot unify int with bool
+error[E0301]: Type mismatch: expected int but got bool
+ --> <expr>:1:0-9
+   = hint: Check that all branches of your expression return the same type

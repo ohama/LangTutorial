@@ -3,4 +3,4 @@
 // --- Input:
 fun x -> x
 // --- Output:
-'m -> 'm
+'a -> 'a

@@ -3,4 +3,4 @@
 // --- Input:
 let id = fun x -> x in id
 // --- Output:
-'n -> 'n
+'a -> 'a

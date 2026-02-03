@@ -3,4 +3,4 @@
 // --- Input:
 filter
 // --- Output:
-('m -> bool) -> 'm list -> 'm list
+('a -> bool) -> 'a list -> 'a list

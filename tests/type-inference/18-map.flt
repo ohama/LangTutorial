@@ -3,4 +3,4 @@
 // --- Input:
 map
 // --- Output:
-('m -> 'n) -> 'm list -> 'n list
+('a -> 'b) -> 'a list -> 'b list

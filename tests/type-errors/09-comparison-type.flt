@@ -1,7 +1,7 @@
 // Comparison operators require int
-// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "true < false" 2>&1
 // --- ExitCode: 1
-// --- Input:
-true < false
 // --- Output:
-TypeError: Cannot unify bool with int
+error[E0301]: Type mismatch: expected bool but got int
+ --> <expr>:1:0-4
+   = hint: Check that all branches of your expression return the same type

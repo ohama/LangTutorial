@@ -3,4 +3,4 @@
 // --- Input:
 length
 // --- Output:
-'m list -> int
+'a list -> int

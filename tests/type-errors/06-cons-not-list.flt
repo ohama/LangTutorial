@@ -1,7 +1,7 @@
 // Cons tail must be list
-// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "1 :: 2" 2>&1
 // --- ExitCode: 1
-// --- Input:
-1 :: 2
 // --- Output:
-TypeError: Cannot unify int with int list
+error[E0301]: Type mismatch: expected int but got int list
+ --> <expr>:1:0-6
+   = hint: Check that all branches of your expression return the same type

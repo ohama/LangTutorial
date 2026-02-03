@@ -124,9 +124,21 @@ let rec inferWithContext (ctx: InferContext list) (env: TypeEnv) (expr: Expr): S
     | App (func, arg, span) ->
         let s1, funcTy = inferWithContext (InAppFun span :: ctx) env func
         let s2, argTy = inferWithContext (InAppArg span :: ctx) (applyEnv s1 env) arg
-        let resultTy = freshVar()
-        let s3 = unifyWithContext ctx [] span (apply s2 funcTy) (TArrow (argTy, resultTy))
-        (compose s3 (compose s2 s1), apply s3 resultTy)
+        let appliedFuncTy = apply s2 funcTy
+        // Check if we're trying to apply a non-function type
+        match appliedFuncTy with
+        | TInt | TBool | TString | TTuple _ | TList _ ->
+            raise (TypeException {
+                Kind = NotAFunction appliedFuncTy
+                Span = spanOf func
+                Term = Some func
+                ContextStack = ctx
+                Trace = []
+            })
+        | _ ->
+            let resultTy = freshVar()
+            let s3 = unifyWithContext ctx [] span appliedFuncTy (TArrow (argTy, resultTy))
+            (compose s3 (compose s2 s1), apply s3 resultTy)
 
     // === If expression (INFER-10) ===
     | If (cond, thenExpr, elseExpr, span) ->

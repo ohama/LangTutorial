@@ -1,7 +1,7 @@
-// Infinite type error: 'm = 'n -> 'm
-// --- Command: dotnet run --project FunLang -- --emit-type %input 2>&1
+// Infinite type error: occurs check
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "let rec f x = f in f" 2>&1
 // --- ExitCode: 1
-// --- Input:
-let rec f x = f in f
 // --- Output:
-TypeError: Infinite type: 'm = 'n -> 'm
+error[E0302]: Occurs check: cannot construct infinite type 'm = 'n -> 'm
+ --> <expr>:1:0-20
+   = hint: This usually means you're trying to define a recursive type without a base case
