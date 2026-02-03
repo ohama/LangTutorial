@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
 **Phase:** 2 of 4 (Error Representation) — IN PROGRESS
-**Plan:** 01 of 03 in phase (completed)
-**Status:** Diagnostic types defined, ready for Unify/Infer integration
-**Last activity:** 2026-02-03 — Completed 02-01-PLAN.md
+**Plan:** 02 of 03 in phase (completed)
+**Status:** TypeException integrated into Unify/Infer, ready for Blame Assignment
+**Last activity:** 2026-02-03 — Completed 02-02-PLAN.md
 
-Progress: [███░░░░░░░] 33% (1/3 plans in Phase 2 complete)
+Progress: [██████░░░░] 67% (2/3 plans in Phase 2 complete)
 
 ## Milestone Summary
 
@@ -45,6 +45,10 @@ See: .planning/MILESTONES.md for full history
 | 02-01 | SecondarySpans initialized empty | Phase 3 (Blame Assignment) will populate with related expression locations | typeErrorToDiagnostic returns empty SecondarySpans list |
 | 02-01 | Error codes E0301-E0304 | Unique codes for UnifyMismatch, OccursCheck, UnboundVar, NotAFunction | Users can reference specific error types in documentation |
 | 02-01 | Context stack and trace stored inner-first | Natural for pushing during inference, reversed for display | formatContextStack and formatTrace reverse before formatting |
+| 02-02 | unifyWithContext threads context and trace | Build UnifyPath as descending into type structure for structural failure location | AtFunctionParam, AtFunctionReturn, AtTupleIndex, AtListElement track position within types |
+| 02-02 | inferWithContext maintains context stack | Push InferContext before recursing for all expression types requiring recursion | Provides inference path showing where in code type checking occurred |
+| 02-02 | Backward-compatible wrapper functions | unify and infer call new functions with empty context | Existing code continues to work without changes |
+| 02-02 | TypeCheck dual API | typecheck (string-based) and typecheckWithDiagnostic (Diagnostic-based) | Backward compatibility + rich error access for future phases |
 
 ### Pending Todos
 
@@ -56,7 +60,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03 09:56
-Stopped at: Completed 02-01-PLAN.md (Diagnostic Types)
+Last session: 2026-02-03 10:09
+Stopped at: Completed 02-02-PLAN.md (Unify Integration)
 Resume file: None
-Next: Plan 02-02 (Unify Integration) - throw TypeException from unification failures
+Next: Plan 02-03 (Blame Assignment) - populate SecondarySpans with related expression locations
