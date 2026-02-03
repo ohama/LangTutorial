@@ -85,6 +85,9 @@ type Expr =
     | Cons of Expr * Expr * span: Span              // Cons operator: h :: t
     // Phase 3 (v3.0): Pattern Matching
     | Match of scrutinee: Expr * clauses: MatchClause list * span: Span
+    // v6.0: Type annotations
+    | Annot of expr: Expr * typeExpr: TypeExpr * span: Span          // (e : T)
+    | LambdaAnnot of param: string * paramType: TypeExpr * body: Expr * span: Span  // fun (x: T) -> e
 
 /// Pattern for destructuring bindings
 /// Phase 1 (v3.0): Tuple patterns
@@ -108,6 +111,17 @@ and MatchClause = Pattern * Expr
 and Constant =
     | IntConst of int
     | BoolConst of bool
+
+/// Type expression AST for type annotations
+/// v6.0: Bidirectional type system
+and TypeExpr =
+    | TEInt                               // int
+    | TEBool                              // bool
+    | TEString                            // string
+    | TEList of TypeExpr                  // T list
+    | TEArrow of TypeExpr * TypeExpr      // T1 -> T2 (right-associative)
+    | TETuple of TypeExpr list            // T1 * T2 * ... (n >= 2)
+    | TEVar of string                     // 'a, 'b (includes apostrophe)
 
 /// Value type for evaluation results
 /// Phase 4: Heterogeneous types (int and bool)
@@ -138,6 +152,7 @@ let spanOf (expr: Expr) : Span =
     | Lambda(_, _, s) | App(_, _, s) -> s
     | Tuple(_, s) | EmptyList s | List(_, s) | Cons(_, _, s) -> s
     | Match(_, _, s) -> s
+    | Annot(_, _, s) | LambdaAnnot(_, _, _, s) -> s
 
 /// Extract span from any Pattern
 let patternSpanOf (pat: Pattern) : Span =
