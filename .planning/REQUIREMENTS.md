@@ -78,9 +78,9 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 | PARSE-05 | Phase 1 | Complete |
 | PARSE-06 | Phase 1 | Complete |
 | PARSE-07 | Phase 1 | Complete |
-| ELAB-01 | Phase 2 | Pending |
-| ELAB-02 | Phase 2 | Pending |
-| ELAB-03 | Phase 2 | Pending |
+| ELAB-01 | Phase 2 | Complete |
+| ELAB-02 | Phase 2 | Complete |
+| ELAB-03 | Phase 2 | Complete |
 | BIDIR-01 | Phase 3 | Pending |
 | BIDIR-02 | Phase 3 | Pending |
 | BIDIR-03 | Phase 3 | Pending |
@@ -101,5 +101,5 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Complete: 7 (26%)
-- Pending: 20
+- Complete: 10 (37%)
+- Pending: 17
