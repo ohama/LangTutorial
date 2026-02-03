@@ -113,6 +113,8 @@ Atom:
     | FALSE              { Bool(false, symSpan parseState 1) }
     | STRING             { String($1, symSpan parseState 1) }
     | LPAREN Expr RPAREN { $2 }  // Preserve inner expr's span
+    // v6.0: Annotated expression - (e : T)
+    | LPAREN Expr COLON TypeExpr RPAREN  { Annot($2, $4, ruleSpan parseState 1 5) }
     // Phase 1 (v3.0): Tuple expressions - (e1, e2, ...)
     | LPAREN Expr COMMA ExprList RPAREN  { Tuple($2 :: $4, ruleSpan parseState 1 5) }
     // Phase 2 (v3.0): List literals
