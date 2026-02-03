@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Include="TypeTests.fs" />
+    <Compile Include="ElaborateTests.fs" />
     <Compile Include="UnifyTests.fs" />
     <Compile Include="ReplTests.fs" />
     <Compile Include="InferTests.fs" />
