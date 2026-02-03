@@ -1,0 +1,104 @@
+# Requirements: v6.0 Bidirectional Type System
+
+**Defined:** 2026-02-03
+**Core Value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공
+
+## v6.0 Requirements
+
+Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking 모드로 대체하고 ML 스타일 타입 어노테이션 지원.
+
+### Parser Extensions
+
+- [ ] **PARSE-01**: COLON 토큰 추가 (타입 어노테이션용)
+- [ ] **PARSE-02**: 타입 키워드 토큰 추가 (TYPE_INT, TYPE_BOOL, TYPE_STRING, TYPE_LIST)
+- [ ] **PARSE-03**: TYPE_VAR 토큰 추가 ('a, 'b 등)
+- [ ] **PARSE-04**: TypeExpr 비터미널 정의 (TEInt, TEBool, TEString, TEArrow, TETuple, TEList, TEVar)
+- [ ] **PARSE-05**: Annot AST 노드 추가 (표현식 어노테이션: `(e : T)`)
+- [ ] **PARSE-06**: LambdaAnnot AST 노드 추가 (파라미터 어노테이션: `fun (x: int) -> e`)
+- [ ] **PARSE-07**: 커리 스타일 다중 파라미터 지원 (`fun (x: int) (y: int) -> e`)
+
+### Type Expression Elaboration
+
+- [ ] **ELAB-01**: TypeExpr → Type 변환 함수 (elaborateTypeExpr)
+- [ ] **ELAB-02**: 타입 변수 스코핑 (같은 바인딩 내 'a는 같은 타입)
+- [ ] **ELAB-03**: 다형 어노테이션 지원 (`let id (x: 'a) : 'a = x`)
+
+### Bidirectional Core
+
+- [ ] **BIDIR-01**: synth 함수 구현 (synthesis mode: expr → type)
+- [ ] **BIDIR-02**: check 함수 구현 (checking mode: expr × type → ())
+- [ ] **BIDIR-03**: 리터럴/변수/어플리케이션 synthesis 규칙
+- [ ] **BIDIR-04**: 람다 checking 규칙 (화살표 타입 분해)
+- [ ] **BIDIR-05**: 어노테이션 없는 람다 hybrid 처리 (fresh var로 synthesis)
+- [ ] **BIDIR-06**: subsumption 규칙 (synthesis → checking 전환)
+- [ ] **BIDIR-07**: Let-polymorphism 유지 (generalize at let)
+
+### Annotation Checking
+
+- [ ] **ANNOT-01**: Annot 표현식 처리 (checking 후 synthesis)
+- [ ] **ANNOT-02**: LambdaAnnot 표현식 처리 (파라미터 타입 사용)
+- [ ] **ANNOT-03**: 어노테이션 타입과 추론 타입 검증
+- [ ] **ANNOT-04**: 잘못된 어노테이션 에러 메시지
+
+### Error Integration
+
+- [ ] **ERR-01**: Mode-aware context (InCheckMode, InSynthMode)
+- [ ] **ERR-02**: 예상 타입 포함 에러 메시지 ("expected int due to annotation")
+- [ ] **ERR-03**: 기존 Diagnostic 인프라 재사용
+
+### Migration
+
+- [ ] **MIG-01**: Bidir 모듈이 모든 기존 테스트 통과
+- [ ] **MIG-02**: Infer → Bidir 전환 (CLI, REPL)
+- [ ] **MIG-03**: 튜토리얼 챕터 작성
+
+## Future Requirements
+
+### Higher-Rank Polymorphism (v7.0+)
+
+- **RANK-01**: forall 양화자 문법
+- **RANK-02**: Dunfield-Krishnaswami 알고리즘 완전 구현
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Higher-rank polymorphism | v6.0은 rank-1 유지 |
+| 타입 클래스/트레이트 | 별도 마일스톤 |
+| Row polymorphism | 레코드 시스템 필요 |
+
+## Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| PARSE-01 | Phase 1 | Pending |
+| PARSE-02 | Phase 1 | Pending |
+| PARSE-03 | Phase 1 | Pending |
+| PARSE-04 | Phase 1 | Pending |
+| PARSE-05 | Phase 1 | Pending |
+| PARSE-06 | Phase 1 | Pending |
+| PARSE-07 | Phase 1 | Pending |
+| ELAB-01 | Phase 2 | Pending |
+| ELAB-02 | Phase 2 | Pending |
+| ELAB-03 | Phase 2 | Pending |
+| BIDIR-01 | Phase 3 | Pending |
+| BIDIR-02 | Phase 3 | Pending |
+| BIDIR-03 | Phase 3 | Pending |
+| BIDIR-04 | Phase 3 | Pending |
+| BIDIR-05 | Phase 3 | Pending |
+| BIDIR-06 | Phase 3 | Pending |
+| BIDIR-07 | Phase 3 | Pending |
+| ANNOT-01 | Phase 4 | Pending |
+| ANNOT-02 | Phase 4 | Pending |
+| ANNOT-03 | Phase 4 | Pending |
+| ANNOT-04 | Phase 4 | Pending |
+| ERR-01 | Phase 5 | Pending |
+| ERR-02 | Phase 5 | Pending |
+| ERR-03 | Phase 5 | Pending |
+| MIG-01 | Phase 6 | Pending |
+| MIG-02 | Phase 6 | Pending |
+| MIG-03 | Phase 6 | Pending |
+
+**Coverage:**
+- v6.0 requirements: 27 total
+- Pending: 27 (0% complete)

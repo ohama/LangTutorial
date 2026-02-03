@@ -80,7 +80,16 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ OUT-01~04: Error Output (에러 코드, Rust-style 포맷, 정규화)
 - ✓ TEST-01~06: Diagnostic 테스트 (12개 골든 테스트)
 
-### On Hold (v6.0+)
+### In Progress (v6.0)
+
+- **PARSE-01~07**: 타입 어노테이션 파서 확장
+- **ELAB-01~03**: TypeExpr → Type 변환
+- **BIDIR-01~07**: Bidirectional 타입 체커 코어
+- **ANNOT-01~04**: 어노테이션 검증
+- **ERR-01~03**: Mode-aware 에러 메시지
+- **MIG-01~03**: Algorithm W → Bidirectional 전환
+
+### On Hold (v7.0+)
 
 - **ADT-01**: 대수적 데이터 타입 (Sum types)
 - **ADT-02**: 사용자 정의 타입 생성자
