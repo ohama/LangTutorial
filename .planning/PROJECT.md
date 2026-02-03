@@ -8,9 +8,9 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-## Previous State (v4.0 Shipped)
+## Current State (v5.0 Shipped)
 
-**v4.0 Shipped:** 2026-02-01
+**v5.0 Shipped:** 2026-02-03
 
 **What's implemented:**
 - Foundation & Pipeline - .NET 10 + FsLexYacc 파이프라인
@@ -26,13 +26,16 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - Lists - 가변 길이 컬렉션, cons 연산자 (v3.0)
 - Pattern Matching - match 표현식, 7가지 패턴 타입 (v3.0)
 - Prelude - 자체 호스팅 표준 라이브러리 11개 함수 (v3.0)
-- **Type System** - Hindley-Milner 타입 추론, Algorithm W (v4.0)
-- **Let-polymorphism** - 다형성 let 바인딩 (v4.0)
-- **--emit-type** - CLI 타입 표시 플래그 (v4.0)
+- Type System - Hindley-Milner 타입 추론, Algorithm W (v4.0)
+- Let-polymorphism - 다형성 let 바인딩 (v4.0)
+- --emit-type - CLI 타입 표시 플래그 (v4.0)
+- **Span Infrastructure** - 모든 AST 노드에 소스 위치 추적 (v5.0)
+- **Type Error Diagnostics** - E0301-E0304 에러 코드, Rust-style 포맷 (v5.0)
+- **Blame Assignment** - Primary/secondary span으로 정확한 에러 위치 (v5.0)
 
 **Codebase:**
-- ~4,805 lines F# (2,608 core + 2,197 tests)
-- 460 total tests (98 fslit + 362 Expecto)
+- ~5,646 lines F#
+- 570 total tests (192 fslit + 378 Expecto)
 
 ## Requirements
 
@@ -67,21 +70,17 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ INTEG-01~04: 통합 (Prelude 타입, typecheck, --emit-type, 오류 처리)
 - ✓ TEST-01~07: 테스트 (Type, Subst, Unify, Infer, TypeCheck, fslit)
 
-### Active (v5.0)
+### Validated (v5.0)
 
-## Current Milestone: v5.0 타입 에러 진단
+- ✓ SPAN-01~04: Span 인프라 (타입, AST, Lexer, Parser)
+- ✓ DIAG-01~04: Diagnostic 타입 (code, message, spans, notes, hint)
+- ✓ CTX-01~03: Context Stack (InferContext, 추론 경로)
+- ✓ TRACE-01~03: Unification Trace (UnifyPath, 단일화 경로)
+- ✓ BLAME-01~03: Blame Assignment (primary/secondary spans)
+- ✓ OUT-01~04: Error Output (에러 코드, Rust-style 포맷, 정규화)
+- ✓ TEST-01~06: Diagnostic 테스트 (12개 골든 테스트)
 
-**Goal:** Algorithm W의 에러 위치/원인을 정확히 표현하는 Diagnostic 인프라 구축
-
-**Target features:**
-- Span/Range 기반 위치 추적
-- Diagnostic 타입 시스템 (에러 코드, 위치, 기대/실제 타입)
-- Context Stack (추론 경로 추적)
-- Unification Trace (단일화 실패 경로)
-- 정확한 에러 메시지 포맷
-- Bidirectional Typing 확장 준비
-
-### On Hold (v5.0+)
+### On Hold (v6.0+)
 
 - **ADT-01**: 대수적 데이터 타입 (Sum types)
 - **ADT-02**: 사용자 정의 타입 생성자
@@ -137,4 +136,4 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | Hindley-Milner 타입 추론 | 타입 클래스 없이 완전한 추론, 교육 목적에 적합 | Good |
 
 ---
-*Last updated: 2026-02-02 after v5.0 milestone start*
+*Last updated: 2026-02-03 after v5.0 milestone complete*

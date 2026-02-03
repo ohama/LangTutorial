@@ -1,5 +1,33 @@
 # Project Milestones: LangTutorial
 
+## v5.0 타입 에러 진단 (Shipped: 2026-02-03)
+
+**Delivered:** Algorithm W 타입 에러에 정확한 위치 추적, 컨텍스트 인식, 도움말 메시지 제공
+
+**Phases completed:** 1-4 (7 plans total)
+
+**Key accomplishments:**
+
+- Span infrastructure — 모든 Expr/Pattern 노드에 소스 위치 (파일, 라인, 컬럼) 추적
+- Diagnostic 타입 — 에러 코드 (E0301-E0304), 컨텍스트 스택, 단일화 추적
+- Blame assignment — Primary span은 직접 원인, secondary spans는 관련 위치
+- Rust-style 에러 포맷 — 위치, 컨텍스트, 힌트를 포함한 멀티라인 출력
+- 타입 변수 정규화 — 내부 TVar 인덱스를 'a, 'b, 'c로 표시
+- 12개 골든 테스트 — 타입 에러 시나리오 완전 커버리지
+
+**Stats:**
+
+- 5,646 lines of F#
+- 4 phases, 7 plans, 27 requirements
+- 2 days (2026-02-02 → 2026-02-03)
+- 378 Expecto + 192 fslit tests
+
+**Git range:** `6355268` → `920de23`
+
+**What's next:** v6.0 (ADT, TCO, 예외 처리) 또는 프로젝트 완료
+
+---
+
 ## v4.0 타입 시스템 (Shipped: 2026-02-01)
 
 **Delivered:** Hindley-Milner 타입 추론 시스템으로 정적 타입 검사 지원
