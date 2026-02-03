@@ -154,11 +154,14 @@ let typeErrorToDiagnostic (err: TypeError) : Diagnostic =
     let traceNotes = formatTrace err.Trace
     let notes = contextNotes @ traceNotes
 
+    // Extract secondary spans from context stack (Phase 3 Blame Assignment)
+    let secondarySpans = contextToSecondarySpans err.Span err.ContextStack
+
     {
         Code = code
         Message = message
         PrimarySpan = err.Span
-        SecondarySpans = []  // Phase 3 (Blame Assignment) will populate this
+        SecondarySpans = secondarySpans
         Notes = notes
         Hint = hint
     }
