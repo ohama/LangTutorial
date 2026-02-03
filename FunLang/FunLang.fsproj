@@ -7,17 +7,20 @@
     =======================
     1. Ast.fs         - AST type definitions (Discriminated Unions)
     2. Type.fs        - Type system definitions (Type, Scheme, TypeEnv)
-    3. Diagnostic.fs  - Error representation types (depends on Type.fs, Ast.fs)
-    4. Unify.fs       - Unification algorithm (depends on Type.fs, Diagnostic.fs)
-    5. Infer.fs       - Inference helpers (depends on Type.fs, Unify.fs, Diagnostic.fs)
-    6. TypeCheck.fs   - Type checking integration (depends on Infer.fs)
-    7. Parser.fsy     - fsyacc specification (generates Parser.fs, Parser.fsi)
-    8. Lexer.fsl      - fslex specification (generates Lexer.fs)
-    9. Parser.fsi     - Generated parser signature
-    10. Parser.fs     - Generated parser implementation
-    11. Lexer.fs      - Generated lexer implementation
-    12. Eval.fs       - Evaluator (pattern matching on AST)
-    13. Program.fs    - Main entry point
+    3. Elaborate.fs   - Type expression elaboration (converts TypeExpr to Type)
+    4. Diagnostic.fs  - Error representation types (depends on Type.fs, Ast.fs)
+    5. Unify.fs       - Unification algorithm (depends on Type.fs, Diagnostic.fs)
+    6. Infer.fs       - Inference helpers (depends on Type.fs, Unify.fs, Diagnostic.fs)
+    7. Bidir.fs       - Bidirectional type checker (depends on Infer.fs)
+    8. TypeCheck.fs   - Type checking integration (depends on Infer.fs)
+    9. Parser.fsy     - fsyacc specification (generates Parser.fs, Parser.fsi)
+    10. Lexer.fsl     - fslex specification (generates Lexer.fs)
+    11. Parser.fsi    - Generated parser signature
+    12. Parser.fs     - Generated parser implementation
+    13. Lexer.fs      - Generated lexer implementation
+    14. Format.fs     - Formatting utilities
+    15. Eval.fs       - Evaluator (pattern matching on AST)
+    16. Program.fs    - Main entry point
 
     WHY THIS ORDER:
     - Lexer.fsl opens Parser to access token types (NUMBER, EOF, etc.)
@@ -52,6 +55,9 @@
 
     <!-- 5. Inference module (manually written, depends on Type.fs, Unify.fs, Diagnostic.fs) -->
     <Compile Include="Infer.fs" />
+
+    <!-- 5.5. Bidirectional type checker (depends on Infer.fs for helpers) -->
+    <Compile Include="Bidir.fs" />
 
     <!-- 6. Type checking integration (manually written, depends on Infer.fs) -->
     <Compile Include="TypeCheck.fs" />
