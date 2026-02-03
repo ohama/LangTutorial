@@ -66,6 +66,11 @@ Plans:
 **Goal**: Implement synthesis and checking modes with hybrid approach
 **Depends on**: Phase 2 (needs type elaboration)
 **Requirements**: BIDIR-01, BIDIR-02, BIDIR-03, BIDIR-04, BIDIR-05, BIDIR-06, BIDIR-07
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Create Bidir.fs with synth/check functions
+- [ ] 03-02-PLAN.md — Build integration and unit tests
 
 **Success Criteria**:
 1. `synth` function infers types for synthesizing expressions
