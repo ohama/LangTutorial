@@ -129,7 +129,7 @@ Plans:
 - [x] 01-01-PLAN.md — Span type definition + Lexer position tracking
 - [x] 01-02-PLAN.md — AST span integration + Parser propagation
 
-#### Phase 2: Error Representation
+#### Phase 2: Error Representation ✅
 **Goal**: Rich diagnostic types with context stacks and unification traces
 **Depends on**: Phase 1 (needs Span)
 **Requirements**: DIAG-01, DIAG-02, DIAG-03, DIAG-04, CTX-01, CTX-02, CTX-03, TRACE-01, TRACE-02, TRACE-03
@@ -139,11 +139,11 @@ Plans:
   3. InferContext tracks inference path (InIfCond, InAppFun, InLetRhs, etc.)
   4. UnifyPath records structural failure location (AtFunctionReturn, AtTupleIndex, etc.)
   5. TypeError includes context stack and unification trace
-**Plans**: 2 plans
+**Plans**: 2 plans — COMPLETE
 
 Plans:
-- [ ] 02-01-PLAN.md — Diagnostic types definition (Diagnostic, TypeError, InferContext, UnifyPath)
-- [ ] 02-02-PLAN.md — Integration into Unify.fs and Infer.fs with context/trace threading
+- [x] 02-01-PLAN.md — Diagnostic types definition (Diagnostic, TypeError, InferContext, UnifyPath)
+- [x] 02-02-PLAN.md — Integration into Unify.fs and Infer.fs with context/trace threading
 
 #### Phase 3: Blame Assignment
 **Goal**: Accurate error location selection integrated with Algorithm W
@@ -183,9 +183,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1. Span Infrastructure | v5.0 | 2/2 | Complete | 2026-02-02 |
-| 2. Error Representation | v5.0 | 0/2 | In progress | - |
+| 2. Error Representation | v5.0 | 2/2 | Complete | 2026-02-03 |
 | 3. Blame Assignment | v5.0 | 0/? | Not started | - |
 | 4. Output & Testing | v5.0 | 0/? | Not started | - |
 
 ---
-*Last updated: 2026-02-03 - Phase 2 planned, ready for execution*
+*Last updated: 2026-02-03 - Phase 2 complete*
