@@ -5,17 +5,17 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
-**Current focus:** v5.0 타입 에러 진단 - Phase 3 (Blame Assignment)
+**Current focus:** v5.0 타입 에러 진단 - Phase 4 (Output & Testing)
 
 ## Current Position
 
 **Milestone:** v5.0 타입 에러 진단 — Algorithm W 에러 위치/원인 정확히 표현
-**Phase:** 3 of 4 (Blame Assignment) — COMPLETE
-**Plan:** 01 of 01 in phase (completed)
-**Status:** Phase 3 verified, ready for Phase 4
-**Last activity:** 2026-02-03 — Completed 03-01-PLAN.md
+**Phase:** 4 of 4 (Output & Testing)
+**Plan:** 01 of 02 in phase (completed)
+**Status:** Plan 01 complete, ready for Plan 02
+**Last activity:** 2026-02-03 — Completed 04-01-PLAN.md
 
-Progress: [███████░░░] 75% (3/4 phases in milestone complete)
+Progress: [████████░░] 87.5% (3.5/4 phases in milestone complete)
 
 ## Milestone Summary
 
@@ -31,7 +31,7 @@ Progress: [███████░░░] 75% (3/4 phases in milestone complete
 - Phase 1: Span Infrastructure — COMPLETE
 - Phase 2: Error Representation — COMPLETE (2026-02-03)
 - Phase 3: Blame Assignment — COMPLETE (2026-02-03)
-- Phase 4: Output & Testing — NOT STARTED
+- Phase 4: Output & Testing — IN PROGRESS (Plan 01 complete)
 
 See: .planning/MILESTONES.md for full history
 
@@ -56,6 +56,8 @@ See: .planning/MILESTONES.md for full history
 | 03-01 | Secondary spans processed outer-to-inner | Matches formatContextStack display order, more intuitive for users | Consistent context navigation |
 | 03-01 | Primary span excluded from secondary spans | Avoid duplication in diagnostic display | Cleaner error output |
 | 03-01 | Secondary spans limited to 3 | Research pattern: avoid clutter while showing relevant context | Focused, actionable diagnostics |
+| 04-01 | Normalized variables use first-appearance order | Consistent 'a, 'b, 'c naming regardless of internal TVar indices | User-friendly type display |
+| 04-01 | Diagnostic format follows Rust-style | error[CODE]: message -> location = context | Modern, familiar format |
 
 ### Pending Todos
 
@@ -67,7 +69,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-03 11:45
-Stopped at: Phase 3 complete, verified
+Last session: 2026-02-03 13:30
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
-Next: Phase 4 - Output & Testing (plan with /gsd:discuss-phase 4 or /gsd:plan-phase 4)
+Next: Phase 4 Plan 02 - Integration (execute with /gsd:execute-phase 4)
