@@ -1,5 +1,18 @@
 module Infer
 
+// ============================================================
+// NOTE: The main entry points (infer, inferWithContext) are
+// deprecated in favor of Bidir.synth/synthTop.
+//
+// This module provides essential helper functions used by Bidir:
+// - freshVar: Generate fresh type variables
+// - instantiate: Instantiate a polymorphic scheme
+// - generalize: Generalize a type to a scheme (let-polymorphism)
+// - inferPattern: Infer types for pattern matching
+//
+// DO NOT remove this module - Bidir depends on these functions.
+// ============================================================
+
 open Type
 open Unify
 open Diagnostic
@@ -70,7 +83,11 @@ let rec inferPattern (pat: Pattern): TypeEnv * Type =
     | ConstPat (BoolConst _, _) ->
         (Map.empty, TBool)
 
-/// Infer type with context stack tracking for rich error messages
+/// <summary>
+/// DEPRECATED: Use Bidir.synth instead.
+/// Context-aware version of Algorithm W inference.
+/// See: Bidir module for the current implementation.
+/// </summary>
 let rec inferWithContext (ctx: InferContext list) (env: TypeEnv) (expr: Expr): Subst * Type =
     match expr with
     // === Literals (INFER-04) ===
@@ -278,6 +295,15 @@ and inferBinaryOpWithContext ctx env e1 e2 leftTy rightTy resultTy =
     let s4 = unifyWithContext ctx [] (spanOf e2) (apply s3 t2) rightTy
     (compose s4 (compose s3 (compose s2 s1)), resultTy)
 
-/// Infer type for expression (Algorithm W) - backward compatible
+/// <summary>
+/// DEPRECATED: Use Bidir.synth instead for type inference.
+/// This function implements Algorithm W and is kept for reference.
+/// The bidirectional type checker (Bidir module) is now the primary
+/// type inference mechanism, supporting type annotations.
+/// </summary>
+/// <remarks>
+/// Helper functions (freshVar, instantiate, generalize, inferPattern)
+/// from this module are still actively used by the Bidir module.
+/// </remarks>
 and infer (env: TypeEnv) (expr: Expr): Subst * Type =
     inferWithContext [] env expr
