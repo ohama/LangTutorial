@@ -18,14 +18,19 @@ F#으로 프로그래밍 언어 만들기 튜토리얼 유튜브 대본.
 | 08 | 패턴 매칭 | [08-pattern-matching.md](08-pattern-matching.md) | 18-20분 |
 | 09 | Prelude | [09-prelude.md](09-prelude.md) | 18-20분 |
 | 10 | Hindley-Milner 타입 시스템 | [10-type-system.md](10-type-system.md) | 20-22분 |
+| 11 | Rust 스타일 에러 메시지 | [11-type-error-diagnostics.md](11-type-error-diagnostics.md) | 18-20분 |
+| 12 | 양방향 타입 체킹 | [12-bidirectional-typing.md](12-bidirectional-typing.md) | 20-22분 |
 
 ### 부록 (Appendix)
 
 | EP | 제목 | 파일 | 예상 길이 |
 |----|------|------|-----------|
-| A1 | 테스트 전략 | [appendix-01-testing.md](appendix-01-testing.md) | 15-18분 |
+| A1 | 테스트 전략 | [appendix-01-testing.md](appendix-01-testing.md) | 18-20분 |
+| A2 | 주석 구현 | [appendix-02-comments.md](appendix-02-comments.md) | 10-12분 |
+| A3 | 문자열 타입 | [appendix-03-strings.md](appendix-03-strings.md) | 12-14분 |
+| A4 | REPL | [appendix-04-repl.md](appendix-04-repl.md) | 12-14분 |
 
-**총 예상 길이:** 약 3시간
+**총 예상 길이:** 약 4시간
 
 ## 대본 형식
 
@@ -63,13 +68,15 @@ F#으로 프로그래밍 언어 만들기 튜토리얼 유튜브 대본.
 ```
 F#과 fslex/fsyacc로 프로그래밍 언어를 직접 만들어 봅니다.
 
-10개 에피소드에 걸쳐:
+12개 본편 + 4개 부록 에피소드에 걸쳐:
 - 숫자만 인식하는 파서에서 시작
 - 사칙연산 계산기로 발전
 - 변수, 조건문, 함수, 재귀 추가
 - 튜플, 리스트, 패턴 매칭 구현
 - Self-hosted Prelude 표준 라이브러리
 - Hindley-Milner 타입 추론 시스템
+- Rust 스타일 에러 메시지
+- 양방향 타입 체킹 (타입 어노테이션)
 - 최종적으로 정적 타입의 Turing-complete 언어 완성!
 
 컴파일러 이론 수업 없이도, 실습 중심으로 언어 구현의 핵심을 배울 수 있습니다.
