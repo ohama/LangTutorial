@@ -46,11 +46,11 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 - [x] **ERR-02**: 예상 타입 포함 에러 메시지 ("expected int due to annotation")
 - [x] **ERR-03**: 기존 Diagnostic 인프라 재사용
 
-### Migration
+### Migration ✓
 
-- [ ] **MIG-01**: Bidir 모듈이 모든 기존 테스트 통과
-- [ ] **MIG-02**: Infer → Bidir 전환 (CLI, REPL)
-- [ ] **MIG-03**: 튜토리얼 챕터 작성
+- [x] **MIG-01**: Bidir 모듈이 모든 기존 테스트 통과
+- [x] **MIG-02**: Infer → Bidir 전환 (CLI, REPL)
+- [x] **MIG-03**: 튜토리얼 챕터 작성
 
 ## Future Requirements
 
@@ -95,11 +95,11 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 | ERR-01 | Phase 5 | Complete |
 | ERR-02 | Phase 5 | Complete |
 | ERR-03 | Phase 5 | Complete |
-| MIG-01 | Phase 6 | Pending |
-| MIG-02 | Phase 6 | Pending |
-| MIG-03 | Phase 6 | Pending |
+| MIG-01 | Phase 6 | Complete |
+| MIG-02 | Phase 6 | Complete |
+| MIG-03 | Phase 6 | Complete |
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Complete: 24 (89%)
-- Pending: 3
+- Complete: 27 (100%)
+- Pending: 0
