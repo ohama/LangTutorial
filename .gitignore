@@ -37,3 +37,4 @@ logs/
 *.key
 credentials.json
 secrets.json
+.claude
