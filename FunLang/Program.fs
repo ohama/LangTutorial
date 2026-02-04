@@ -51,7 +51,7 @@ let main argv =
             let expr = results.GetResult Expr
             try
                 let ast = parse expr "<expr>"
-                printfn "%A" ast
+                printfn "%s" (formatAst ast)
                 0
             with ex ->
                 eprintfn "Error: %s" ex.Message
@@ -113,7 +113,7 @@ let main argv =
                 try
                     let input = File.ReadAllText filename
                     let ast = parse input filename
-                    printfn "%A" ast
+                    printfn "%s" (formatAst ast)
                     0
                 with ex ->
                     eprintfn "Error: %s" ex.Message

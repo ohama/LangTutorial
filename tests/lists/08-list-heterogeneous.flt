@@ -1,6 +1,7 @@
-// LIST-04: Heterogeneous list (dynamically typed)
-// --- Command: dotnet run --project FunLang -- %input
-// --- Input:
-[1, true, "hello"]
+// LIST-04: Heterogeneous list - should fail type check (statically typed language)
+// --- Command: dotnet run --project FunLang -- --expr "[1, true]" 2>&1
+// --- ExitCode: 1
 // --- Output:
-[1, true, "hello"]
+error[E0301]: Type mismatch: expected int but got bool
+ --> <expr>:1:0-9
+   = hint: Check that all branches of your expression return the same type

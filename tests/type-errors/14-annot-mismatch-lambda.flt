@@ -3,7 +3,7 @@
 // --- ExitCode: 1
 // --- Output:
 error[E0301]: Type mismatch: expected bool but got int
- --> <expr>:1:10-11
+ --> <expr>:1:10-15
    = due to annotation: <expr>:1:0-31
    = note: expected bool -> bool due to annotation at <expr>:1:0-31
    = hint: The type annotation at <expr>:1:0-31 expects bool

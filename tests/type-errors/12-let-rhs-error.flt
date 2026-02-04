@@ -3,7 +3,7 @@
 // --- ExitCode: 1
 // --- Output:
 error[E0301]: Type mismatch: expected bool but got int
- --> <expr>:1:16-17
+ --> <expr>:1:16-21
    = in body of 'x': <expr>:1:0-21
    = note: in let x body at <expr>:1:0-21
    = hint: Check that all branches of your expression return the same type

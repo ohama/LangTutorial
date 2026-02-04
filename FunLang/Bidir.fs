@@ -125,7 +125,32 @@ let rec synth (ctx: InferContext list) (env: TypeEnv) (expr: Expr): Subst * Type
         (finalSubst, apply s5 thenTy)
 
     // === Binary operators ===
-    | Add (e1, e2, _) | Subtract (e1, e2, _) | Multiply (e1, e2, _) | Divide (e1, e2, _) ->
+    // Add supports both int and string (overloaded)
+    | Add (e1, e2, span) ->
+        let s1, t1 = synth ctx env e1
+        let s2, t2 = synth ctx (applyEnv s1 env) e2
+        let appliedT1 = apply s2 t1
+        let appliedT2 = t2
+        // Try to unify both operands - they must be the same type (int or string)
+        let s3 = unifyWithContext ctx [] span appliedT1 appliedT2
+        let resultTy = apply s3 appliedT1
+        // Verify result is int or string
+        match resultTy with
+        | TInt | TString -> (compose s3 (compose s2 s1), resultTy)
+        | TVar _ ->
+            // Ambiguous - default to int (backward compatible)
+            let s4 = unifyWithContext ctx [] span resultTy TInt
+            (compose s4 (compose s3 (compose s2 s1)), TInt)
+        | _ ->
+            raise (TypeException {
+                Kind = UnifyMismatch (TInt, resultTy)
+                Span = span
+                Term = Some expr
+                ContextStack = ctx
+                Trace = []
+            })
+
+    | Subtract (e1, e2, _) | Multiply (e1, e2, _) | Divide (e1, e2, _) ->
         let s = inferBinaryOp ctx env e1 e2 TInt TInt
         (s, TInt)
 
@@ -134,7 +159,14 @@ let rec synth (ctx: InferContext list) (env: TypeEnv) (expr: Expr): Subst * Type
         let s' = unifyWithContext ctx [] (spanOf e) (apply s t) TInt
         (compose s' s, TInt)
 
-    | Equal (e1, e2, _) | NotEqual (e1, e2, _)
+    // Equality supports any type (polymorphic equality)
+    | Equal (e1, e2, span) | NotEqual (e1, e2, span) ->
+        let s1, t1 = synth ctx env e1
+        let s2, t2 = synth ctx (applyEnv s1 env) e2
+        let s3 = unifyWithContext ctx [] span (apply s2 t1) t2
+        (compose s3 (compose s2 s1), TBool)
+
+    // Comparison operators only work on int
     | LessThan (e1, e2, _) | GreaterThan (e1, e2, _)
     | LessEqual (e1, e2, _) | GreaterEqual (e1, e2, _) ->
         let s = inferBinaryOp ctx env e1 e2 TInt TInt

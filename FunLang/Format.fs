@@ -71,3 +71,78 @@ let lex (input: string) : Parser.token list =
         | Parser.EOF -> List.rev (Parser.EOF :: acc)
         | t -> loop (t :: acc)
     loop []
+
+/// Format AST as a string (without span information for readable output)
+let rec formatAst (expr: Ast.Expr) : string =
+    match expr with
+    | Ast.Number (n, _) -> sprintf "Number %d" n
+    | Ast.Bool (b, _) -> sprintf "Bool %b" b
+    | Ast.String (s, _) -> sprintf "String \"%s\"" s
+    | Ast.Var (name, _) -> sprintf "Var \"%s\"" name
+    | Ast.Add (l, r, _) -> sprintf "Add (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Subtract (l, r, _) -> sprintf "Subtract (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Multiply (l, r, _) -> sprintf "Multiply (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Divide (l, r, _) -> sprintf "Divide (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Negate (e, _) -> sprintf "Negate (%s)" (formatAst e)
+    | Ast.LessThan (l, r, _) -> sprintf "LessThan (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.GreaterThan (l, r, _) -> sprintf "GreaterThan (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.LessEqual (l, r, _) -> sprintf "LessEqual (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.GreaterEqual (l, r, _) -> sprintf "GreaterEqual (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Equal (l, r, _) -> sprintf "Equal (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.NotEqual (l, r, _) -> sprintf "NotEqual (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.And (l, r, _) -> sprintf "And (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.Or (l, r, _) -> sprintf "Or (%s, %s)" (formatAst l) (formatAst r)
+    | Ast.If (cond, t, e, _) -> sprintf "If (%s, %s, %s)" (formatAst cond) (formatAst t) (formatAst e)
+    | Ast.Let (name, value, body, _) -> sprintf "Let (\"%s\", %s, %s)" name (formatAst value) (formatAst body)
+    | Ast.LetRec (name, param, body, expr, _) ->
+        sprintf "LetRec (\"%s\", \"%s\", %s, %s)" name param (formatAst body) (formatAst expr)
+    | Ast.Lambda (param, body, _) -> sprintf "Lambda (\"%s\", %s)" param (formatAst body)
+    | Ast.LambdaAnnot (param, tyExpr, body, _) ->
+        sprintf "LambdaAnnot (\"%s\", %s, %s)" param (formatTypeExpr tyExpr) (formatAst body)
+    | Ast.Annot (e, tyExpr, _) ->
+        sprintf "Annot (%s, %s)" (formatAst e) (formatTypeExpr tyExpr)
+    | Ast.App (f, a, _) -> sprintf "App (%s, %s)" (formatAst f) (formatAst a)
+    | Ast.Tuple (exprs, _) ->
+        let formatted = exprs |> List.map formatAst |> String.concat ", "
+        sprintf "Tuple [%s]" formatted
+    | Ast.LetPat (pat, value, body, _) ->
+        sprintf "LetPat (%s, %s, %s)" (formatPattern pat) (formatAst value) (formatAst body)
+    | Ast.EmptyList _ -> "EmptyList"
+    | Ast.List (exprs, _) ->
+        let formatted = exprs |> List.map formatAst |> String.concat ", "
+        sprintf "List [%s]" formatted
+    | Ast.Cons (h, t, _) -> sprintf "Cons (%s, %s)" (formatAst h) (formatAst t)
+    | Ast.Match (scrut, clauses, _) ->
+        let formattedClauses =
+            clauses
+            |> List.map (fun (pat, expr) -> sprintf "(%s, %s)" (formatPattern pat) (formatAst expr))
+            |> String.concat "; "
+        sprintf "Match (%s, [%s])" (formatAst scrut) formattedClauses
+
+/// Format TypeExpr as string
+and formatTypeExpr (te: Ast.TypeExpr) : string =
+    match te with
+    | Ast.TEInt -> "TEInt"
+    | Ast.TEBool -> "TEBool"
+    | Ast.TEString -> "TEString"
+    | Ast.TEList t -> sprintf "TEList (%s)" (formatTypeExpr t)
+    | Ast.TEArrow (t1, t2) -> sprintf "TEArrow (%s, %s)" (formatTypeExpr t1) (formatTypeExpr t2)
+    | Ast.TETuple ts ->
+        let formatted = ts |> List.map formatTypeExpr |> String.concat ", "
+        sprintf "TETuple [%s]" formatted
+    | Ast.TEVar name -> sprintf "TEVar \"%s\"" name
+
+/// Format Pattern as string
+and formatPattern (pat: Ast.Pattern) : string =
+    match pat with
+    | Ast.VarPat (name, _) -> sprintf "VarPat \"%s\"" name
+    | Ast.WildcardPat _ -> "WildcardPat"
+    | Ast.TuplePat (pats, _) ->
+        let formatted = pats |> List.map formatPattern |> String.concat ", "
+        sprintf "TuplePat [%s]" formatted
+    | Ast.ConstPat (c, _) ->
+        match c with
+        | Ast.IntConst n -> sprintf "ConstPat (IntConst %d)" n
+        | Ast.BoolConst b -> sprintf "ConstPat (BoolConst %b)" b
+    | Ast.EmptyListPat _ -> "EmptyListPat"
+    | Ast.ConsPat (h, t, _) -> sprintf "ConsPat (%s, %s)" (formatPattern h) (formatPattern t)

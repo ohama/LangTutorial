@@ -3,5 +3,5 @@
 // --- ExitCode: 1
 // --- Output:
 error[E0301]: Type mismatch: expected bool but got int
- --> <expr>:1:0-4
+ --> <expr>:1:0-8
    = hint: Check that all branches of your expression return the same type
