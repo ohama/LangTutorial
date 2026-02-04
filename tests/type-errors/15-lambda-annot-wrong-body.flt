@@ -1,0 +1,7 @@
+// LambdaAnnot with type error in body (int parameter used with bool operator)
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "fun (x: int) -> x && true" 2>&1
+// --- ExitCode: 1
+// --- Output:
+error[E0301]: Type mismatch: expected int but got bool
+ --> <expr>:1:16-17
+   = hint: Check that all branches of your expression return the same type

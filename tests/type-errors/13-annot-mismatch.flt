@@ -1,0 +1,7 @@
+// Type annotation mismatch: bool annotated as int
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "(true : int)" 2>&1
+// --- ExitCode: 1
+// --- Output:
+error[E0301]: Type mismatch: expected int but got bool
+ --> <expr>:1:1-5
+   = hint: Check that all branches of your expression return the same type

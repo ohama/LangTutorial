@@ -1,0 +1,7 @@
+// Type annotation mismatch: lambda annotated with incompatible type
+// --- Command: dotnet run --project FunLang -- --emit-type --expr "(fun x -> x + 1 : bool -> bool)" 2>&1
+// --- ExitCode: 1
+// --- Output:
+error[E0301]: Type mismatch: expected bool but got int
+ --> <expr>:1:10-11
+   = hint: Check that all branches of your expression return the same type
