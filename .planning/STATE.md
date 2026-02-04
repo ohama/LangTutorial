@@ -10,16 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 4 - Annotation Checking (complete)
-**Plan:** 02 of 02 complete
-**Status:** Phase 4 verified
-**Last activity:** 2026-02-04 - Completed 04-02-PLAN.md (Annotation Error Testing)
+**Phase:** Phase 5 - Error Integration (in progress)
+**Plan:** 01 of 01 complete
+**Status:** Phase 5 Plan 01 complete
+**Last activity:** 2026-02-04 - Completed 05-01-PLAN.md (Mode-aware Error Diagnostics)
 
-Progress: ████████████████████░░░░░░░░ 4/6 phases (67%)
+Progress: █████████████████████████░░░ 5/6 phases (83%)
 Phase 1: Complete (3/3 plans, 7/7 requirements)
 Phase 2: Complete (2/2 plans, 3/3 requirements)
 Phase 3: Complete (2/2 plans, 7/7 requirements)
 Phase 4: Complete (2/2 plans, 4/4 requirements)
+Phase 5: Complete (1/1 plans, 3/3 requirements)
 
 ## Milestone Summary
 
@@ -59,6 +60,8 @@ See: .planning/ROADMAP.md for phase details
 | Two elaboration APIs | elaborateTypeExpr (fresh scope) vs elaborateScoped (shared scope for curried params) (02-01) |
 | TypeCheck uses Bidir.synthTop | Required for annotation type checking to work in CLI and integration tests (04-02) |
 | Type erasure in Eval | Annot/LambdaAnnot evaluate inner expression; runtime ignores type annotations (04-02) |
+| InCheckMode stores (Type, source, Span) | Flexible source tracking for annotation, if-branch, etc. error contexts (05-01) |
+| Annotation hint replaces generic hint | When annotation context present, hint explains where expected type came from (05-01) |
 
 ### Pending Todos
 
@@ -66,11 +69,11 @@ None.
 
 ### Blockers/Concerns
 
-- Pre-existing BidirTests parse errors (11 tests) due to syntax mismatches - not blocking Phase 4 completion
+- Pre-existing BidirTests parse errors (11 tests) due to syntax mismatches - not blocking progress
 
 ## Session Continuity
 
-Last session: 2026-02-04 01:24:50 UTC
-Stopped at: Completed 04-02-PLAN.md (Annotation Error Testing)
+Last session: 2026-02-04 11:12:00 UTC
+Stopped at: Completed 05-01-PLAN.md (Mode-aware Error Diagnostics)
 Resume file: None
-Next: Run /gsd:plan-phase 5 to plan Error Integration
+Next: Run /gsd:plan-phase 6 to plan Polish or verify phase 5 complete
