@@ -1,0 +1,6 @@
+// Annotated lambda with if expression body
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+fun (x: int) -> if x > 0 then x else 0 - x
+// --- Output:
+int -> int
