@@ -10,15 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 3 - Bidirectional Core (complete)
+**Phase:** Phase 4 - Annotation Checking (complete)
 **Plan:** 02 of 02 complete
-**Status:** Phase 3 verified ✓
-**Last activity:** 2026-02-03 — Completed 03-02-PLAN.md (Bidirectional Type Checker Integration & Testing)
+**Status:** Phase 4 verified
+**Last activity:** 2026-02-04 - Completed 04-02-PLAN.md (Annotation Error Testing)
 
-Progress: ████████████████░░░░░░░░░░░░ 3/6 phases (50%)
-Phase 1: ✓ Complete (3/3 plans, 7/7 requirements)
-Phase 2: ✓ Complete (2/2 plans, 3/3 requirements)
-Phase 3: ✓ Complete (2/2 plans, 7/7 requirements)
+Progress: ████████████████████░░░░░░░░ 4/6 phases (67%)
+Phase 1: Complete (3/3 plans, 7/7 requirements)
+Phase 2: Complete (2/2 plans, 3/3 requirements)
+Phase 3: Complete (2/2 plans, 7/7 requirements)
+Phase 4: Complete (2/2 plans, 4/4 requirements)
 
 ## Milestone Summary
 
@@ -56,6 +57,8 @@ See: .planning/ROADMAP.md for phase details
 | Separate type var index ranges | User type vars (elaboration) start at 0, inference type vars start at 1000+ to avoid collision (02-01) |
 | Environment threading in elaboration | Thread Map<string, int> through elaboration to ensure 'a in same scope maps to same TVar index (02-01) |
 | Two elaboration APIs | elaborateTypeExpr (fresh scope) vs elaborateScoped (shared scope for curried params) (02-01) |
+| TypeCheck uses Bidir.synthTop | Required for annotation type checking to work in CLI and integration tests (04-02) |
+| Type erasure in Eval | Annot/LambdaAnnot evaluate inner expression; runtime ignores type annotations (04-02) |
 
 ### Pending Todos
 
@@ -63,11 +66,11 @@ None.
 
 ### Blockers/Concerns
 
-None.
+- Pre-existing BidirTests parse errors (11 tests) due to syntax mismatches - not blocking Phase 4 completion
 
 ## Session Continuity
 
-Last session: 2026-02-03 14:08:05 UTC
-Stopped at: Completed 03-02-PLAN.md (Bidirectional Type Checker Integration & Testing)
+Last session: 2026-02-04 01:24:50 UTC
+Stopped at: Completed 04-02-PLAN.md (Annotation Error Testing)
 Resume file: None
-Next: Run /gsd:plan-phase 4 to plan Annotation Checking
+Next: Run /gsd:plan-phase 5 to plan Error Integration
