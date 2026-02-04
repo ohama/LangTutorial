@@ -10,10 +10,10 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 5 - Error Integration (in progress)
-**Plan:** 01 of 01 complete
-**Status:** Phase 5 Plan 01 complete
-**Last activity:** 2026-02-04 - Completed 05-01-PLAN.md (Mode-aware Error Diagnostics)
+**Phase:** Phase 6 - Migration (in progress)
+**Plan:** 1 of 02 complete (06-02)
+**Status:** Plan 06-02 complete, plan 06-01 pending
+**Last activity:** 2026-02-04 - Completed 06-02-PLAN.md (Chapter 12 tutorial)
 
 Progress: █████████████████████████░░░ 5/6 phases (83%)
 Phase 1: Complete (3/3 plans, 7/7 requirements)
@@ -21,6 +21,7 @@ Phase 2: Complete (2/2 plans, 3/3 requirements)
 Phase 3: Complete (2/2 plans, 7/7 requirements)
 Phase 4: Complete (2/2 plans, 4/4 requirements)
 Phase 5: Complete (1/1 plans, 3/3 requirements)
+Phase 6: In progress (1/2 plans, 1/3 requirements)
 
 ## Milestone Summary
 
@@ -62,6 +63,7 @@ See: .planning/ROADMAP.md for phase details
 | Type erasure in Eval | Annot/LambdaAnnot evaluate inner expression; runtime ignores type annotations (04-02) |
 | InCheckMode stores (Type, source, Span) | Flexible source tracking for annotation, if-branch, etc. error contexts (05-01) |
 | Annotation hint replaces generic hint | When annotation context present, hint explains where expected type came from (05-01) |
+| Tutorial Korean/English mixed style | Follow established pattern from chapters 10-11 (06-02) |
 
 ### Pending Todos
 
@@ -73,7 +75,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-04 11:12:00 UTC
-Stopped at: Completed 05-01-PLAN.md (Mode-aware Error Diagnostics)
+Last session: 2026-02-04
+Stopped at: Completed 06-02-PLAN.md (Chapter 12 tutorial)
 Resume file: None
-Next: Run /gsd:plan-phase 6 to plan Polish or verify phase 5 complete
+Next: Run 06-01-PLAN.md to complete Phase 6
