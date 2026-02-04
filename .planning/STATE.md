@@ -10,22 +10,22 @@ See: .planning/PROJECT.md (updated 2026-02-03)
 ## Current Position
 
 **Milestone:** v6.0 Bidirectional Type System
-**Phase:** Phase 6 - Migration (in progress)
-**Plan:** 1 of 02 complete (06-02)
-**Status:** Plan 06-02 complete, plan 06-01 pending
-**Last activity:** 2026-02-04 - Completed 06-02-PLAN.md (Chapter 12 tutorial)
+**Phase:** Phase 6 - Migration (COMPLETE)
+**Plan:** 2 of 02 complete
+**Status:** Phase 6 complete - Migration verification and documentation finished
+**Last activity:** 2026-02-04 - Completed 06-01-PLAN.md (Migration verification)
 
-Progress: █████████████████████████░░░ 5/6 phases (83%)
+Progress: ████████████████████████████ 6/6 phases (100%)
 Phase 1: Complete (3/3 plans, 7/7 requirements)
 Phase 2: Complete (2/2 plans, 3/3 requirements)
 Phase 3: Complete (2/2 plans, 7/7 requirements)
 Phase 4: Complete (2/2 plans, 4/4 requirements)
 Phase 5: Complete (1/1 plans, 3/3 requirements)
-Phase 6: In progress (1/2 plans, 1/3 requirements)
+Phase 6: Complete (2/2 plans, 3/3 requirements)
 
 ## Milestone Summary
 
-**v6.0 Bidirectional Type System** in progress:
+**v6.0 Bidirectional Type System** COMPLETE:
 - 6 phases, 27 requirements
 - Complete transition from Algorithm W to bidirectional
 - ML-style type annotations: `fun (x: int) -> x + 1`
@@ -64,6 +64,7 @@ See: .planning/ROADMAP.md for phase details
 | InCheckMode stores (Type, source, Span) | Flexible source tracking for annotation, if-branch, etc. error contexts (05-01) |
 | Annotation hint replaces generic hint | When annotation context present, hint explains where expected type came from (05-01) |
 | Tutorial Korean/English mixed style | Follow established pattern from chapters 10-11 (06-02) |
+| Keep Infer.fs helper functions | freshVar, instantiate, generalize, inferPattern reused by Bidir; only entry points deprecated (06-01) |
 
 ### Pending Todos
 
@@ -76,6 +77,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-04
-Stopped at: Completed 06-02-PLAN.md (Chapter 12 tutorial)
+Stopped at: Completed 06-01-PLAN.md (Migration verification)
 Resume file: None
-Next: Run 06-01-PLAN.md to complete Phase 6
+Next: v6.0 Milestone COMPLETE - all 6 phases finished
