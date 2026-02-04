@@ -107,6 +107,10 @@ Plans:
 **Goal**: Mode-aware diagnostics with expected type information
 **Depends on**: Phase 4 (needs annotation checking working)
 **Requirements**: ERR-01, ERR-02, ERR-03
+**Plans:** 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md — Add InCheckMode context and annotation-aware error messages
 
 **Success Criteria**:
 1. InferContext includes checking mode information
