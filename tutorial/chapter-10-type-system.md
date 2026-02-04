@@ -523,6 +523,22 @@ make -C tests && dotnet run --project FunLang.Tests
 - **FunLang/TypeCheck.fs**: Prelude 타입, typecheck 함수
 - **FunLang/Program.fs**: CLI 통합 (--emit-type)
 
+## 다음 단계: 양방향 타입 체킹
+
+이 장에서 구현한 Algorithm W는 **타입 추론**의 기초다. 하지만 타입 주석을 명시적으로 지원하지 않는다.
+
+FunLang v6.0부터 **양방향 타입 체킹(Bidirectional Type Checking)**을 도입하여:
+
+- 타입 주석 지원: `fun (x: int) -> x + 1`
+- 더 나은 에러 메시지: 예상 타입이 어디서 왔는지 설명
+- 문서화 목적의 명시적 타입: `(expr : Type)`
+
+자세한 내용은 [Chapter 12: 양방향 타입 체킹](chapter-12-bidirectional-typing.md)을 참고한다.
+
+> **Note**: Bidir 모듈(`FunLang/Bidir.fs`)이 TypeCheck.fs에서 사용된다.
+> Infer 모듈의 `infer`/`inferWithContext`는 참고용으로 유지되며,
+> `freshVar`, `instantiate`, `generalize` 등의 헬퍼 함수는 Bidir에서 재사용된다.
+
 ## 관련 문서
 
 - [implement-hindley-milner-algorithm-w](../docs/howto/implement-hindley-milner-algorithm-w.md) - Algorithm W 전체 흐름
