@@ -1,0 +1,203 @@
+#!/bin/bash
+# mdbook-setup: mdBook 프로젝트 설정 및 빌드
+# 사용법: ./scripts/mdbook-setup
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+cd "$PROJECT_ROOT"
+
+echo "=== mdBook Setup ==="
+
+# 1. docs/ 백업
+if [ -d "docs" ]; then
+    echo "docs/ → docs.backup/ 복사 중..."
+    rm -rf docs.backup
+    cp -r docs docs.backup
+    echo "✓ 백업 완료"
+fi
+
+# 2. book/ 소스 폴더 생성
+echo "book/ 소스 폴더 생성 중..."
+mkdir -p book/src
+
+# 3. book.toml 생성
+cat > book/book.toml << 'EOF'
+[book]
+title = "FunLang: F#로 만드는 프로그래밍 언어"
+authors = ["Shohruh Makhkamov"]
+language = "ko"
+description = "fslex/fsyacc를 사용한 인터프리터 구축 튜토리얼"
+src = "src"
+
+[build]
+build-dir = "../docs"
+create-missing = false
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/shohruh-abduakhatov-portfolio/LangTutorial"
+edit-url-template = "https://github.com/shohruh-abduakhatov-portfolio/LangTutorial/edit/master/book/src/{path}"
+
+[output.html.search]
+enable = true
+limit-results = 30
+boost-title = 2
+boost-hierarchy = 1
+EOF
+echo "✓ book/book.toml 생성"
+
+# 4. SUMMARY.md 생성
+cat > book/src/SUMMARY.md << 'EOF'
+# Summary
+
+[소개](introduction.md)
+
+# 기초
+
+- [Chapter 1: 프로젝트 기초](chapter-01-foundation.md)
+- [Chapter 2: 산술 연산](chapter-02-arithmetic.md)
+- [Chapter 3: 변수와 바인딩](chapter-03-variables.md)
+- [Chapter 4: 조건문](chapter-04-conditionals.md)
+
+# 함수와 데이터
+
+- [Chapter 5: 함수](chapter-05-functions.md)
+- [Chapter 6: 튜플](chapter-06-tuples.md)
+- [Chapter 7: 리스트](chapter-07-lists.md)
+- [Chapter 8: 패턴 매칭](chapter-08-pattern-matching.md)
+
+# 고급 주제
+
+- [Chapter 9: Prelude](chapter-09-prelude.md)
+- [Chapter 10: 타입 시스템](chapter-10-type-system.md)
+- [Chapter 11: 타입 에러 진단](chapter-11-type-error-diagnostics.md)
+- [Chapter 12: 양방향 타이핑](chapter-12-bidirectional-typing.md)
+
+# 부록
+
+- [Appendix A: 테스팅](appendix-01-testing.md)
+- [Appendix B: 주석](appendix-02-comments.md)
+- [Appendix C: 문자열](appendix-03-strings.md)
+- [Appendix D: REPL](appendix-04-repl.md)
+EOF
+echo "✓ book/src/SUMMARY.md 생성"
+
+# 5. introduction.md 생성
+cat > book/src/introduction.md << 'EOF'
+# FunLang: F#로 만드는 프로그래밍 언어
+
+F#과 fslex/fsyacc를 사용하여 함수형 프로그래밍 언어 인터프리터를 구축하는 튜토리얼입니다.
+
+## 목표
+
+- **Lexer/Parser**: fslex와 fsyacc로 토큰화 및 구문 분석
+- **AST**: 추상 구문 트리 설계
+- **Interpreter**: 트리-워킹 인터프리터 구현
+- **Type System**: Hindley-Milner 타입 추론
+
+## FunLang 특징
+
+```
+// 변수 바인딩
+let x = 42
+
+// 함수 정의
+let add = fun x y -> x + y
+
+// 재귀 함수
+let rec factorial = fun n ->
+  if n <= 1 then 1
+  else n * factorial (n - 1)
+
+// 패턴 매칭
+let rec length = fun lst ->
+  match lst with
+  | [] -> 0
+  | _ :: tail -> 1 + length tail
+
+// 타입 추론
+let compose = fun f g x -> f (g x)
+```
+
+## 시작하기
+
+[Chapter 1: 프로젝트 기초](chapter-01-foundation.md)부터 시작하세요.
+EOF
+echo "✓ book/src/introduction.md 생성"
+
+# 6. tutorial/*.md 복사
+echo "tutorial/*.md → book/src/ 복사 중..."
+cp tutorial/*.md book/src/
+echo "✓ 튜토리얼 콘텐츠 복사 완료"
+
+# 7. mdbook 빌드
+echo "mdbook 빌드 중..."
+mdbook build book
+echo "✓ 빌드 완료"
+
+# 8. .nojekyll 생성
+touch docs/.nojekyll
+echo "✓ docs/.nojekyll 생성"
+
+# 9. GitHub Actions 워크플로우 생성
+mkdir -p .github/workflows
+cat > .github/workflows/mdbook.yml << 'EOF'
+name: Build mdBook
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'book/**'
+      - 'tutorial/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v2
+        with:
+          mdbook-version: 'latest'
+
+      - name: Build mdBook
+        run: mdbook build book
+
+      - name: Check for changes
+        id: check
+        run: |
+          git diff --quiet docs/ || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.check.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git commit -m "docs: rebuild mdBook site"
+          git push
+EOF
+echo "✓ .github/workflows/mdbook.yml 생성"
+
+echo ""
+echo "=== 완료 ==="
+echo "소스: book/src/ ($(ls book/src/*.md | wc -l) files)"
+echo "출력: docs/ ($(ls docs/*.html | wc -l) HTML files)"
+echo "백업: docs.backup/"
+echo ""
+echo "다음 단계:"
+echo "  1. git add -A && git commit -m 'feat: add mdBook documentation site'"
+echo "  2. git push"
+echo "  3. GitHub Settings > Pages > Branch: master, Folder: /docs"

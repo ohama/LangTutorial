@@ -1,0 +1,680 @@
+<!DOCTYPE HTML>
+<html lang="ko" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 10: 타입 시스템 - FunLang: F#로 만드는 프로그래밍 언어</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="fslex/fsyacc를 사용한 인터프리터 구축 튜토리얼">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-b2e0a5d9.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-2aa7beb1.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">FunLang: F#로 만드는 프로그래밍 언어</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/shohruh-abduakhatov-portfolio/LangTutorial" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/shohruh-abduakhatov-portfolio/LangTutorial/edit/master/book/src/src/chapter-10-type-system.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="chapter-10-type-system-hindley-milner"><a class="header" href="#chapter-10-type-system-hindley-milner">Chapter 10: Type System (Hindley-Milner)</a></h1>
+<p>이 장에서는 FunLang에 <strong>Hindley-Milner 타입 추론 시스템</strong>을 구현한다. 명시적 타입 주석 없이도 모든 표현식의 타입을 자동으로 추론하여, 실행 전에 타입 오류를 발견할 수 있다.</p>
+<h2 id="개요"><a class="header" href="#개요">개요</a></h2>
+<p>타입 시스템은 다음 기능을 제공한다:</p>
+<ul>
+<li><strong>타입 추론</strong>: 명시적 주석 없이 타입 자동 유추</li>
+<li><strong>다형성</strong>: <code>let id = fun x -&gt; x</code>가 <code>forall 'a. 'a -&gt; 'a</code> 타입을 갖음</li>
+<li><strong>정적 검사</strong>: 실행 전에 <code>1 + true</code> 같은 오류 발견</li>
+<li><strong>CLI 통합</strong>: <code>--emit-type</code> 플래그로 타입 표시</li>
+</ul>
+<p><strong>핵심 아이디어</strong>: Algorithm W를 사용하여 AST를 순회하며 타입 변수와 제약을 수집하고, 단일화(unification)로 해를 구한다.</p>
+<h2 id="구현-전략"><a class="header" href="#구현-전략">구현 전략</a></h2>
+<p>타입 시스템은 4단계로 구현된다:</p>
+<ol>
+<li><strong>Type.fs</strong>: 타입 AST, Scheme, Substitution 연산</li>
+<li><strong>Unify.fs</strong>: 단일화 알고리즘과 occurs check</li>
+<li><strong>Infer.fs</strong>: Algorithm W 타입 추론</li>
+<li><strong>TypeCheck.fs</strong>: Prelude 타입 정의와 CLI 통합</li>
+</ol>
+<h3 id="왜-hindley-milner인가"><a class="header" href="#왜-hindley-milner인가">왜 Hindley-Milner인가?</a></h3>
+<p>Hindley-Milner는 ML 계열 언어(OCaml, F#, Haskell)의 기반이다:</p>
+<ul>
+<li><strong>완전한 추론</strong>: 타입 주석 없이도 항상 가장 일반적인 타입을 찾음</li>
+<li><strong>Let-polymorphism</strong>: <code>let</code> 바인딩에서 다형성 지원</li>
+<li><strong>결정 가능성</strong>: 추론이 항상 종료되고 결과가 유일함</li>
+</ul>
+<h2 id="typefs-타입-정의"><a class="header" href="#typefs-타입-정의">Type.fs: 타입 정의</a></h2>
+<p><code>FunLang/Type.fs</code>는 타입 시스템의 기초를 정의한다.</p>
+<h3 id="타입-ast"><a class="header" href="#타입-ast">타입 AST</a></h3>
+<pre><code class="language-fsharp">type Type =
+    | TInt                        // int
+    | TBool                       // bool
+    | TString                     // string
+    | TVar of int                 // 타입 변수 'a, 'b, ... (정수로 구분)
+    | TArrow of Type * Type       // 함수 타입 'a -&gt; 'b
+    | TTuple of Type list         // 튜플 타입 'a * 'b
+    | TList of Type               // 리스트 타입 'a list
+</code></pre>
+<p><strong>설계 결정</strong>:</p>
+<ul>
+<li><code>TVar of int</code>: 문자열 대신 정수 사용. 비교/해싱이 빠르고 fresh 변수 생성이 단순</li>
+<li>7개 타입 생성자로 FunLang의 모든 값 표현</li>
+</ul>
+<h3 id="scheme-다형성-지원"><a class="header" href="#scheme-다형성-지원">Scheme: 다형성 지원</a></h3>
+<pre><code class="language-fsharp">type Scheme = Scheme of vars: int list * ty: Type
+</code></pre>
+<p>Scheme은 <code>forall</code> 변수 리스트와 타입을 포함한다:</p>
+<ul>
+<li><code>id: forall 'a. 'a -&gt; 'a</code> → <code>Scheme([0], TArrow(TVar 0, TVar 0))</code></li>
+<li><code>const: forall 'a 'b. 'a -&gt; 'b -&gt; 'a</code> → <code>Scheme([0; 1], TArrow(TVar 0, TArrow(TVar 1, TVar 0)))</code></li>
+</ul>
+<h3 id="타입-환경과-대체"><a class="header" href="#타입-환경과-대체">타입 환경과 대체</a></h3>
+<pre><code class="language-fsharp">type TypeEnv = Map&lt;string, Scheme&gt;
+type Subst = Map&lt;int, Type&gt;
+</code></pre>
+<ul>
+<li><strong>TypeEnv</strong>: 변수 이름을 Scheme에 매핑</li>
+<li><strong>Subst</strong>: 타입 변수를 구체 타입에 매핑</li>
+</ul>
+<h3 id="formattype-타입-출력"><a class="header" href="#formattype-타입-출력">formatType: 타입 출력</a></h3>
+<pre><code class="language-fsharp">let rec formatType = function
+    | TInt -&gt; "int"
+    | TBool -&gt; "bool"
+    | TString -&gt; "string"
+    | TVar n -&gt; sprintf "'%c" (char (97 + n % 26))  // 'a, 'b, ...
+    | TArrow (t1, t2) -&gt;
+        let left = match t1 with TArrow _ -&gt; sprintf "(%s)" (formatType t1) | _ -&gt; formatType t1
+        sprintf "%s -&gt; %s" left (formatType t2)
+    | TTuple ts -&gt; ts |&gt; List.map formatType |&gt; String.concat " * "
+    | TList t -&gt; sprintf "%s list" (formatType t)
+</code></pre>
+<p>Arrow 타입의 왼쪽 피연산자만 괄호로 감싼다 (오른쪽 결합).</p>
+<h3 id="substitution-연산"><a class="header" href="#substitution-연산">Substitution 연산</a></h3>
+<p><strong>apply</strong>: 타입에 대체 적용</p>
+<pre><code class="language-fsharp">let rec apply (s: Subst) = function
+    | TInt -&gt; TInt
+    | TBool -&gt; TBool
+    | TString -&gt; TString
+    | TVar n -&gt;
+        match Map.tryFind n s with
+        | Some t -&gt; apply s t  // 재귀! transitive chain 처리
+        | None -&gt; TVar n
+    | TArrow (t1, t2) -&gt; TArrow (apply s t1, apply s t2)
+    | TTuple ts -&gt; TTuple (List.map (apply s) ts)
+    | TList t -&gt; TList (apply s t)
+</code></pre>
+<p><strong>중요</strong>: <code>TVar</code> 케이스에서 <code>apply s t</code>를 재귀 호출한다. <code>{0→TVar 1, 1→TInt}</code>를 <code>TVar 0</code>에 적용하면 <code>TInt</code>가 된다.</p>
+<p><strong>compose</strong>: 대체 합성</p>
+<pre><code class="language-fsharp">let compose (s2: Subst) (s1: Subst): Subst =
+    let s1' = Map.map (fun _ t -&gt; apply s2 t) s1
+    Map.fold (fun acc k v -&gt; Map.add k v acc) s1' s2
+</code></pre>
+<p><code>compose s2 s1</code>은 “s1 먼저, 그 다음 s2” 순서다.</p>
+<h3 id="free-variables"><a class="header" href="#free-variables">Free Variables</a></h3>
+<pre><code class="language-fsharp">let rec freeVars = function
+    | TInt | TBool | TString -&gt; Set.empty
+    | TVar n -&gt; Set.singleton n
+    | TArrow (t1, t2) -&gt; Set.union (freeVars t1) (freeVars t2)
+    | TTuple ts -&gt; ts |&gt; List.map freeVars |&gt; Set.unionMany
+    | TList t -&gt; freeVars t
+
+let freeVarsScheme (Scheme (vars, ty)) =
+    Set.difference (freeVars ty) (Set.ofList vars)
+
+let freeVarsEnv (env: TypeEnv) =
+    env |&gt; Map.values |&gt; Seq.map freeVarsScheme |&gt; Set.unionMany
+</code></pre>
+<p>Scheme의 free variable은 bound variable을 제외한다.</p>
+<h2 id="unifyfs-단일화-알고리즘"><a class="header" href="#unifyfs-단일화-알고리즘">Unify.fs: 단일화 알고리즘</a></h2>
+<p><code>FunLang/Unify.fs</code>는 Robinson의 단일화 알고리즘을 구현한다.</p>
+<h3 id="occurs-check"><a class="header" href="#occurs-check">Occurs Check</a></h3>
+<pre><code class="language-fsharp">exception TypeError of string
+
+let occurs (v: int) (t: Type): bool =
+    Set.contains v (freeVars t)
+</code></pre>
+<p>Occurs check는 무한 타입을 방지한다. <code>'a = 'a -&gt; int</code>는 불가능하다.</p>
+<h3 id="unify-함수"><a class="header" href="#unify-함수">unify 함수</a></h3>
+<pre><code class="language-fsharp">let rec unify (t1: Type) (t2: Type): Subst =
+    match t1, t2 with
+    | TInt, TInt -&gt; empty
+    | TBool, TBool -&gt; empty
+    | TString, TString -&gt; empty
+
+    // 대칭 패턴: TVar는 양쪽 모두 처리
+    | TVar n, t | t, TVar n -&gt;
+        if t = TVar n then empty
+        elif occurs n t then
+            raise (TypeError (sprintf "Infinite type: %s = %s"
+                (formatType (TVar n)) (formatType t)))
+        else
+            singleton n t
+
+    // Arrow: 도메인 단일화 → 결과 적용 → 치역 단일화
+    | TArrow (a1, b1), TArrow (a2, b2) -&gt;
+        let s1 = unify a1 a2
+        let s2 = unify (apply s1 b1) (apply s1 b2)
+        compose s2 s1
+
+    | TTuple ts1, TTuple ts2 when List.length ts1 = List.length ts2 -&gt;
+        List.fold2 (fun s t1 t2 -&gt;
+            let s' = unify (apply s t1) (apply s t2)
+            compose s' s
+        ) empty ts1 ts2
+
+    | TList t1, TList t2 -&gt;
+        unify t1 t2
+
+    | _ -&gt;
+        raise (TypeError (sprintf "Cannot unify %s with %s"
+            (formatType t1) (formatType t2)))
+</code></pre>
+<p><strong>핵심 포인트</strong>:</p>
+<ul>
+<li><code>| TVar n, t | t, TVar n -&gt;</code>: 대칭 패턴으로 양방향 처리</li>
+<li>Arrow 단일화에서 <code>apply s1 b1</code>: substitution threading</li>
+<li>Tuple은 길이가 같아야 하고 각 요소를 순차 단일화</li>
+</ul>
+<h2 id="inferfs-algorithm-w"><a class="header" href="#inferfs-algorithm-w">Infer.fs: Algorithm W</a></h2>
+<p><code>FunLang/Infer.fs</code>는 완전한 타입 추론을 구현한다.</p>
+<h3 id="freshvar-새-타입-변수-생성"><a class="header" href="#freshvar-새-타입-변수-생성">freshVar: 새 타입 변수 생성</a></h3>
+<pre><code class="language-fsharp">let freshVar =
+    let counter = ref 1000  // 0-999는 Prelude용 예약
+    fun () -&gt;
+        let n = !counter
+        counter := n + 1
+        TVar n
+</code></pre>
+<p><strong>중요</strong>: 1000부터 시작하여 Prelude scheme의 bound variable(0-9)과 충돌 방지.</p>
+<h3 id="instantiate-scheme-인스턴스화"><a class="header" href="#instantiate-scheme-인스턴스화">instantiate: Scheme 인스턴스화</a></h3>
+<pre><code class="language-fsharp">let instantiate (Scheme (vars, ty)): Type =
+    match vars with
+    | [] -&gt; ty  // Monomorphic - 그대로 반환
+    | _ -&gt;
+        let freshVars = List.map (fun _ -&gt; freshVar()) vars
+        let subst = List.zip vars freshVars |&gt; Map.ofList
+        apply subst ty
+</code></pre>
+<p><code>forall 'a. 'a -&gt; 'a</code>를 인스턴스화하면 <code>'x -&gt; 'x</code> (fresh ’x).</p>
+<h3 id="generalize-타입-일반화"><a class="header" href="#generalize-타입-일반화">generalize: 타입 일반화</a></h3>
+<pre><code class="language-fsharp">let generalize (env: TypeEnv) (ty: Type): Scheme =
+    let envFree = freeVarsEnv env
+    let tyFree = freeVars ty
+    let vars = Set.difference tyFree envFree |&gt; Set.toList
+    Scheme (vars, ty)
+</code></pre>
+<p>환경에 없는 free variable을 <code>forall</code>로 감싼다.</p>
+<h3 id="infer-함수-algorithm-w-핵심"><a class="header" href="#infer-함수-algorithm-w-핵심">infer 함수: Algorithm W 핵심</a></h3>
+<pre><code class="language-fsharp">let rec infer (env: TypeEnv) (expr: Expr): Subst * Type =
+    match expr with
+    // Literals
+    | Number _ -&gt; (empty, TInt)
+    | Bool _ -&gt; (empty, TBool)
+    | String _ -&gt; (empty, TString)
+
+    // Variable
+    | Var name -&gt;
+        match Map.tryFind name env with
+        | Some scheme -&gt; (empty, instantiate scheme)
+        | None -&gt; raise (TypeError (sprintf "Unbound variable: %s" name))
+
+    // Lambda
+    | Lambda (param, body) -&gt;
+        let paramTy = freshVar()
+        let bodyEnv = Map.add param (Scheme ([], paramTy)) env
+        let s, bodyTy = infer bodyEnv body
+        (s, TArrow (apply s paramTy, bodyTy))
+
+    // Application
+    | App (func, arg) -&gt;
+        let s1, funcTy = infer env func
+        let s2, argTy = infer (applyEnv s1 env) arg
+        let resultTy = freshVar()
+        let s3 = unify (apply s2 funcTy) (TArrow (argTy, resultTy))
+        (compose s3 (compose s2 s1), apply s3 resultTy)
+
+    // Let with polymorphism
+    | Let (name, value, body) -&gt;
+        let s1, valueTy = infer env value
+        let env' = applyEnv s1 env
+        let scheme = generalize env' (apply s1 valueTy)
+        let bodyEnv = Map.add name scheme env'
+        let s2, bodyTy = infer bodyEnv body
+        (compose s2 s1, bodyTy)
+
+    // ... If, LetRec, Tuple, List, Match, etc.
+</code></pre>
+<p><strong>핵심 패턴</strong>:</p>
+<ol>
+<li><code>infer</code>는 <code>(Subst, Type)</code> 튜플 반환</li>
+<li>매 단계에서 이전 substitution을 환경에 적용: <code>applyEnv s1 env</code></li>
+<li>Let에서 <code>generalize</code> 호출 → let-polymorphism</li>
+<li>Lambda param은 <code>Scheme([], ty)</code> → monomorphic</li>
+</ol>
+<h3 id="let-polymorphism-vs-lambda-monomorphism"><a class="header" href="#let-polymorphism-vs-lambda-monomorphism">Let-Polymorphism vs Lambda Monomorphism</a></h3>
+<p><strong>Let은 다형성을 허용</strong>:</p>
+<pre><code class="language-funlang">let id = fun x -&gt; x in (id 5, id true)
+// id: forall 'a. 'a -&gt; 'a
+// 첫 번째 사용: 'a = int
+// 두 번째 사용: 'a = bool
+// 결과: (int, bool) ✓
+</code></pre>
+<p><strong>Lambda parameter는 monomorphic</strong>:</p>
+<pre><code class="language-funlang">fun f -&gt; (f 1, f true)
+// f는 한 타입으로 고정
+// f: int -&gt; 'a 또는 f: bool -&gt; 'a 둘 중 하나만 가능
+// 타입 오류!
+</code></pre>
+<h2 id="typecheckfs-통합"><a class="header" href="#typecheckfs-통합">TypeCheck.fs: 통합</a></h2>
+<p><code>FunLang/TypeCheck.fs</code>는 Prelude 타입과 typecheck 함수를 제공한다.</p>
+<h3 id="initialtypeenv-prelude-함수-타입"><a class="header" href="#initialtypeenv-prelude-함수-타입">initialTypeEnv: Prelude 함수 타입</a></h3>
+<pre><code class="language-fsharp">let initialTypeEnv: TypeEnv =
+    Map.ofList [
+        // map: ('a -&gt; 'b) -&gt; 'a list -&gt; 'b list
+        "map", Scheme([0; 1], TArrow(TArrow(TVar 0, TVar 1), TArrow(TList(TVar 0), TList(TVar 1))))
+
+        // filter: ('a -&gt; bool) -&gt; 'a list -&gt; 'a list
+        "filter", Scheme([0], TArrow(TArrow(TVar 0, TBool), TArrow(TList(TVar 0), TList(TVar 0))))
+
+        // fold: ('b -&gt; 'a -&gt; 'b) -&gt; 'b -&gt; 'a list -&gt; 'b
+        "fold", Scheme([0; 1], TArrow(TArrow(TVar 1, TArrow(TVar 0, TVar 1)), TArrow(TVar 1, TArrow(TList(TVar 0), TVar 1))))
+
+        // id: 'a -&gt; 'a
+        "id", Scheme([0], TArrow(TVar 0, TVar 0))
+
+        // ... length, reverse, append, const, compose, hd, tl
+    ]
+</code></pre>
+<h3 id="typecheck-함수"><a class="header" href="#typecheck-함수">typecheck 함수</a></h3>
+<pre><code class="language-fsharp">let typecheck (expr: Expr): Result&lt;Type, string&gt; =
+    try
+        let subst, ty = infer initialTypeEnv expr
+        Ok(apply subst ty)
+    with
+    | TypeError msg -&gt; Error(msg)
+</code></pre>
+<h3 id="cli-통합"><a class="header" href="#cli-통합">CLI 통합</a></h3>
+<p><code>Program.fs</code>에서 <code>--emit-type</code> 플래그 처리:</p>
+<pre><code class="language-fsharp">| EmitType -&gt;
+    let source = results.GetResult Expr
+    let ast = parse source
+    match typecheck ast with
+    | Ok ty -&gt; printfn "%s" (formatType ty)
+    | Error msg -&gt; eprintfn "Error: %s" msg; exit 1
+</code></pre>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="리터럴-타입-추론"><a class="header" href="#리터럴-타입-추론">리터럴 타입 추론</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e '42'
+int
+
+$ dotnet run --project FunLang -- --emit-type -e 'true'
+bool
+
+$ dotnet run --project FunLang -- --emit-type -e '"hello"'
+string
+</code></pre>
+<h3 id="함수-타입-추론"><a class="header" href="#함수-타입-추론">함수 타입 추론</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e 'fun x -&gt; x'
+'m -&gt; 'm
+
+$ dotnet run --project FunLang -- --emit-type -e 'fun x -&gt; x + 1'
+int -&gt; int
+
+$ dotnet run --project FunLang -- --emit-type -e 'fun x -&gt; fun y -&gt; x + y'
+int -&gt; int -&gt; int
+</code></pre>
+<h3 id="let-polymorphism"><a class="header" href="#let-polymorphism">Let-Polymorphism</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e 'let id = fun x -&gt; x in (id 5, id true)'
+int * bool
+
+$ dotnet run --project FunLang -- --emit-type -e 'let id = fun x -&gt; x in id'
+'m -&gt; 'm
+</code></pre>
+<h3 id="리스트와-튜플"><a class="header" href="#리스트와-튜플">리스트와 튜플</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e '[1, 2, 3]'
+int list
+
+$ dotnet run --project FunLang -- --emit-type -e '[]'
+'m list
+
+$ dotnet run --project FunLang -- --emit-type -e '(1, true, "hello")'
+int * bool * string
+</code></pre>
+<h3 id="prelude-함수-타입"><a class="header" href="#prelude-함수-타입">Prelude 함수 타입</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e 'map'
+('m -&gt; 'n) -&gt; 'm list -&gt; 'n list
+
+$ dotnet run --project FunLang -- --emit-type -e 'filter'
+('m -&gt; bool) -&gt; 'm list -&gt; 'm list
+
+$ dotnet run --project FunLang -- --emit-type -e 'map (fun x -&gt; x + 1)'
+int list -&gt; int list
+</code></pre>
+<h3 id="타입-오류"><a class="header" href="#타입-오류">타입 오류</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e '1 + true'
+Error: Cannot unify int with bool
+
+$ dotnet run --project FunLang -- --emit-type -e 'if true then 1 else false'
+Error: Cannot unify int with bool
+
+$ dotnet run --project FunLang -- --emit-type -e 'let rec f x = f in f'
+Error: Infinite type: 'm = 'm -&gt; 'n
+</code></pre>
+<h3 id="재귀-함수-타입"><a class="header" href="#재귀-함수-타입">재귀 함수 타입</a></h3>
+<pre><code class="language-bash">$ dotnet run --project FunLang -- --emit-type -e 'let rec fact n = if n &lt;= 1 then 1 else n * fact (n - 1) in fact'
+int -&gt; int
+</code></pre>
+<h2 id="구현-세부-사항"><a class="header" href="#구현-세부-사항">구현 세부 사항</a></h2>
+<h3 id="substitution-threading"><a class="header" href="#substitution-threading">Substitution Threading</a></h3>
+<p>매 추론 단계에서 이전 substitution을 다음 단계에 전파해야 한다:</p>
+<pre><code class="language-fsharp">| App (func, arg) -&gt;
+    let s1, funcTy = infer env func
+    let s2, argTy = infer (applyEnv s1 env) arg  // ← s1 적용
+    let s3 = unify (apply s2 funcTy) (TArrow (argTy, resultTy))
+    (compose s3 (compose s2 s1), apply s3 resultTy)
+</code></pre>
+<h3 id="type-variable-충돌-방지"><a class="header" href="#type-variable-충돌-방지">Type Variable 충돌 방지</a></h3>
+<p>Prelude scheme은 0-9 범위의 bound variable을 사용하고, <code>freshVar</code>는 1000부터 시작한다:</p>
+<pre><code class="language-fsharp">// Prelude: Scheme([0; 1], TArrow(TVar 0, TVar 1))
+// Fresh: TVar 1000, TVar 1001, ...
+</code></pre>
+<h3 id="generalize-타이밍"><a class="header" href="#generalize-타이밍">Generalize 타이밍</a></h3>
+<p>Let에서 value 추론 후, substitution을 환경에 적용한 다음 generalize해야 한다:</p>
+<pre><code class="language-fsharp">| Let (name, value, body) -&gt;
+    let s1, valueTy = infer env value
+    let env' = applyEnv s1 env          // 먼저 적용
+    let scheme = generalize env' (apply s1 valueTy)  // 그 다음 generalize
+</code></pre>
+<h2 id="정리"><a class="header" href="#정리">정리</a></h2>
+<p>이 장에서 구현한 내용:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>기능</th><th>파일</th><th>설명</th></tr>
+</thead>
+<tbody>
+<tr><td>타입 AST</td><td><code>Type.fs</code></td><td>7개 타입 생성자 (TInt, TBool, TString, TVar, TArrow, TTuple, TList)</td></tr>
+<tr><td>Substitution</td><td><code>Type.fs</code></td><td>apply, compose, freeVars</td></tr>
+<tr><td>단일화</td><td><code>Unify.fs</code></td><td>occurs check, unify</td></tr>
+<tr><td>타입 추론</td><td><code>Infer.fs</code></td><td>Algorithm W (freshVar, instantiate, generalize, infer)</td></tr>
+<tr><td>통합</td><td><code>TypeCheck.fs</code></td><td>initialTypeEnv, typecheck</td></tr>
+<tr><td>CLI</td><td><code>Program.fs</code></td><td>–emit-type 플래그</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Hindley-Milner의 특징</strong>:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>특성</th><th>설명</th></tr>
+</thead>
+<tbody>
+<tr><td>완전한 추론</td><td>타입 주석 없이 가장 일반적인 타입 유추</td></tr>
+<tr><td>Let-polymorphism</td><td>let 바인딩에서 다형성 지원</td></tr>
+<tr><td>결정 가능성</td><td>항상 종료, 유일한 principal type</td></tr>
+<tr><td>Occurs check</td><td>무한 타입 방지</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="테스트"><a class="header" href="#테스트">테스트</a></h2>
+<pre><code class="language-bash"># fslit 통합 테스트
+make -C tests type-inference
+make -C tests type-errors
+
+# Expecto 단위 테스트
+dotnet run --project FunLang.Tests
+
+# 전체 테스트 (460개)
+make -C tests &amp;&amp; dotnet run --project FunLang.Tests
+</code></pre>
+<h2 id="소스-참조"><a class="header" href="#소스-참조">소스 참조</a></h2>
+<p>전체 소스 코드는 다음 위치에서 확인할 수 있다:</p>
+<ul>
+<li><strong>FunLang/Type.fs</strong>: 타입 정의, Substitution, Free Variables</li>
+<li><strong>FunLang/Unify.fs</strong>: 단일화 알고리즘, Occurs Check</li>
+<li><strong>FunLang/Infer.fs</strong>: Algorithm W 구현</li>
+<li><strong>FunLang/TypeCheck.fs</strong>: Prelude 타입, typecheck 함수</li>
+<li><strong>FunLang/Program.fs</strong>: CLI 통합 (–emit-type)</li>
+</ul>
+<h2 id="다음-단계-양방향-타입-체킹"><a class="header" href="#다음-단계-양방향-타입-체킹">다음 단계: 양방향 타입 체킹</a></h2>
+<p>이 장에서 구현한 Algorithm W는 <strong>타입 추론</strong>의 기초다. 하지만 타입 주석을 명시적으로 지원하지 않는다.</p>
+<p>FunLang v6.0부터 **양방향 타입 체킹(Bidirectional Type Checking)**을 도입하여:</p>
+<ul>
+<li>타입 주석 지원: <code>fun (x: int) -&gt; x + 1</code></li>
+<li>더 나은 에러 메시지: 예상 타입이 어디서 왔는지 설명</li>
+<li>문서화 목적의 명시적 타입: <code>(expr : Type)</code></li>
+</ul>
+<p>자세한 내용은 <a href="chapter-12-bidirectional-typing.html">Chapter 12: 양방향 타입 체킹</a>을 참고한다.</p>
+<blockquote>
+<p><strong>Note</strong>: Bidir 모듈(<code>FunLang/Bidir.fs</code>)이 TypeCheck.fs에서 사용된다.
+Infer 모듈의 <code>infer</code>/<code>inferWithContext</code>는 참고용으로 유지되며,
+<code>freshVar</code>, <code>instantiate</code>, <code>generalize</code> 등의 헬퍼 함수는 Bidir에서 재사용된다.</p>
+</blockquote>
+<h2 id="관련-문서"><a class="header" href="#관련-문서">관련 문서</a></h2>
+<ul>
+<li><a href="../docs/howto/implement-hindley-milner-algorithm-w.html">implement-hindley-milner-algorithm-w</a> - Algorithm W 전체 흐름</li>
+<li><a href="../docs/howto/implement-let-polymorphism.html">implement-let-polymorphism</a> - Let-polymorphism 구현</li>
+<li><a href="../docs/howto/avoid-type-variable-collision.html">avoid-type-variable-collision</a> - 타입 변수 충돌 방지</li>
+<li><a href="../docs/howto/write-type-inference-tests.html">write-type-inference-tests</a> - 타입 추론 테스트 방법</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-09-prelude.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-11-type-error-diagnostics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-09-prelude.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-11-type-error-diagnostics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

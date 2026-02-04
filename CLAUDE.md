@@ -21,7 +21,18 @@ dotnet run --project FunLang.Tests # Expecto 테스트 (129개)
 - Phase 6 보류
 - **Turing-complete 언어 달성**
 
+## 문서 사이트
+
+```bash
+./scripts/mdbook-setup   # 초기 설정 (docs/ 백업 후 빌드)
+mdbook serve book --open # 로컬 미리보기
+mdbook build book        # 빌드
+```
+
+- 소스: `book/src/`
+- 출력: `docs/` (GitHub Pages)
+
 ## 작업 시 참고
 
 1. 테스트 추가: `TESTING.md` 참조
-2. howto 문서: `docs/howto/README.md`
+2. howto 문서: `docs.backup/howto/README.md`
