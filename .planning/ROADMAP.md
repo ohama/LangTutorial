@@ -102,15 +102,16 @@ Plans:
 4. Wrong annotations produce clear error messages
 5. Tests cover valid and invalid annotations
 
-### Phase 5: Error Integration
+### Phase 5: Error Integration ✓
 
 **Goal**: Mode-aware diagnostics with expected type information
 **Depends on**: Phase 4 (needs annotation checking working)
 **Requirements**: ERR-01, ERR-02, ERR-03
+**Status:** COMPLETE (2026-02-04)
 **Plans:** 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md — Add InCheckMode context and annotation-aware error messages
+- [x] 05-01-PLAN.md — Add InCheckMode context and annotation-aware error messages
 
 **Success Criteria**:
 1. InferContext includes checking mode information

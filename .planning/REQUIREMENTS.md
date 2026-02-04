@@ -40,11 +40,11 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 - [x] **ANNOT-03**: 어노테이션 타입과 추론 타입 검증
 - [x] **ANNOT-04**: 잘못된 어노테이션 에러 메시지
 
-### Error Integration
+### Error Integration ✓
 
-- [ ] **ERR-01**: Mode-aware context (InCheckMode, InSynthMode)
-- [ ] **ERR-02**: 예상 타입 포함 에러 메시지 ("expected int due to annotation")
-- [ ] **ERR-03**: 기존 Diagnostic 인프라 재사용
+- [x] **ERR-01**: Mode-aware context (InCheckMode, InSynthMode)
+- [x] **ERR-02**: 예상 타입 포함 에러 메시지 ("expected int due to annotation")
+- [x] **ERR-03**: 기존 Diagnostic 인프라 재사용
 
 ### Migration
 
@@ -92,14 +92,14 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 | ANNOT-02 | Phase 4 | Complete |
 | ANNOT-03 | Phase 4 | Complete |
 | ANNOT-04 | Phase 4 | Complete |
-| ERR-01 | Phase 5 | Pending |
-| ERR-02 | Phase 5 | Pending |
-| ERR-03 | Phase 5 | Pending |
+| ERR-01 | Phase 5 | Complete |
+| ERR-02 | Phase 5 | Complete |
+| ERR-03 | Phase 5 | Complete |
 | MIG-01 | Phase 6 | Pending |
 | MIG-02 | Phase 6 | Pending |
 | MIG-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Complete: 21 (78%)
-- Pending: 6
+- Complete: 24 (89%)
+- Pending: 3
