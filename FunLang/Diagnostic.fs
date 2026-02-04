@@ -37,6 +37,7 @@ type InferContext =
     | InListElement of index: int * Span
     | InConsHead of Span
     | InConsTail of Span
+    | InCheckMode of expected: Type * source: string * Span
 
 /// Unification path - where in the type structure unification failed
 /// Tracks the structural location within types (e.g., 2nd arg of function)
@@ -81,6 +82,8 @@ let formatContextStack (stack: InferContext list) : string list =
         | InListElement (index, span) -> sprintf "in list element %d at %s" index (formatSpan span)
         | InConsHead span -> sprintf "in cons head at %s" (formatSpan span)
         | InConsTail span -> sprintf "in cons tail at %s" (formatSpan span)
+        | InCheckMode (ty, source, span) ->
+            sprintf "expected %s due to %s at %s" (formatType ty) source (formatSpan span)
     )
 
 /// Format unification trace to list of strings (reversed for outer-to-inner display)
@@ -114,6 +117,7 @@ let contextToSecondarySpans (primarySpan: Span) (contexts: InferContext list) : 
         | InListElement (idx, span) -> (span, sprintf "in list element %d" idx)
         | InConsHead span -> (span, "in cons head")
         | InConsTail span -> (span, "in cons tail")
+        | InCheckMode (_, source, span) -> (span, sprintf "due to %s" source)
     )
     |> List.filter (fun (span, _) -> span <> primarySpan)  // Exclude primary span (avoid duplication)
     |> List.distinctBy fst  // Remove duplicate spans
@@ -123,14 +127,29 @@ let contextToSecondarySpans (primarySpan: Span) (contexts: InferContext list) : 
 // Conversion to Diagnostic
 // ============================================================================
 
+/// Find the first InCheckMode in context to extract annotation source
+let findExpectedTypeSource (contexts: InferContext list) : (Type * string * Span) option =
+    contexts
+    |> List.tryPick (function
+        | InCheckMode (ty, source, span) -> Some (ty, source, span)
+        | _ -> None)
+
 /// Convert TypeError to Diagnostic for display
 let typeErrorToDiagnostic (err: TypeError) : Diagnostic =
     let code, message, hint =
         match err.Kind with
         | UnifyMismatch (expected, actual) ->
-            Some "E0301",
-            sprintf "Type mismatch: expected %s but got %s" (formatType expected) (formatType actual),
-            Some "Check that all branches of your expression return the same type"
+            let source = findExpectedTypeSource err.ContextStack
+            let baseMsg = sprintf "Type mismatch: expected %s but got %s"
+                            (formatType expected) (formatType actual)
+            let hint =
+                match source with
+                | Some (_, "annotation", span) ->
+                    Some (sprintf "The type annotation at %s expects %s"
+                            (formatSpan span) (formatType expected))
+                | _ ->
+                    Some "Check that all branches of your expression return the same type"
+            Some "E0301", baseMsg, hint
 
         | OccursCheck (var, ty) ->
             Some "E0302",
