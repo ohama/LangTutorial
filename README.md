@@ -4,6 +4,8 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼.
 
 fslex와 fsyacc를 사용하여 인터프리터를 단계별로 구현합니다. 사칙연산부터 시작해 변수, 조건문, 함수, 데이터 구조, 타입 시스템까지 확장하며, 각 챕터는 독립적으로 실행 가능한 완전한 예제를 제공합니다.
 
+**온라인 튜토리얼:** https://ohama.github.io/LangTutorial/
+
 ## 진행 상태
 
 | 챕터 | 내용 | 상태 |
@@ -191,9 +193,12 @@ LangTutorial/
 │   ├── chapter-10-type-system.md
 │   └── appendix-01-testing.md
 ├── youtube/              # YouTube 대본 (10 episodes + 1 appendix)
-├── docs/
-│   ├── grammar.md        # 언어 문법 명세 (BNF)
-│   └── howto/            # 개발 지식 문서 (24개)
+├── book/                # mdBook 소스
+│   └── src/             # 튜토리얼 마크다운
+├── docs/                # mdBook 출력 (GitHub Pages)
+├── docs.backup/         # 기존 문서
+│   ├── grammar.md       # 언어 문법 명세 (BNF)
+│   └── howto/           # 개발 지식 문서 (24개)
 ```
 
 ## 기술 스택
@@ -225,11 +230,12 @@ git checkout v6.0            # v6.0: Bidirectional Type System
 
 ## 문서
 
-- **[docs/grammar.md](docs/grammar.md)** — FunLang 문법 명세 (BNF, 타입 주석 포함)
+- **[온라인 튜토리얼](https://ohama.github.io/LangTutorial/)** — mdBook 기반 웹 문서
+- **[docs.backup/grammar.md](docs.backup/grammar.md)** — FunLang 문법 명세 (BNF, 타입 주석 포함)
 - **[examples/](examples/)** — 실용적인 FunLang 예제 (정렬, 검색, 피보나치 등)
 - **tutorial/** — 단계별 튜토리얼 (11 chapters + 1 appendix)
 - **youtube/** — YouTube 대본 (10 episodes + 1 appendix)
-- **docs/howto/** — 개발 지식 문서 (24개)
+- **docs.backup/howto/** — 개발 지식 문서 (24개)
   - fsyacc 파서 작성, 연산자 우선순위
   - fslex 렉서 작성, 키워드 우선순위
   - 단항 마이너스 구현
