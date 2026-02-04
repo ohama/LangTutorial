@@ -3,6 +3,7 @@ module TypeCheck
 open Type
 open Unify
 open Infer
+open Bidir
 open Ast
 open Diagnostic
 
@@ -48,8 +49,8 @@ let initialTypeEnv: TypeEnv =
 /// Returns Ok(type) on success, Error(message) on type error
 let typecheck (expr: Expr): Result<Type, string> =
     try
-        let subst, ty = infer initialTypeEnv expr
-        Ok(apply subst ty)
+        let ty = synthTop initialTypeEnv expr
+        Ok(ty)
     with
     | TypeException err ->
         // Convert to Diagnostic, then extract message for backward compatibility
@@ -60,8 +61,8 @@ let typecheck (expr: Expr): Result<Type, string> =
 /// Returns Ok(type) on success, Error(Diagnostic) on type error
 let typecheckWithDiagnostic (expr: Expr): Result<Type, Diagnostic> =
     try
-        let subst, ty = infer initialTypeEnv expr
-        Ok(apply subst ty)
+        let ty = synthTop initialTypeEnv expr
+        Ok(ty)
     with
     | TypeException err ->
         Error(typeErrorToDiagnostic err)
