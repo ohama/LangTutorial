@@ -8,9 +8,9 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 각 챕터가 독립적으로 동작하는 완전한 예제를 제공하여, 독자가 언어 구현의 각 단계를 직접 따라하고 실행해볼 수 있어야 한다.
 
-## Current State (v5.0 Shipped)
+## Current State (v6.0 Shipped)
 
-**v5.0 Shipped:** 2026-02-03
+**v6.0 Shipped:** 2026-02-04
 
 **What's implemented:**
 - Foundation & Pipeline - .NET 10 + FsLexYacc 파이프라인
@@ -29,13 +29,16 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - Type System - Hindley-Milner 타입 추론, Algorithm W (v4.0)
 - Let-polymorphism - 다형성 let 바인딩 (v4.0)
 - --emit-type - CLI 타입 표시 플래그 (v4.0)
-- **Span Infrastructure** - 모든 AST 노드에 소스 위치 추적 (v5.0)
-- **Type Error Diagnostics** - E0301-E0304 에러 코드, Rust-style 포맷 (v5.0)
-- **Blame Assignment** - Primary/secondary span으로 정확한 에러 위치 (v5.0)
+- Span Infrastructure - 모든 AST 노드에 소스 위치 추적 (v5.0)
+- Type Error Diagnostics - E0301-E0304 에러 코드, Rust-style 포맷 (v5.0)
+- Blame Assignment - Primary/secondary span으로 정확한 에러 위치 (v5.0)
+- **Bidirectional Type Checking** - synth/check 모드, Algorithm W 대체 (v6.0)
+- **ML-style Type Annotations** - `fun (x: int) -> e`, `(e : T)` 지원 (v6.0)
+- **Polymorphic Annotations** - `'a` 타입 변수 문법 (v6.0)
 
 **Codebase:**
-- ~5,646 lines F#
-- 570 total tests (192 fslit + 378 Expecto)
+- ~6,831 lines F#
+- 619 total tests (200 fslit + 419 Expecto)
 
 ## Requirements
 
@@ -80,14 +83,14 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - ✓ OUT-01~04: Error Output (에러 코드, Rust-style 포맷, 정규화)
 - ✓ TEST-01~06: Diagnostic 테스트 (12개 골든 테스트)
 
-### In Progress (v6.0)
+### Validated (v6.0)
 
-- **PARSE-01~07**: 타입 어노테이션 파서 확장
-- **ELAB-01~03**: TypeExpr → Type 변환
-- **BIDIR-01~07**: Bidirectional 타입 체커 코어
-- **ANNOT-01~04**: 어노테이션 검증
-- **ERR-01~03**: Mode-aware 에러 메시지
-- **MIG-01~03**: Algorithm W → Bidirectional 전환
+- ✓ PARSE-01~07: 타입 어노테이션 파서 확장 (COLON, TYPE_*, TypeExpr, Annot, LambdaAnnot)
+- ✓ ELAB-01~03: TypeExpr → Type 변환, 타입 변수 스코핑
+- ✓ BIDIR-01~07: Bidirectional 타입 체커 코어 (synth/check, let-polymorphism)
+- ✓ ANNOT-01~04: 어노테이션 검증, 에러 메시지
+- ✓ ERR-01~03: Mode-aware 에러 메시지, InCheckMode
+- ✓ MIG-01~03: Algorithm W → Bidirectional 전환, 튜토리얼 작성
 
 ### On Hold (v7.0+)
 
@@ -101,7 +104,8 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 
 - 실수 (float/double) — 정수만 지원, 파싱/연산 단순화
 - 컴파일러 (바이트코드/네이티브 코드 생성) — 인터프리터에 집중
-- 타입 주석 구문 — 타입 추론만 지원, 명시적 주석 불필요
+- Higher-rank polymorphism — v6.0은 rank-1 유지
+- 타입 클래스/트레이트 — 별도 마일스톤 필요
 
 ## Context
 
@@ -113,12 +117,12 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 - fslit — 파일 기반 CLI 테스트
 
 **Directory structure:**
-- `tutorial/` — 튜토리얼 문서 (9 chapters + 1 appendix)
-- `youtube/` — YouTube 스크립트 (10개)
-- `FunLang/` — 언어 구현 (Ast, Lexer, Parser, Eval, Format, Prelude, Program)
+- `tutorial/` — 튜토리얼 문서 (12 chapters + 4 appendices)
+- `youtube/` — YouTube 스크립트 (14개)
+- `FunLang/` — 언어 구현 (Ast, Lexer, Parser, Eval, Format, Prelude, Type, Bidir, Program)
 - `FunLang.Tests/` — Expecto 단위 테스트
 - `tests/` — fslit CLI 테스트
-- `docs/` — 문서 (grammar.md, howto/ 17개)
+- `docs/` — 문서 (grammar.md, howto/ 18개)
 - `Prelude.fun` — 자체 호스팅 표준 라이브러리
 
 ## Constraints
@@ -143,6 +147,9 @@ F# 개발자를 위한 프로그래밍 언어 구현 튜토리얼. fslex와 fsya
 | Right-associative cons | `1 :: 2 :: []` = `1 :: (2 :: [])` | Good |
 
 | Hindley-Milner 타입 추론 | 타입 클래스 없이 완전한 추론, 교육 목적에 적합 | Good |
+| Bidirectional type checking | Algorithm W 대체, 어노테이션 지원으로 더 나은 에러 메시지 | Good |
+| Hybrid approach | 어노테이션 없는 람다에 fresh var 사용, 역호환성 유지 | Good |
+| ML-style annotations | F#/OCaml 친숙한 문법, 기존 람다 문법과 자연스럽게 통합 | Good |
 
 ---
-*Last updated: 2026-02-03 after v5.0 milestone complete*
+*Last updated: 2026-02-04 after v6.0 milestone complete*
