@@ -4,4 +4,6 @@
 // --- Output:
 error[E0301]: Type mismatch: expected int but got bool
  --> <expr>:1:16-17
-   = hint: Check that all branches of your expression return the same type
+   = due to annotation: <expr>:1:0-25
+   = note: expected int due to annotation at <expr>:1:0-25
+   = hint: The type annotation at <expr>:1:0-25 expects int

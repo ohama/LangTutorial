@@ -70,16 +70,18 @@ let rec synth (ctx: InferContext list) (env: TypeEnv) (expr: Expr): Subst * Type
         (s, TArrow (apply s paramTy, bodyTy))
 
     // === LambdaAnnot (annotated lambda) ===
-    | LambdaAnnot (param, paramTyExpr, body, _) ->
+    | LambdaAnnot (param, paramTyExpr, body, span) ->
         let paramTy = elaborateTypeExpr paramTyExpr
+        let ctx' = InCheckMode (paramTy, "annotation", span) :: ctx
         let bodyEnv = Map.add param (Scheme ([], paramTy)) env
-        let s, bodyTy = synth ctx bodyEnv body
+        let s, bodyTy = synth ctx' bodyEnv body
         (s, TArrow (apply s paramTy, bodyTy))
 
     // === Annot (type annotation) ===
     | Annot (e, tyExpr, span) ->
         let expectedTy = elaborateTypeExpr tyExpr
-        let s = check ctx env e expectedTy
+        let ctx' = InCheckMode (expectedTy, "annotation", span) :: ctx
+        let s = check ctx' env e expectedTy
         (s, apply s expectedTy)
 
     // === Let (BIDIR-07 - let-polymorphism) ===
