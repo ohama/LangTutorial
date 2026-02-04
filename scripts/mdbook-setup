@@ -11,12 +11,31 @@ cd "$PROJECT_ROOT"
 
 echo "=== mdBook Setup ==="
 
-# 1. docs/ 백업
+# 1. docs/ 처리
 if [ -d "docs" ]; then
-    echo "docs/ → docs.backup/ 복사 중..."
-    rm -rf docs.backup
-    cp -r docs docs.backup
-    echo "✓ 백업 완료"
+    echo "docs/ 폴더가 이미 존재합니다."
+    echo ""
+    echo "[B] 백업 후 진행 (docs/ → docs.backup/)"
+    echo "[O] 덮어쓰기 (백업 없이)"
+    echo "[X] 취소"
+    echo ""
+    read -p "선택: " choice
+
+    case "$choice" in
+        [Bb])
+            echo "docs/ → docs.backup/ 복사 중..."
+            rm -rf docs.backup
+            cp -r docs docs.backup
+            echo "✓ 백업 완료"
+            ;;
+        [Oo])
+            echo "백업 없이 진행합니다."
+            ;;
+        *)
+            echo "취소됨."
+            exit 0
+            ;;
+    esac
 fi
 
 # 2. book/ 소스 폴더 생성
@@ -195,7 +214,7 @@ echo ""
 echo "=== 완료 ==="
 echo "소스: book/src/ ($(ls book/src/*.md | wc -l) files)"
 echo "출력: docs/ ($(ls docs/*.html | wc -l) HTML files)"
-echo "백업: docs.backup/"
+[ -d "docs.backup" ] && echo "백업: docs.backup/"
 echo ""
 echo "다음 단계:"
 echo "  1. git add -A && git commit -m 'feat: add mdBook documentation site'"
