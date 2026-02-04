@@ -83,16 +83,17 @@ Plans:
 7. Let-polymorphism (generalize at let) preserved
 8. All unannotated code produces same types as Algorithm W
 
-### Phase 4: Annotation Checking
+### Phase 4: Annotation Checking ✓
 
 **Goal**: Test and validate annotation checking functionality
 **Depends on**: Phase 3 (needs bidirectional core)
 **Requirements**: ANNOT-01, ANNOT-02, ANNOT-03, ANNOT-04
+**Status:** COMPLETE (2026-02-04)
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Valid annotation tests (fslit + Expecto)
-- [ ] 04-02-PLAN.md — Invalid annotation error tests
+- [x] 04-01-PLAN.md — Valid annotation tests (fslit + Expecto)
+- [x] 04-02-PLAN.md — Invalid annotation error tests
 
 **Success Criteria**:
 1. `(e : T)` annotation expressions type check correctly

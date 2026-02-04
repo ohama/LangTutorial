@@ -33,12 +33,12 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 - [x] **BIDIR-06**: subsumption 규칙 (synthesis → checking 전환)
 - [x] **BIDIR-07**: Let-polymorphism 유지 (generalize at let)
 
-### Annotation Checking
+### Annotation Checking ✓
 
-- [ ] **ANNOT-01**: Annot 표현식 처리 (checking 후 synthesis)
-- [ ] **ANNOT-02**: LambdaAnnot 표현식 처리 (파라미터 타입 사용)
-- [ ] **ANNOT-03**: 어노테이션 타입과 추론 타입 검증
-- [ ] **ANNOT-04**: 잘못된 어노테이션 에러 메시지
+- [x] **ANNOT-01**: Annot 표현식 처리 (checking 후 synthesis)
+- [x] **ANNOT-02**: LambdaAnnot 표현식 처리 (파라미터 타입 사용)
+- [x] **ANNOT-03**: 어노테이션 타입과 추론 타입 검증
+- [x] **ANNOT-04**: 잘못된 어노테이션 에러 메시지
 
 ### Error Integration
 
@@ -88,10 +88,10 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 | BIDIR-05 | Phase 3 | Complete |
 | BIDIR-06 | Phase 3 | Complete |
 | BIDIR-07 | Phase 3 | Complete |
-| ANNOT-01 | Phase 4 | Pending |
-| ANNOT-02 | Phase 4 | Pending |
-| ANNOT-03 | Phase 4 | Pending |
-| ANNOT-04 | Phase 4 | Pending |
+| ANNOT-01 | Phase 4 | Complete |
+| ANNOT-02 | Phase 4 | Complete |
+| ANNOT-03 | Phase 4 | Complete |
+| ANNOT-04 | Phase 4 | Complete |
 | ERR-01 | Phase 5 | Pending |
 | ERR-02 | Phase 5 | Pending |
 | ERR-03 | Phase 5 | Pending |
@@ -101,5 +101,5 @@ Bidirectional type system으로 완전 전환. Algorithm W를 synthesis/checking
 
 **Coverage:**
 - v6.0 requirements: 27 total
-- Complete: 17 (63%)
-- Pending: 10
+- Complete: 21 (78%)
+- Pending: 6
