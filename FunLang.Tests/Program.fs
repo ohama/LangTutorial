@@ -946,6 +946,8 @@ let main argv =
         ReplTests.cliTests
         InferTests.inferTests
         TypeCheckTests.typeCheckTests
+        BidirTests.annotationSynthesisTests
+        BidirTests.annotationErrorTests
         commentTests
         stringTests
         phase2Tests

@@ -18,6 +18,10 @@ let parse (input: string) : Expr =
 let synthEmpty expr =
     Bidir.synthTop Map.empty expr
 
+/// Synthesize type from string input using bidirectional checker
+let synthFromString (input: string) : Type.Type =
+    parse input |> synthEmpty
+
 /// Synthesize type using Infer module (Algorithm W) for comparison
 let inferEmpty expr =
     let s, ty = Infer.infer Map.empty expr
@@ -337,3 +341,123 @@ let bidirTests = testList "Bidirectional Type Checking" [
         }
     ]
 ]
+
+[<Tests>]
+let annotationSynthesisTests =
+    testList "Annotation synthesis (ANNOT-01, ANNOT-02, ANNOT-03)" [
+        // ANNOT-01: Annot expression checking
+        test "Annot: (42 : int) synthesizes int" {
+            let ty = synthFromString "(42 : int)"
+            Expect.equal ty TInt "integer annotation"
+        }
+
+        test "Annot: (true : bool) synthesizes bool" {
+            let ty = synthFromString "(true : bool)"
+            Expect.equal ty TBool "bool annotation"
+        }
+
+        test "Annot: annotation type is returned, not inferred type" {
+            // Even though lambda could be polymorphic, annotation constrains it
+            let ty = synthFromString "(fun x -> x : int -> int)"
+            Expect.equal ty (TArrow (TInt, TInt)) "constrained by annotation"
+        }
+
+        test "Annot: nested expression with annotation" {
+            let ty = synthFromString "(let x = 5 in x + 1 : int)"
+            Expect.equal ty TInt "let expression annotation"
+        }
+
+        // ANNOT-02: LambdaAnnot synthesis
+        test "LambdaAnnot: fun (x: int) -> x synthesizes int -> int" {
+            let ty = synthFromString "fun (x: int) -> x"
+            Expect.equal ty (TArrow (TInt, TInt)) "annotated identity"
+        }
+
+        test "LambdaAnnot: fun (x: bool) -> x synthesizes bool -> bool" {
+            let ty = synthFromString "fun (x: bool) -> x"
+            Expect.equal ty (TArrow (TBool, TBool)) "bool annotated identity"
+        }
+
+        test "LambdaAnnot: fun (x: int) -> x + 1 synthesizes int -> int" {
+            let ty = synthFromString "fun (x: int) -> x + 1"
+            Expect.equal ty (TArrow (TInt, TInt)) "arithmetic body"
+        }
+
+        test "LambdaAnnot: parameter type propagates to body" {
+            // x is known to be int from annotation
+            let ty = synthFromString "fun (x: int) -> if x > 0 then x else 0"
+            Expect.equal ty (TArrow (TInt, TInt)) "parameter type in body"
+        }
+
+        // ANNOT-03: Annotation type validated
+        test "Annot: string annotation on string literal" {
+            let ty = synthFromString "(\"hello\" : string)"
+            Expect.equal ty TString "string annotation"
+        }
+
+        test "Annot: list annotation" {
+            let ty = synthFromString "([1, 2, 3] : int list)"
+            Expect.equal ty (TList TInt) "list annotation"
+        }
+
+        test "Annot: tuple annotation" {
+            let ty = synthFromString "((1, true) : int * bool)"
+            Expect.equal ty (TTuple [TInt; TBool]) "tuple annotation"
+        }
+    ]
+
+[<Tests>]
+let annotationErrorTests =
+    testList "Annotation errors (ANNOT-04)" [
+        // ANNOT-04: Wrong annotations produce clear errors
+        test "Annot: (true : int) raises type error" {
+            Expect.throws (fun () -> synthFromString "(true : int)" |> ignore)
+                          "bool cannot be annotated as int"
+        }
+
+        test "Annot: (42 : bool) raises type error" {
+            Expect.throws (fun () -> synthFromString "(42 : bool)" |> ignore)
+                          "int cannot be annotated as bool"
+        }
+
+        test "Annot: (\"hello\" : int) raises type error" {
+            Expect.throws (fun () -> synthFromString "(\"hello\" : int)" |> ignore)
+                          "string cannot be annotated as int"
+        }
+
+        test "Annot: lambda annotated with wrong return type" {
+            Expect.throws (fun () -> synthFromString "(fun x -> x + 1 : int -> bool)" |> ignore)
+                          "int return cannot be annotated as bool"
+        }
+
+        test "Annot: lambda annotated with wrong param type" {
+            Expect.throws (fun () -> synthFromString "(fun x -> x && true : int -> bool)" |> ignore)
+                          "bool param cannot be annotated as int"
+        }
+
+        test "LambdaAnnot: body type mismatch" {
+            Expect.throws (fun () -> synthFromString "fun (x: int) -> x && true" |> ignore)
+                          "int param used with bool operator"
+        }
+
+        test "LambdaAnnot: wrong comparison type" {
+            // x is int but compared as bool
+            Expect.throws (fun () -> synthFromString "fun (x: int) -> if x then 1 else 0" |> ignore)
+                          "int param used as bool condition"
+        }
+
+        test "Annot: list element type mismatch" {
+            Expect.throws (fun () -> synthFromString "([1, 2, 3] : bool list)" |> ignore)
+                          "int list cannot be annotated as bool list"
+        }
+
+        test "Annot: tuple element type mismatch" {
+            Expect.throws (fun () -> synthFromString "((1, true) : bool * int)" |> ignore)
+                          "tuple element types swapped"
+        }
+
+        test "Annot: function vs non-function" {
+            Expect.throws (fun () -> synthFromString "(42 : int -> int)" |> ignore)
+                          "int cannot be annotated as function"
+        }
+    ]
