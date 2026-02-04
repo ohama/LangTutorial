@@ -124,9 +124,14 @@ Plans:
 **Goal**: Complete switchover from Algorithm W to bidirectional
 **Depends on**: Phase 5 (needs all features working)
 **Requirements**: MIG-01, MIG-02, MIG-03
+**Plans:** 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Verification and deprecation documentation
+- [ ] 06-02-PLAN.md — Tutorial chapter (chapter-12)
 
 **Success Criteria**:
-1. All 570+ existing tests pass with Bidir module
+1. All 600+ existing tests pass with Bidir module
 2. CLI and REPL use Bidir instead of Infer
 3. Tutorial chapter documents bidirectional type system
 4. Old Infer module can be deprecated
