@@ -60,6 +60,16 @@ FunLang의 공식 문법 명세. BNF (Backus-Naur Form) 표기법 사용.
 
 ```bnf
 <lambda-expr> ::= "fun" <ident> "->" <expr>
+               | "fun" <annot-param> "->" <expr>
+               | "fun" <annot-param-list> "->" <expr>
+```
+
+### 타입 주석 (v6.0)
+
+```bnf
+<annot-expr>       ::= "(" <expr> ":" <type-expr> ")"
+<annot-param>      ::= "(" <ident> ":" <type-expr> ")"
+<annot-param-list> ::= <annot-param> { <annot-param> }
 ```
 
 ### 논리 표현식
@@ -112,6 +122,7 @@ FunLang의 공식 문법 명세. BNF (Backus-Naur Form) 표기법 사용.
          | <string>
          | <tuple>
          | <list>
+         | <annot-expr>
          | "(" <expr> ")"
 
 <bool>  ::= "true" | "false"
@@ -140,6 +151,22 @@ FunLang의 공식 문법 명세. BNF (Backus-Naur Form) 표기법 사용.
 <pattern-list> ::= <pattern> "," <pattern> { "," <pattern> }
 ```
 
+### 타입 표현식 (v6.0)
+
+```bnf
+<type-expr>       ::= <type-arrow>
+<type-arrow>      ::= <type-tuple> { "->" <type-tuple> }
+<type-tuple>      ::= <type-primary> { "*" <type-primary> }
+<type-primary>    ::= <type-atom> [ "list" ]
+<type-atom>       ::= "int" | "bool" | "string"
+                    | <type-var>
+                    | "(" <type-expr> ")"
+
+<type-var>        ::= "'" <ident>
+```
+
+우결합성: `int -> int -> int` = `int -> (int -> int)`
+
 ## 어휘 문법 (Lexical Grammar)
 
 ### 식별자와 키워드
@@ -156,6 +183,7 @@ FunLang의 공식 문법 명세. BNF (Backus-Naur Form) 표기법 사용.
             | "if" | "then" | "else"
             | "true" | "false"
             | "fun" | "match" | "with"
+            | "int" | "bool" | "string" | "list"
 ```
 
 ### 리터럴
@@ -181,7 +209,7 @@ FunLang의 공식 문법 명세. BNF (Backus-Naur Form) 표기법 사용.
 ### 구분자
 
 ```bnf
-<delimiter> ::= "(" | ")" | "[" | "]" | "," | "|" | "_"
+<delimiter> ::= "(" | ")" | "[" | "]" | "," | "|" | "_" | ":" | "'"
 ```
 
 ### 공백과 주석
@@ -274,8 +302,29 @@ filter (fun x -> x > 1) [1, 2, 3]     // [2, 3]
 fold (fun a -> fun b -> a + b) 0 [1, 2, 3]  // 6
 ```
 
+### 타입 주석 (v6.0)
+```
+// 표현식 타입 주석
+(42 : int)                            // 42
+(true : bool)                         // true
+([1, 2, 3] : int list)                // [1, 2, 3]
+
+// 람다 파라미터 타입 주석
+fun (x: int) -> x + 1                 // <function>
+fun (f: int -> int) (x: int) -> f x   // <function>
+
+// 다형 함수에서 타입 제약
+let id = fun (x: int) -> x in id 5    // 5
+
+// 복합 타입 주석
+let f = fun (p: int * bool) -> p in f (1, true)  // (1, true)
+```
+
 ## 관련 파일
 
 - `FunLang/Lexer.fsl` — fslex 렉서 명세
 - `FunLang/Parser.fsy` — fsyacc 파서 명세
-- `FunLang/Ast.fs` — AST 타입 정의
+- `FunLang/Ast.fs` — AST 타입 정의 (TypeExpr 포함)
+- `FunLang/Elaborate.fs` — TypeExpr → Type 변환
+- `FunLang/Infer.fs` — Hindley-Milner 타입 추론 (Algorithm W)
+- `FunLang/Bidir.fs` — Bidirectional 타입 체킹 (synth/check)
