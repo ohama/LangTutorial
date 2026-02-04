@@ -1,0 +1,6 @@
+// Type annotation on integer literal
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+(42 : int)
+// --- Output:
+int

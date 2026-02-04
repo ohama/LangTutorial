@@ -1,0 +1,6 @@
+// Type annotation on let expression
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+(let x = 5 in x + 1 : int)
+// --- Output:
+int

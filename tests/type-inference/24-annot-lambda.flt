@@ -1,0 +1,6 @@
+// Type annotation on lambda expression
+// --- Command: dotnet run --project FunLang -- --emit-type %input
+// --- Input:
+(fun x -> x : int -> int)
+// --- Output:
+int -> int
