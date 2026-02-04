@@ -49,6 +49,13 @@ let formatToken (token: Parser.token) : string =
     | Parser.MATCH -> "MATCH"
     | Parser.WITH -> "WITH"
     | Parser.PIPE -> "PIPE"
+    // v6.0: Type annotation tokens
+    | Parser.COLON -> "COLON"
+    | Parser.TYPE_INT -> "TYPE_INT"
+    | Parser.TYPE_BOOL -> "TYPE_BOOL"
+    | Parser.TYPE_STRING -> "TYPE_STRING"
+    | Parser.TYPE_LIST -> "TYPE_LIST"
+    | Parser.TYPE_VAR s -> sprintf "TYPE_VAR(%s)" s
     | Parser.EOF -> "EOF"
 
 /// Format a list of tokens as a space-separated string

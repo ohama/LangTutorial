@@ -215,6 +215,13 @@ and eval (env: Env) (expr: Expr) : Value =
         | BoolValue false -> eval env elseBranch
         | _ -> failwith "Type error: if condition must be boolean"
 
+    // v6.0: Type annotations - erased at runtime
+    | Annot (expr, _, _) ->
+        eval env expr  // Just evaluate the underlying expression
+
+    | LambdaAnnot (param, _, body, _) ->
+        FunctionValue (param, body, env)  // Same as regular lambda at runtime
+
     // Phase 5: Functions
 
     // Lambda creates a closure capturing current environment
